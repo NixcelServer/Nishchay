@@ -43,11 +43,34 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
-//Route::get('/admin/dashboard',[AdminController::class,'dashboard']);
 
 
- Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
+
+Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
+    //if admin logs in show him admin dashboard
      Route::get('/dashboard',[AdminController::class,'dashboard']);
+     //if admin clicks on user in left menu
+     Route::get('/users',[AdminController::class,'showUsers']);
+     //admin clicks on create new user button
+     Route::get('/createuser',[AdminController::class,'createUser']);
+     //submitting the create new user form
+     Route::post('/storeuser',[AdminController::class,'storeUser']);
+     //edit user form
+     Route::get('/edituser/{$id}',[AdminController::class,'editUserForm']);
+     //upadte the user in db
+     Route::post('/edituser',[AdminController::class,'editUser']);
+     //delete user
+     Route::post('/delete',[AdminController::class,'deleteUser']);
+
+     //admin clicks on departments in left menu
+     Route::get('/depts',[AdminController::class,'showDept']);
+    //show new department form
+     Route::get('/createdept',[AdminController::class,'createDept']);
+     //create a new dept in db
+     Route::post('/storedept',[AdminController::class,'storeDept']);
+     //edit dept form
+     Route::get('/editdept/');
+
 
 
  });
