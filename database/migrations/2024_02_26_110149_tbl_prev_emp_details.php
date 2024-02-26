@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_previous_employment_details', function (Blueprint $table) {
-            $table->id('tbl_previous_employment_detail_id');
+        Schema::create('tbl_prev_emp_details', function (Blueprint $table) {
+            $table->id('tbl_prev_empl_detail_id');
             $table->integer('tbl_user_id');
             $table->string('company_name');
             $table->date('start_date');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_previous_employment_details');
+        Schema::dropIfExists('tbl_prev_emp_details');
     }
 };

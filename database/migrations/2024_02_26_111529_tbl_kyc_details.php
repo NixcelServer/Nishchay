@@ -11,18 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_official_details', function (Blueprint $table) {
-            $table->id('tbl_official_detail_id');
-            $table->integer('tbl_user_id');
-            $table->string('official_email_id')->unique();
-            $table->string('work_location');
-            $table->integer('reporting_manager_id');
+        Schema::create('tbl_kyc_details', function (Blueprint $table) {
+            $table->id('tbl_kyc_detail_id');
+            $table->integer('aadharcard_no')->unique()->required();
+            $table->integer('pancard_no')->unique()->required();
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
             $table->string('flag');
         });
     }
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_official_details');
+        Schema::dropIfExists('tbl_kyc_details');
     }
 };

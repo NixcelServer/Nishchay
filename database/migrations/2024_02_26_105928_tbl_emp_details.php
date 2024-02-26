@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_employee_details', function (Blueprint $table) {
+        Schema::create('tbl_emp_details', function (Blueprint $table) {
             $table->id('tbl_employee_detail_id');
             $table->integer('tbl_user_id');
             $table->integer('offer_letter_no')->unique();
+            $table->integer('emp_code')->unique();
             $table->string('title');
             $table->string('first_name')->required();
             $table->string('middle_name');
@@ -46,6 +47,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_employee_details');
+        Schema::dropIfExists('tbl_emp_details');
     }
 };

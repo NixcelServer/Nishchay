@@ -1,9 +1,9 @@
 <?php
-
+ 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+ 
 return new class extends Migration
 {
     /**
@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_epf_essi_details', function (Blueprint $table) {
-            $table->id('tbl_epf_essi__detail_id');
+        Schema::create('tbl_additional_details', function (Blueprint $table) {
+            $table->id('tbl_addtional_detail_id');
             $table->integer('tbl_user_id');
-            $table->string('uan')->unique();
-            $table->string('old_epf_no')->unique();
-            $table->string('nixcel_epf_no')->unique();
-            $table->string('nixcel_essi_no')->unique();
-            $table->string('nominee_name')->required();
-            $table->string('relation_with_nominee')->required();
+            $table->string('employment_status');
+            $table->string('technology');
+            $table->string('module');
+            $table->date('join_date');
+            $table->date('position_change_date');
+            $table->string('position_change_status');
+            $table->date('exit_date');
+            $table->date('fnf_payable_date');
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
@@ -27,14 +29,16 @@ return new class extends Migration
             $table->date('update_date');
             $table->time('update_time');
             $table->string('flag');
+           
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_epf_essi_details');
+        Schema::dropIfExists('tbl_additional_details');
     }
 };
+ 

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_salary_structure_details', function (Blueprint $table) {
-            $table->id('tbl_salary_structure_detail_id');
+        Schema::create('tbl_sal_details', function (Blueprint $table) {
+            $table->id('tbl_sal_detail_id');
             $table->integer('tbl_user_id');
             $table->integer('actual_gross');
             $table->integer('basic');
@@ -43,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_salary_structure_details');
+        Schema::dropIfExists('tbl_sal_details');
     }
 };

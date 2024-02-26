@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_additional_details', function (Blueprint $table) {
-            $table->id('tbl_addtional_detail_id');
+        Schema::create('tbl_official_details', function (Blueprint $table) {
+            $table->id('tbl_official_detail_id');
             $table->integer('tbl_user_id');
-            $table->string('employment_status');
-            $table->string('technology');
-            $table->string('module');
-            $table->date('join_date');
-            $table->date('position_change_date');
-            $table->string('position_change_status');
-            $table->date('exit_date');
-            $table->date('fnf_payable_date');
+            $table->string('official_email_id')->unique();
+            $table->string('work_location');
+            $table->integer('reporting_manager_id');
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
@@ -29,7 +24,6 @@ return new class extends Migration
             $table->date('update_date');
             $table->time('update_time');
             $table->string('flag');
-            
         });
     }
 
@@ -38,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_additional_details');
+        Schema::dropIfExists('tbl_official_details');
     }
 };

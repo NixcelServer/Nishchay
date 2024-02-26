@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_bank_details', function (Blueprint $table) {
-            $table->id('tbl_bank_details_id');
+        Schema::create('tbl_epf_essi_details', function (Blueprint $table) {
+            $table->id('tbl_epf_essi__detail_id');
             $table->integer('tbl_user_id');
-            $table->string('bank_name')->required();
-            $table->string('branch')->required();
-            $table->string('city')->required();
-            $table->string('ifsc')->required();
-            $table->string('account_no')->unique();
+            $table->string('uan')->unique();
+            $table->string('old_epf_no')->unique();
+            $table->string('nixcel_epf_no')->unique();
+            $table->string('nixcel_essi_no')->unique();
+            $table->string('nominee_name')->required();
+            $table->string('relation_with_nominee')->required();
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_bank_details');
+        Schema::dropIfExists('tbl_epf_essi_details');
     }
 };
