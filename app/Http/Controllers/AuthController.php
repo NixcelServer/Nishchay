@@ -1,97 +1,89 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
-
+ 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Helpers\EncryptionDecryptionHelper;
-
+ 
 class AuthController extends Controller
 {
-    //check if user is logged in and in redirectdash set the route based on role id
-    public function loadRegister(){
-        if(Auth::user()){
-            $route = $this->redirectDash();
-            return redirect($route);
-        }
-        return view('register');
-    }
-
+   
+    //load login page
     public function loadLogin()
     {
+        //check if user is logged in, redirect to request orelse redirect to login page
         if(Auth::user()){
             $route = $this->redirectDash();
             return redirect($route);
         }
-        return view('users.login');
+        return view('frontend_home.home');
     }
-
+ 
     public function login(Request $request)
-    {
+    {  
+        //check if user exists
         $user = User::where('email',$request->email)->first();
-
-        $role_id=$user->tbl_role_id;
-        //get info about role from db and get rolename
-        // $role = Role::where('tbl_role_id', $user->tbl_role_id)->first();
-        // $roleName = $role->role_name;
-        
        
-
         //get the password from request
         $password =$request->password;
-        
-       //encrypt the password 
+       
+       //encrypt the password
         $encrypted_pass = EncryptionDecryptionHelper::encryptData($password);
-      
+     
         //check if user is found
         if(!$user){
             return redirect()->back()->with('error', 'Invalid email or password');
         }
-
-        $activity_name = "login";
-        $activity_by = $user->tbl_user_id;
-        
-       // AuditLogHelper::logDetails($activity_name, $activity_by);
-
+        //if user exists validate password and redirect to respective page
         if (strcmp($user->password, $encrypted_pass) === 0) {
-            
+ 
+            // $activity_name = "login";
+            // $activity_by = $user->tbl_user_id;
+       
+            // AuditLogHelper::logDetails($activity_name, $activity_by);
+ 
+            auth()->login($user);
+           
+            Session::put('user', $user);
+ 
+            //redirectDash will check if the role of the user and redirect to respective dashboard
             $route = $this->redirectDash();
-            
+           
+            // $userss = Auth::user();
+ 
+            // $user12 = session('user');
+            // $userid = $user12->tbl_user_id;
+            // dd($userid);
+ 
+       
             return redirect($route);
         } else {
             // if passwords are not same display following msg
              return redirect()->back()->with('error', 'Invalid email or password');
         }
     }
-
+ 
     public function loadDashboard()
     {
         return view('user.dashboard');
     }
-
+ 
     public function redirectDash()
     {
-        if (Auth::check()) {
-            // User is authenticated
-            dd("user authenticated");
-            $user = Auth::user();
-        }
-        $user = Auth::user();
-        dd($user);
-        $role_id = Auth::user()->tbl_role_id;
-        dd($role_id);
+     
         $redirect = '';
-
-        if(Auth::user() && Auth::user()->tbl_role_id == 1){
-            dd("Admin");
+ 
+        if(Auth::user() && Auth::user()->tbl_role_id == 1)
+        {        
             $redirect = '/admin/dashboard';
         }
-
+ 
         else if(Auth::user() && Auth::user()->role ==2){
             dd("HR");
-            $redirect = ''; 
+            $redirect = '';
         }
         else if(Auth::user() && Auth::user()->role == 3){
             dd("Developer");
@@ -99,15 +91,17 @@ class AuthController extends Controller
         else{
             $redirect ='/';
         }
-
+ 
         return $redirect;
     }
-
+ 
     public function logout(Request $request)
     {
         $request->session()->flush();
         Auth::logout();
         return redirect('/');
     }
-
+ 
+   
+ 
 }

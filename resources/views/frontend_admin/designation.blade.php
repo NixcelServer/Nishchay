@@ -1,0 +1,1 @@
+@extends('frontend_home.leftmenu')

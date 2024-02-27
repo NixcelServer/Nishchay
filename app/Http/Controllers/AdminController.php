@@ -10,6 +10,7 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
+use App\Models\Department;
 
 
 
@@ -101,6 +102,67 @@ class AdminController extends Controller
 
     public function dashBoard()
     {
-        dd("admin Dashboard");
+        return view('frontend_admin.admin_home');
+    }
+
+    public function index()
+    {
+       return view('frontend_admin.admin_home');
+    }
+
+
+    //fetch and show the users from db
+    public function showUsers()
+    {
+        $users = User::get();
+        //dd("in show users");
+        $users->transform(function ($user)
+        {
+            $action = 'encrypt';
+            $user->encrypted_id = EncryptionDecryptionHelper::encdecId($user->id, $action);
+            return $user;
+        });
+        
+        return view('frontend_admin.user',['users'=>$users]);
+           
+    }
+
+    public function add_new_user_form()
+    {
+       return view('frontend_admin.add_new_user_form');
+    }
+
+
+    //create new user in db and redirect to user home page
+    public function storeUser(Request $request){
+        
+        $user_details = session('user');
+        
+        $password = $request->password;
+        
+        $user = new User;
+        $user->first_name = $request->first_name;
+        $user->middle_name = $request->middle_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->tbl_role_id = $request->tbl_role_id;
+        $user->add_by = $user_details->tbl_user_id;
+        $user->add_date = Date::now()->toDateString();
+        $user->add_time = Date::now()->toTimeString();
+        $user->flag ="show";
+        $user->save();
+
+        //audit log entry
+
+        return redirect("/admin/users");
+    }
+
+    //fetch dept from db and show them in table format
+    public function showDept()
+    {
+        $depts = Department::get();
+        // dd("in show dept");
+        return view('frontend_admin.department',['depts'=>$depts]);
     }
 }

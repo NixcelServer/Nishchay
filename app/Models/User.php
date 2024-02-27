@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Helpers\EncryptionDecryptionHelper;
+
 
 class User extends Authenticatable
 {
@@ -29,6 +31,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 protected $table = 'mst_tbl_users';
+public $timestamps = false;
 
     protected $hidden = [
         'password',
@@ -53,7 +56,7 @@ protected $table = 'mst_tbl_users';
     public function setPasswordAttribute($password)
     {
         // Your custom encryption logic goes here
-        $encryptedPassword = customEncryptFunction($password);
+        $encryptedPassword = EncryptionDecryptionHelper::encryptData($password);
         
         $this->attributes['password'] = $encryptedPassword;
     }
