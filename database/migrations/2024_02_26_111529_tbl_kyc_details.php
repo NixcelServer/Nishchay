@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id('tbl_kyc_detail_id');
             $table->integer('aadharcard_no')->unique()->required();
             $table->integer('pancard_no')->unique()->required();
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->string('flag');
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->string('flag')->default('show');
         });
     }
 

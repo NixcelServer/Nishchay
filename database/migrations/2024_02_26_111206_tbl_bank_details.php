@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('tbl_bank_details', function (Blueprint $table) {
             $table->id('tbl_bank_details_id');
-            $table->integer('tbl_user_id');
-            $table->string('bank_name')->required();
-            $table->string('branch')->required();
-            $table->string('city')->required();
-            $table->string('ifsc')->required();
+            $table->integer('tbl_user_id')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('branch')->nullable();
+            $table->string('city')->nullable();
+            $table->string('ifsc')->nullable();
             $table->string('account_no')->unique();
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->integer('update_by')->nullable();
+            $table->date('update_date')->nullable();
+            $table->time('update_time')->nullable();
+            $table->string('flag')->default('show');
         });
     }
 

@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('tbl_prev_emp_details', function (Blueprint $table) {
             $table->id('tbl_prev_empl_detail_id');
-            $table->integer('tbl_user_id');
-            $table->string('company_name');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->string('flag');
+            $table->integer('tbl_user_id')->nullable();
+            $table->string('company_name')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->string('flag')->default('show');
             
             
         });

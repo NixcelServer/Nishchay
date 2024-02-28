@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id('tbl_module_id');
             $table->string('module_name')->required();
             $table->string('module_path')->required();
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->integer('update_by')->nullable();
+            $table->date('update_date')->nullable();
+            $table->time('update_time')->nullable();
+            $table->string('flag')->default('show');
 
            
         });

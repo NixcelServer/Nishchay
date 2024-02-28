@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('tbl_official_details', function (Blueprint $table) {
             $table->id('tbl_official_detail_id');
-            $table->integer('tbl_user_id');
+            $table->integer('tbl_user_id')->nullable();
             $table->string('official_email_id')->unique();
-            $table->string('work_location');
-            $table->integer('reporting_manager_id');
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
+            $table->string('work_location')->nullable();
+            $table->integer('reporting_manager_id')->nullable();
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->integer('update_by')->nullable();
+            $table->date('update_date')->nullable();
+            $table->time('update_time')->nullable();
+            $table->string('flag')->default('show');
         });
     }
 
