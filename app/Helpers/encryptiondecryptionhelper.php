@@ -26,7 +26,42 @@ class EncryptionDecryptionHelper{
         $output = openssl_decrypt($data, $cipher_method, $encryption_key, $options, $encryption_iv);
         return $output;
     }
-}
 
+
+    public static function encdecId($id,$action)
+    {
+        $output = false;
+
+        //cipher method
+        $ciphering = "BF-CBC";
+
+        
+        $encryption_iv = "8ZtyeBqt";
+        //echo "</br>".$iv_length;
+        $options = 0;
+
+        
+
+        // encryption key
+        $encryption_key = "aopasffewsdjkad";
+        
+
+        // Encryption process
+        if ($action == 'encrypt')
+        {
+            $output = openssl_encrypt($id, $ciphering,
+	        $encryption_key, $options, $encryption_iv);
+        }
+        //decryption 
+        else if($action =='decrypt')
+        {
+            $output = openssl_decrypt($id, $ciphering,
+	                    $encryption_key, $options, $encryption_iv);
+
+        }
+       
+        return $output;
+    }
+}    
 
 ?>
