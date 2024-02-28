@@ -1,16 +1,18 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
-
+ 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Helpers\EncryptionDecryptionHelper;
-
+ 
 class AuthController extends Controller
 {
+
     
+
     //load login page
     public function loadLogin()
     {
@@ -19,20 +21,22 @@ class AuthController extends Controller
             $route = $this->redirectDash();
             return redirect($route);
         }
-        return view('users.login');
+        return view('frontend_home.home');
     }
-
+ 
     public function login(Request $request)
+
     {   
         //check if user exists 
         $user = User::where('email',$request->email)->first();
         
+
         //get the password from request
         $password =$request->password;
-        
-       //encrypt the password 
+       
+       //encrypt the password
         $encrypted_pass = EncryptionDecryptionHelper::encryptData($password);
-      
+     
         //check if user is found
         if(!$user){
             return redirect()->back()->with('error', 'Invalid email or password');
@@ -59,31 +63,36 @@ class AuthController extends Controller
             // dd($userid);
 
         
+
             return redirect($route);
         } else {
             // if passwords are not same display following msg
              return redirect()->back()->with('error', 'Invalid email or password');
         }
     }
-
+ 
     public function loadDashboard()
     {
         return view('user.dashboard');
     }
-
+ 
     public function redirectDash()
     {
+
       
         $redirect = '';
+
 
         if(Auth::user() && Auth::user()->tbl_role_id == 1)
         {        
             $redirect = '/admin/dashboard';
         }
 
+
         else if(Auth::user() && Auth::user()->tbl_role_id ==2){
             
             $redirect = '/hr/dashboard'; 
+
         }
         else if(Auth::user() && Auth::user()->tbl_role_id == 3){
             dd("Developer");
@@ -91,10 +100,10 @@ class AuthController extends Controller
         else{
             $redirect ='/';
         }
-
+ 
         return $redirect;
     }
-
+ 
     public function logout(Request $request)
     {
         $request->session()->flush();
@@ -102,6 +111,8 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+
     
 
 }
+

@@ -19,6 +19,7 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
+use App\Models\Department;
 
 
 
@@ -156,6 +157,8 @@ class AdminController extends Controller
     //edit user details in db
     public function editUser(Request $request)
     {
+
+
         $userdetails = session('user');
         
         $enc_id = $request->input('enc_id');
@@ -171,13 +174,16 @@ class AdminController extends Controller
 
         $user = User::findOrFail($dec_id);
         
-        
+
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->password = $request->password;
         $user->tbl_role_id = $request->tbl_role_id;
+
+      
+
         $user->add_by = $user->add_by;
         $user->add_date = $user->add_date;
         $user->add_time = $user->add_time;
@@ -188,6 +194,7 @@ class AdminController extends Controller
         $user->save();
         dd("success");
         return redirect('/admin/users');
+
 
     }
 

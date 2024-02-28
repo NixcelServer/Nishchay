@@ -1,8 +1,9 @@
 <?php
-
+ 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\HrController;
 
 
 
+
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,30 +23,7 @@ use App\Http\Controllers\HrController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-//when user tries to access server
-//entry point
-
-// Route::get('/', function () {
-//     //check if user exists in session
-//     if (session()->has('user')) {
-//         return redirect('/user');
-//     }
-//     return (new AdminController())->showLoginForm();
-// });
-
-// //login user verification
-// Route::post('/login',[AdminController::class,'login']);
-
-// //display create user form
-// Route::get('/createuserfrom',[AdminController::class,'showCreateUserForm']);
-
-// //submitting the create user form
-// Route::post('/createnewuser',[AdminController::class,'createUser']);
+ 
 
 
 
@@ -130,3 +110,4 @@ Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
     Route::get('/dashboard',[HrController::class,'dashboard']);
     Route::get('/employees',[HrController::class,'showEmployees']);
 });
+

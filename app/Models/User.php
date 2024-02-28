@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Helpers\EncryptionDecryptionHelper;
 
+
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -29,9 +31,11 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
     protected $table = 'mst_tbl_users';
     protected $primaryKey = 'tbl_user_id';
     public $timestamps = false;
+
     protected $hidden = [
         'password',
         'remember_token',

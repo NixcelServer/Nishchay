@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+use App\Helpers\customEncryptFunction;
 
 class EncryptionDecryptionHelper{
 
@@ -28,7 +29,11 @@ class EncryptionDecryptionHelper{
     }
 
 
+
+   
+
     public static function encdecId($id,$action)
+
     {
         $output = false;
 
@@ -44,18 +49,30 @@ class EncryptionDecryptionHelper{
 
         // encryption key
         $encryption_key = "aopasffewsdjkad";
+
         
+
+        
+
 
         // Encryption process
         if ($action == 'encrypt')
         {
+
+           
+
             $output = openssl_encrypt($id, $ciphering,
+
 	        $encryption_key, $options, $encryption_iv);
         }
         //decryption 
         else if($action =='decrypt')
         {
+
+           
+
             $output = openssl_decrypt($id, $ciphering,
+
 	                    $encryption_key, $options, $encryption_iv);
 
         }
