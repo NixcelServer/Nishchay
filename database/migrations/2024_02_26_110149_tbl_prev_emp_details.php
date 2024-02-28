@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_modules', function (Blueprint $table) {
-            $table->id('tbl_module_id');
-            $table->string('module_name')->required();
-            $table->string('module_path')->required();
+        Schema::create('tbl_prev_emp_details', function (Blueprint $table) {
+            $table->id('tbl_prev_empl_detail_id');
+            $table->integer('tbl_user_id')->nullable();
+            $table->string('company_name')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->integer('add_by')->nullable();
             $table->date('add_date')->nullable();
             $table->time('add_time')->nullable();
-            $table->integer('update_by')->nullable();
-            $table->date('update_date')->nullable();
-            $table->time('update_time')->nullable();
             $table->string('flag')->default('show');
-
-           
+            
+            
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_modules');
+        Schema::dropIfExists('tbl_prev_emp_details');
     }
 };

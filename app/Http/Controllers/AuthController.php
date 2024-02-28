@@ -10,7 +10,9 @@ use App\Helpers\EncryptionDecryptionHelper;
  
 class AuthController extends Controller
 {
-   
+
+    
+
     //load login page
     public function loadLogin()
     {
@@ -23,10 +25,12 @@ class AuthController extends Controller
     }
  
     public function login(Request $request)
-    {  
-        //check if user exists
+
+    {   
+        //check if user exists 
         $user = User::where('email',$request->email)->first();
-       
+        
+
         //get the password from request
         $password =$request->password;
        
@@ -39,26 +43,27 @@ class AuthController extends Controller
         }
         //if user exists validate password and redirect to respective page
         if (strcmp($user->password, $encrypted_pass) === 0) {
- 
+
             // $activity_name = "login";
             // $activity_by = $user->tbl_user_id;
-       
+        
             // AuditLogHelper::logDetails($activity_name, $activity_by);
- 
+
             auth()->login($user);
-           
+            
             Session::put('user', $user);
- 
+
             //redirectDash will check if the role of the user and redirect to respective dashboard
             $route = $this->redirectDash();
-           
+            
             // $userss = Auth::user();
- 
+
             // $user12 = session('user');
             // $userid = $user12->tbl_user_id;
             // dd($userid);
- 
-       
+
+        
+
             return redirect($route);
         } else {
             // if passwords are not same display following msg
@@ -73,19 +78,23 @@ class AuthController extends Controller
  
     public function redirectDash()
     {
-     
+
+      
         $redirect = '';
- 
+
+
         if(Auth::user() && Auth::user()->tbl_role_id == 1)
         {        
             $redirect = '/admin/dashboard';
         }
- 
-        else if(Auth::user() && Auth::user()->tbl_role_id == 2){
-            // dd("HR");
-            $redirect = '/hr_home';
+
+
+        else if(Auth::user() && Auth::user()->tbl_role_id ==2){
+            
+            $redirect = '/hr/dashboard'; 
+
         }
-        else if(Auth::user() && Auth::user()->role == 3){
+        else if(Auth::user() && Auth::user()->tbl_role_id == 3){
             dd("Developer");
         }
         else{
@@ -101,7 +110,9 @@ class AuthController extends Controller
         Auth::logout();
         return redirect('/');
     }
- 
-   
- 
+
+
+    
+
 }
+

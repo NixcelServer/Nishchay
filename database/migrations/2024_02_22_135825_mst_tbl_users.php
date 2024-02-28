@@ -14,18 +14,18 @@ return new class extends Migration
         Schema::create('mst_tbl_users', function (Blueprint $table) {
             $table->id('tbl_user_id');
             $table->string('first_name')->required();
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name')->required();
             $table->string('email')->unique()->required();
             $table->string('password')->required();
             $table->integer('tbl_role_id')->required();
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->integer('update_by')->nullable();
+            $table->date('update_date')->nullable();
+            $table->time('update_time')->nullable();
+            $table->string('flag')->default('show');
             
         });
     }

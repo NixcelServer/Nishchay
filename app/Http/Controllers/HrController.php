@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class HrController extends Controller
 {
+
     public function dashBoard()
     {
         return view('frontend_hr.hr_home');
@@ -20,5 +21,6 @@ class HrController extends Controller
     {
         return view('frontend_hr.add_new_employee_form');
     }
+
 
 }

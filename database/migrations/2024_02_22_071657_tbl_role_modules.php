@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('tbl_role_modules', function (Blueprint $table) {
             $table->id('tbl_role_module_id');
-            $table->integer('tbl_role_id');
-            $table->integer('tbl_module_id');
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
+            $table->integer('tbl_role_id')->nullable();
+            $table->integer('tbl_module_id')->nullable();
+            $table->integer('add_by')->nullable();
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->integer('update_by')->nullable();
+            $table->date('update_date')->nullable();
+            $table->time('update_time')->nullable();
+            $table->string('flag')->default('show');
 
             
         });

@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Helpers\EncryptionDecryptionHelper;
 
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -30,8 +31,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-protected $table = 'mst_tbl_users';
-public $timestamps = false;
+
+    protected $table = 'mst_tbl_users';
+    protected $primaryKey = 'tbl_user_id';
+    public $timestamps = false;
 
     protected $hidden = [
         'password',
@@ -47,6 +50,13 @@ public $timestamps = false;
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected $attributes = [
+        'update_by' => null,
+        'update_date' => null,
+        'update_time' => null
+    ];
+    
 
     public function getAuthPassword()
     {
