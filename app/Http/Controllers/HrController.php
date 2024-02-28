@@ -14,6 +14,6 @@ class HrController extends Controller
 
     public function showEmployees()
     {
-        dd("show Employees");
+        return view('hr.employees');
     }
 }

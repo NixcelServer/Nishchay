@@ -192,9 +192,36 @@ class AdminController extends Controller
     }
 
     //delete user
-    public function deleteUser(Request $request)
+    public function deleteUser($enc_id)
     {
-       //
+        $action = 'decrypt';
+        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
+        
+        $user = User::find($dec_id);
+        $user->flag = "deleted";
+        $user->save();
+
+        $emp = EmployeeDetail::find($dec_id);
+        $emp->flag = "deleted";
+        $emp->save();
+
+        $additional_detail = AdditionalDetail::find($dec_id);
+        $additional_detail->flag = "deleted";
+        $additonal_detail->save();
+
+        $epf_essi_detail = EpfEssiDetail::find($dec_id);
+
+        $bank_detail = EpfEssiDetail::find($dec_id);
+
+        $kyc_detail = KycDetail::find($dec_id);
+
+        $official_detail = OfficialDetail::find($dec_id);
+
+        $prev_emp_detail = PreviousEmploymentDetail::find($dec_id);
+
+        $sal = SalaryStructureDetail::find($dec_id);
+
+
        return redirect('/admin/users');
     } 
 

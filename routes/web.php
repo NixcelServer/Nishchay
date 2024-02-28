@@ -69,7 +69,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //upadte the user in db
      Route::post('/edituser',[AdminController::class,'editUser']);
      //delete user
-     Route::post('/delete',[AdminController::class,'deleteUser']);
+     Route::get('/delete/{id}',[AdminController::class,'deleteUser']);
 
      //admin clicks on departments in left menu
      Route::get('/depts',[DeptController::class,'showDept']);
