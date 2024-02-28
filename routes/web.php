@@ -108,6 +108,7 @@ Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
 
     //if Hr logs in show him admin dashboard
     Route::get('/dashboard',[HrController::class,'dashboard']);
-    Route::get('/employees',[HrController::class,'showEmployees']);
+    Route::get('/employee',[HrController::class,'showemployee']);
+    Route::get('/add_new_employee_form',[HrController::class,'addemployee']);
 });
 

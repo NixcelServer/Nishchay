@@ -147,7 +147,7 @@
             @if($user->tbl_role_id == 2)
             <ul class="menu">
               <li>
-                <a href="/employee">
+                <a href="/hr/employee">
                   Employee
                   <span class=""></span>
                 </a>
@@ -162,6 +162,9 @@
         </aside>
       </div>    
           
+ 
+  
+      
   <!-- General JS Scripts -->
   <script src="/assets/js/app.min.js"></script>
   <!-- JS Libraies -->

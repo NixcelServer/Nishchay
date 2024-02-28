@@ -19,7 +19,6 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
-use App\Models\Department;
 
 
 
@@ -28,7 +27,7 @@ class AdminController extends Controller
     //when admin logs in show him the dashboard
     public function dashboard()
     {
-        //dd("admin Dashboard");
+        return view('frontend_admin.admin_home');
     }
     
     //fetch and show the users from db 
@@ -49,7 +48,7 @@ class AdminController extends Controller
         
 
         // Pass the transformed users to the view
-    return view('users.users', compact('users'));
+    return view('frontend_admin.user', compact('users'));
            
     }
     
