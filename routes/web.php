@@ -49,7 +49,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //upadte the user in db
      Route::post('/edituser',[AdminController::class,'editUser']);
      //delete user
-     Route::post('/delete',[AdminController::class,'deleteUser']);
+     Route::get('/delete/{id}',[AdminController::class,'deleteUser']);
 
      //admin clicks on departments in left menu
      Route::get('/depts',[DeptController::class,'showDept']);
@@ -62,10 +62,10 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //edit dept and store into database
      Route::post('/editdept',[DeptController::class,'editDept']);
      //delete dept
-     Route::post('/deletedept',[DeptController::class,'deleteDept']);
+     Route::get('/deletedept/{id}',[DeptController::class,'deleteDept']);
 
      //designations
-     Route::get('/designation',[DesignationController::class,'showDesignation']);
+     Route::get('/designations',[DesignationController::class,'showDesignation']);
      //show new department form
      Route::get('/createdesignationform',[DesignationController::class,'createDesignation']);
      //create a new dept in db
@@ -89,7 +89,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //store existing edited role into db
      Route::post('/editrole',[RoleController::class,'editRole']);
      //delete role
-     Route::post('/deleterole',[RoleController::class,'deleteRole']);
+     Route::get('/deleterole/{id}',[RoleController::class,'deleteRole']);
      //assign module form
      Route::get('/assignmodule/{id}',[RoleController::class,'assignModuleForm']);
      //store assign module details into db

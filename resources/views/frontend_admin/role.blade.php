@@ -55,26 +55,23 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- <tbody>
+                                    <tbody>
                                         @foreach($roles as $key => $role)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $role->name }}</td>
+                                            <td>{{ $role->role_name }}</td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="" class="btn btn-warning">Edit</a>
-                                                <!-- Delete action form with encrypted ID -->
-                                                <form action="" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this role?')">Delete</button>
-                                                </form>
+                                                <a href="/admin/editrole/{{$role->encrypted_id}}" class="btn btn-warning">Edit</a>
+                                                 <!-- Delete action form with encrypted ID -->
+                                                <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this role?')">Delete</a>
+                                                
                                                 <!-- Assign Module action link -->
                                                 <a href="" class="btn btn-info">Assign Module</a>
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody> --}}
+                                    </tbody> 
                                 </table>
                             </div>
                         </div>

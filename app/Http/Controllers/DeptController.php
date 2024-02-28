@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Helpers\EncryptionDecryptionHelper;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Date;
 
 class DeptController extends Controller
 {
@@ -12,7 +14,7 @@ class DeptController extends Controller
      //fetch dept from db and show them in table format
      public function showDept()
      {
-        $departments = Department::where('flag', 'show')->get();
+        $depts = Department::where('flag', 'show')->get();
 
          
          //encrypt ids before passing to the view
@@ -20,7 +22,7 @@ class DeptController extends Controller
             $dept->encrypted_id=EncryptionDecryptionHelper::encdecId($dept->tbl_dept_id, 'encrypt');
          }
          
-         return view('dept.depts',['depts'=>$depts]);
+         return view('frontend_admin.department',['depts'=>$depts]);
      }
 
      //create new dept form
@@ -37,10 +39,10 @@ class DeptController extends Controller
          $user = session('user');
          $user_id = $user->tbl_user_id;
          $dept = new Department;
-         $dept->department_name = $request->department_name;
+         $dept->dept_name = $request->departmentName;
          $dept->add_by = $user_id;
          $dept->add_date = Date::now()->toDateString();
-         $dept->add_time = Date::now()->toTimeeString();
+         $dept->add_time = Date::now()->toTimeString();
          $dept->flag = "show";
          $dept->save();
          
@@ -80,9 +82,9 @@ class DeptController extends Controller
      }
 
      //delete dept 
-     public function deleteDept(Request $request){
+     public function deleteDept($enc_id){
         //get the dept details from db and set the flag as deleted
-        $enc_id = $request->input('enc_id');
+        
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 

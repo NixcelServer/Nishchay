@@ -6,21 +6,15 @@ use Illuminate\Http\Request;
 
 class HrController extends Controller
 {
-
-    public function dashBoard()
+    //When HR logs in show HR Dashboard
+    public function dashboard()
     {
-        return view('frontend_hr.hr_home');
+        dd("HR dashboard");
     }
 
-    public function showemployee()
+    public function showEmployees()
     {
-        return view('frontend_hr.new_employee_registration');
+        
+        return view('hr.employees');
     }
-
-    public function addemployee()
-    {
-        return view('frontend_hr.add_new_employee_form');
-    }
-
-
 }

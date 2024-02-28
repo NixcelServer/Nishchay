@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-12 text-right mt-n4">
                             <div class="buttons">
-                                <a href="add_new_user_form" class="btn btn-primary">Add New User</a>
+                                <a href="/admin/createuser" class="btn btn-primary">Add New User</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -40,21 +40,24 @@
                                             <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                @if($user->tbl_role_id == 1)
-                                                    Admin
-                                                @else
-                                                    User
-                                                @endif
+                                            @if($user->tbl_role_id == 1)
+                                                Admin
+                                            @elseif($user->tbl_role_id == 2)
+                                                Hr
+                                            @elseif($user->tbl_role_id == 3)
+                                                Developer
+                                            @elseif($user->tbl_role_id == 4)
+                                                Manager
+                                            @else
+                                                Unknown Role
+                                            @endif
                                             </td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="" class="btn btn-warning">Edit</a>
+                                                <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning">Edit</a>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <form action="" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                                                </form>
+                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                                               
                                             </td>
                                         </tr>
                                         @endforeach

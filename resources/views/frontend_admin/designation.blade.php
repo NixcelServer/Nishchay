@@ -27,7 +27,7 @@
                         </div>
                         <!-- Form to add new designation -->
                         <div id="addDesignationForm" style="display: none;">
-                            <form method="POST">
+                            <form action="/admin/storedesignation" method="POST">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -50,27 +50,20 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- <tbody>
-                                        @foreach($users as $key => $user)
+                                     <tbody>
+                                        @foreach($designations as $key => $designation)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->role }}</td>
+                                            <td>{{ $designation->designation_name }}</td>
                                             
                                             <td>
-                                                <!-- Update action link with encrypted ID -->
-                                                <a href="{{ route('user.edit', $user->id) }}">Update</a>
+                                            <a href="/admin/editdept/{{$designation->encrypted_id}}" class="btn btn-warning">Edit</a>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit">Delete</button>
-                                                </form>
+                                                <a href="/admin/deletedept/{{$designation->encrypted_id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody> --}}
+                                    </tbody> 
                                 </table>
                             </div>
                         </div>

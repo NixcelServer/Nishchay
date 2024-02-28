@@ -21,7 +21,7 @@ class RoleController extends Controller
             $role->encrypted_id=EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
          }
 
-         return view('role.roles',['roles'=>$roles]);
+         return view('frontend_admin.role',['roles'=>$roles]);
     }
 
     public function createRoleForm()
@@ -76,10 +76,10 @@ class RoleController extends Controller
           return redirect('/admin/roles');
     }
 
-    public function deleteRole(Request $request)
+    public function deleteRole($enc_id)
     {
         //get the dept details from db and set the flag as deleted
-        $enc_id = $request->input('enc_id');
+        
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 

@@ -28,7 +28,24 @@
                         </div>
                         <!-- Form to add new department -->
                         <div id="addDepartmentForm" style="display: none;">
-                            <form method="POST">                                @csrf
+                            <form action="/admin/storedept" method="POST"> 
+                                                               @csrf
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="departmentName">Enter Department Name</label>
+                                        <input type="text" class="form-control" id="departmentName" name="departmentName" required>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-left">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Layer to open -->
+                         <!-- Form to edit department -->
+                         <div id="editDepartmentForm" style="display: none;">
+                            <form action="/admin/editdept" method="POST"> 
+                                                               @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="departmentName">Enter Department Name</label>
@@ -50,27 +67,25 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- <tbody>
-                                        @foreach($users as $key => $user)
+                                     <tbody>
+                                        @foreach($depts as $key => $dept)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->role }}</td>
+                                            <td>{{ $dept->dept_name }}</td>
+                                            
                                             
                                             <td>
-                                                <!-- Update action link with encrypted ID -->
-                                                <a href="{{ route('user.edit', $user->id) }}">Update</a>
+                                                 <!-- Edit action link with encrypted ID -->
+                                                 
+                                                 <button class="btn btn-warning" id="toggleForm1">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit">Delete</button>
+                                                <a href="/admin/deletedept/{{$dept->encrypted_id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                                               
                                                 </form>
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody> --}}
+                                    </tbody> 
                                 </table>
                             </div>
                         </div>
@@ -91,4 +106,14 @@
             addDepartmentForm.style.display = 'none';
         }
     });
+
+    document.getElementById('toggleForm1').addEventListener('click', function() {
+    var editDepartmentForm = document.getElementById('editDepartmentForm');
+    if (editDepartmentForm.style.display === 'none') {
+        editDepartmentForm.style.display = 'block';
+    } else {
+        editDepartmentForm.style.display = 'none';
+    }
+});
+    
 </script>

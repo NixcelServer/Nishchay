@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Designation;
 use App\Helpers\EncryptionDecryptionHelper;
+use Illuminate\Support\Facades\Date;
+
 
 class DesignationController extends Controller
 {
@@ -17,7 +19,7 @@ class DesignationController extends Controller
             $designation->encrypted_id=EncryptionDecryptionHelper::encdecId($designation->tbl_designation_id, 'encrypt');
          }
          
-         return view('designation.designations',['designations'=>$designations]);
+         return view('frontend_admin.designation',['designations'=>$designations]);
 
     }
 
@@ -34,10 +36,10 @@ class DesignationController extends Controller
         $user_id = $user->tbl_user_id;
 
         $designation = new Designation;
-        $designation->designation_name = $request->designation_name;
+        $designation->designation_name = $request->designationName;
         $designation->add_by = $user_id;
         $designation->add_date = Date::now()->toDateString();
-        $designation->add_time = Date::now()->toTimeeString();
+        $designation->add_time = Date::now()->toTimeString();
         $designation->flag = "show";
         $designation->save();
 

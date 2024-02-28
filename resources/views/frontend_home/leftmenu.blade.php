@@ -120,7 +120,7 @@
             @if($user->tbl_role_id == 1)
                 <ul class="menu">
               <li>
-                <a href="/admin/designation">
+                <a href="/admin/designations">
                   Designation
                   <span class=""></span>
                 </a>
@@ -131,7 +131,7 @@
             @if($user->tbl_role_id == 1)
             <ul class="menu">
               <li>
-                <a href="/admin/role">
+                <a href="/admin/roles">
                   Role
                   <span class=""></span>
                 </a>

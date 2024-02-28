@@ -19,7 +19,7 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
-use App\Models\Department;
+
 
 
 
@@ -28,7 +28,7 @@ class AdminController extends Controller
     //when admin logs in show him the dashboard
     public function dashboard()
     {
-        //dd("admin Dashboard");
+        return view('frontend_admin.admin_home');
     }
     
     //fetch and show the users from db 
@@ -49,13 +49,13 @@ class AdminController extends Controller
         
 
         // Pass the transformed users to the view
-    return view('users.users', compact('users'));
+    return view('frontend_admin.user', compact('users'));
            
     }
     
     //display user registration form
     public function createUser(){
-        return view('users.createuserform');
+        return view('frontend_admin.add_new_user_form');
     }
 
     //create new user in db and redirect to user home page
@@ -127,13 +127,13 @@ class AdminController extends Controller
         // $official_detail->tbl_user_id = $userId;
         // $official_detail->save();
 
-        $prev_emp_detail = new PreviousEmploymentDetail;
-        $prev_emp_detail->tbl_user_id = $userId;
-        $prev_emp_detail->save();
+        // $prev_emp_detail = new PreviousEmploymentDetail;
+        // $prev_emp_detail->tbl_user_id = $userId;
+        // $prev_emp_detail->save();
 
-        $sal = new SalaryStructureDetail;
-        $sal->tbl_user_id = $userId;
-        $sal->save();
+        // $sal = new SalaryStructureDetail;
+        // $sal->tbl_user_id = $userId;
+        // $sal->save();
 
         
 
@@ -151,17 +151,18 @@ class AdminController extends Controller
         
         $user = User::find($dec_id);
         
-        return view('users.edit',['user'=>'$user','enc_id' => $enc_id]);
+        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id]);
     }
 
     //edit user details in db
     public function editUser(Request $request)
     {
 
-
+        
         $userdetails = session('user');
         
         $enc_id = $request->input('enc_id');
+        
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
         
@@ -192,18 +193,58 @@ class AdminController extends Controller
         $user->update_time = Date::now()->toTimeString();
         
         $user->save();
-        dd("success");
+        //dd("success");
         return redirect('/admin/users');
 
 
     }
 
     //delete user
-    public function deleteUser(Request $request)
-    {
-       //
-       return redirect('/admin/users');
-    } 
+     //delete user
+     public function deleteUser($enc_id)
+     {
+         $action = 'decrypt';
+         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
+         
+         $user = User::find($dec_id);
+         $user->flag = "deleted";
+         $user->save();
+ 
+        //  $emp = EmployeeDetail::find($dec_id);
+        //  $emp->flag = "deleted";
+        //  $emp->save();
+ 
+        //  $additional_detail = AdditionalDetail::find($dec_id);
+        //  $additional_detail->flag = "deleted";
+        //  $additonal_detail->save();
+ 
+        //  $epf_essi_detail = EpfEssiDetail::find($dec_id);
+        //  $epf_essi_detail->flag = "deleted";
+        //  $epf_essi_detail->flag->save();
+ 
+        //  $bank_detail = BankDetail::find($dec_id);
+        //  $bank_detail->flag = "deleted";
+        //  $bank_detail->save();
+
+        //  $kyc_detail = KycDetail::find($dec_id);
+        //  $kyc_detail->flag = "deleted";
+        //  $kyc_detail->save();
+ 
+        //  $official_detail = OfficialDetail::find($dec_id);
+        //  $official_detail->flag = "deleted";
+        //  $official_detail->save();
+ 
+        //  $prev_emp_detail = PreviousEmploymentDetail::find($dec_id);
+        //  $prev_emp_detail->flag = "deleted";
+        //  $prev_emp_detail->save();
+ 
+        //  $sal = SalaryStructureDetail::find($dec_id);
+        //  $sal->flag = "deleted";
+        //  $sal->save();
+ 
+ 
+        return redirect('/admin/users');
+     } 
 
    
 
