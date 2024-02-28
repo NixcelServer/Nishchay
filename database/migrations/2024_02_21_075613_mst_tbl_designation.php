@@ -10,20 +10,19 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('mst_tbl_designations', function (Blueprint $table) {
-            $table->id('tbl_designation_id');
-            $table->string('designation_name')->unique();
-            $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
-           
-        });
-    }
+{
+    Schema::create('mst_tbl_designations', function (Blueprint $table) {
+        $table->id('tbl_designation_id');
+        $table->string('designation_name')->unique();
+        $table->integer('add_by')->nullable();
+        $table->date('add_date')->nullable();
+        $table->time('add_time')->nullable();
+        $table->integer('update_by')->nullable();
+        $table->date('update_date')->nullable();
+        $table->time('update_time')->nullable();
+        $table->string('flag')->default('show');
+    });
+}
 
     /**
      * Reverse the migrations.
