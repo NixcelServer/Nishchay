@@ -165,4 +165,18 @@ class AdminController extends Controller
         // dd("in show dept");
         return view('frontend_admin.department',['depts'=>$depts]);
     }
+
+    public function showDesignation()
+    {
+        // $depts = Department::get();
+        // dd("in show dept");
+        return view('frontend_admin.designation');
+    }
+
+    public function showRole()
+    {
+        // $depts = Department::get();
+        // dd("in show dept");
+        return view('frontend_admin.role');
+    }
 }

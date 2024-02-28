@@ -39,18 +39,23 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->role }}</td>
-                                            
-                                            {{-- <td>
-                                                <!-- Update action link with encrypted ID -->
-                                                <a href="{{ route('user.edit', $user->id) }}">Update</a>
+                                            <td>
+                                                @if($user->tbl_role_id == 1)
+                                                    Admin
+                                                @else
+                                                    User
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <!-- Edit action link with encrypted ID -->
+                                                <a href="" class="btn btn-warning">Edit</a>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST">
+                                                <form action="" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
                                                 </form>
-                                            </td> --}}
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

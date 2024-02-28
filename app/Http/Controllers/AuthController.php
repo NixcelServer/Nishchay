@@ -81,9 +81,9 @@ class AuthController extends Controller
             $redirect = '/admin/dashboard';
         }
  
-        else if(Auth::user() && Auth::user()->role ==2){
-            dd("HR");
-            $redirect = '';
+        else if(Auth::user() && Auth::user()->tbl_role_id == 2){
+            // dd("HR");
+            $redirect = '/hr_home';
         }
         else if(Auth::user() && Auth::user()->role == 3){
             dd("Developer");

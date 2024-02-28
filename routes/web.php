@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HrController;
+
  
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,7 @@ use App\Http\Controllers\AuthController;
  
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
+Route::post('/logout',[AuthController::class,'logout']);
  
  
  
@@ -57,11 +60,12 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      Route::post('/storeuser',[AdminController::class,'storeUser']);
      //admin clicks on departments in left menu
      Route::get('/depts',[AdminController::class,'showDept']);
-
-
+     //admin clicks on designation in left menu
+     Route::get('/designation',[AdminController::class,'showDesignation']);
+     //admin clicks on Role in left menu
+     Route::get('/role',[AdminController::class,'showRole']);
+     //admin clicks on add_new_user_form in left menu
      route::get('/add_new_user_form',[AdminController::class,'add_new_user_form']);
-
- 
      //admin clicks on departments in left menu
     // Route::get('/dep')
  });
@@ -71,4 +75,10 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //     // Route::post('/update-role',[SuperAdminController::class,'updateRole'])->name('updateRole');
 
 
-route::get('/admin_home',[AdminController::class,'index']);
+//routes for HR
+Route::get('/hr_home',[HrController::class,'dashBoard']);
+Route::get('/employee',[HrController::class,'showemployee']);
+Route::get('/add_new_employee_form',[HrController::class,'addemployee']);
+
+
+
