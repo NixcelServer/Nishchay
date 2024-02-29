@@ -35,9 +35,11 @@ class DeptController extends Controller
      //create new dept in db
      public function storeDept(Request $request)
      {   
+
       $request->validate([
          'departmentName' => 'required|unique:mst_tbl_depts,dept_name'
       ]);  
+
         //get user detials from session to add in add by colm
          $user = session('user');
          $user_id = $user->tbl_user_id;
