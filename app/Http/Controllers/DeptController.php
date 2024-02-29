@@ -28,13 +28,16 @@ class DeptController extends Controller
      //create new dept form
      public function createDept(Request $request)
      {
-        
+         
          return view('dept.createDept');
      }
  
      //create new dept in db
      public function storeDept(Request $request)
      {   
+      $request->validate([
+         'departmentName' => 'required|unique:mst_tbl_depts,dept_name'
+      ]);  
         //get user detials from session to add in add by colm
          $user = session('user');
          $user_id = $user->tbl_user_id;
@@ -60,7 +63,10 @@ class DeptController extends Controller
      }
  
      public function editDept(Request $request)//edit the dept
-     {
+      {
+         $request->validate([
+            'departmentName' => 'required|unique:mst_tbl_depts,dept_name'
+         ]);    
         //get user details from session , they will be used in update by colm
         $user = session('user');
         $user_id = $user->tbl_user_id;
@@ -70,12 +76,13 @@ class DeptController extends Controller
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
+        
         $dept = Department::findOrFail($dec_id);
         //edit the dept details from the attributes received in request
-        $dept->dept_name = $request->dept_name;
+        $dept->dept_name = $request->departmentName;
         $dept->update_by = $user_id;
         $dept->update_date = Date::now()->toDateString();
-        $dept->update_time = Date::now()->toTimeeString();
+        $dept->update_time = Date::now()->toTimeString();
         $dept->save();
 
         return redirect('/admin/depts');

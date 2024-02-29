@@ -30,7 +30,10 @@ class DesignationController extends Controller
     }
 
     public function storeDesignation(Request $request)
-    {
+    {   
+        $request -> validate([
+            'designationName' => 'required|unique:mst_tbl_designations,designation_name'
+        ]);
         //get user detials from session to add in add by colm
         $user = session('user');
         $user_id = $user->tbl_user_id;
@@ -58,7 +61,11 @@ class DesignationController extends Controller
     } 
 
     public function editDesignation(Request $request)
-    {
+    {   
+        $request -> validate([
+            'designationName' => 'required|unique:mst_tbl_designations,designation_name'
+        ]);
+        
          //get user details from session , they will be used in update by colm
          $user = session('user');
          $user_id = $user->tbl_user_id;
@@ -70,19 +77,19 @@ class DesignationController extends Controller
 
          $designation = Designation::findOrFail($dec_id);
 
-         $designation->designation_name = $request->designation_name;
+         $designation->designation_name = $request->designationName;
          $designation->update_by = $user_id;
          $designation->update_date = Date::now()->toDateString();
-         $designation->update_time = Date::now()->toTimeeString();
+         $designation->update_time = Date::now()->toTimeString();
          $designation->save();
 
          return redirect('/admin/designations');
     }
 
-    public function deleteDesignation(Request $request)
+    public function deleteDesignation($enc_id)
     {
          //get the dept details from db and set the flag as deleted
-         $enc_id = $request->input('enc_id');
+        //
          $action = 'decrypt';
          $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
  
@@ -90,5 +97,6 @@ class DesignationController extends Controller
  
          $designation->flag = "deleted";
          $designation->save();
+         return redirect()->back();
     }
 }

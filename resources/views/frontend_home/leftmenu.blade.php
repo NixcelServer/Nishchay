@@ -147,7 +147,7 @@
             @if($user->tbl_role_id == 2)
             <ul class="menu">
               <li>
-                <a href="/employee">
+                <a href="/hr/employees">
                   Employee
                   <span class=""></span>
                 </a>
