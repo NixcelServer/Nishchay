@@ -55,9 +55,8 @@
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
                                                 <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning">Edit</a>
-                                                <!-- Delete action form with encrypted ID -->
-                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
-                                               
+                                                <!-- Delete action form with encrypted ID and SweetAlert confirmation -->
+                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger delete-user" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -71,3 +70,32 @@
         </div>
     </section>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Script to handle SweetAlert confirmation for user deletion
+    document.querySelectorAll('.delete-user').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default action of the link
+            
+            var encryptedId = this.dataset.encryptedId; // Retrieve encrypted_id from data attribute
+
+            // Display SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the delete URL if user confirms
+                    window.location.href = "/admin/delete/" + encryptedId;
+                }
+            });
+        });
+    });
+</script>

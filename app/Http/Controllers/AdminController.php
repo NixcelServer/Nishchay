@@ -247,7 +247,10 @@ class AdminController extends Controller
      } 
 
    
-
+     public function showmodules()
+     {
+         return view('frontend_admin.assign_module');
+     }
  
 
 

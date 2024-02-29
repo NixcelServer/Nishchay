@@ -7,7 +7,7 @@ use App\Models\Role;
 use App\Helpers\EncryptionDecryptionHelper;
 use App\Models\Module;
 use App\Models\RoleModule;
-
+use Illuminate\Support\Facades\Date;
 
 class RoleController extends Controller
 {
@@ -34,7 +34,7 @@ class RoleController extends Controller
         $user = session('user');
          $user_id = $user->tbl_user_id;
          $role = new Role;
-         $role->role_name = $request->role_name;
+         $role->role_name = $request->roleName;
          //$dept->add_by = $user_id;
          $role->add_date = Date::now()->toDateString();
          $role->add_time = Date::now()->toTimeString();
@@ -67,10 +67,10 @@ class RoleController extends Controller
   
           $role = Role::findOrFail($dec_id);
           //edit the dept details from the attributes received in request
-          $role->role_name = $request->role_name;
-          $role->update_by = $user_id;
-          $role->update_date = Date::now()->toDateString();
-          $role->update_time = Date::now()->toTimeeString();
+          $role->role_name = $request->roleName;
+          //$role->update_by = $user_id;
+          $role->updated_date = Date::now()->toDateString();
+          $role->updated_time = Date::now()->toTimeString();
           $role->save();
 
           return redirect('/admin/roles');

@@ -75,7 +75,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
     //edit designation and store in db
      Route::post('/editdesignation',[DesignationController::class,'editDesignation']);
      //delete designation
-     Route::post('/deletedesignation',[DesignationController::class,'deleteDesignation']);
+     Route::get('/deletedesignation/{id}',[DesignationController::class,'deleteDesignation']);
 
      //Role
      //show roles
@@ -91,6 +91,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //delete role
      Route::get('/deleterole/{id}',[RoleController::class,'deleteRole']);
      //assign module form
+     Route::get('/assignmodule',[AdminController::class,'showmodules']);
      Route::get('/assignmodule/{id}',[RoleController::class,'assignModuleForm']);
      //store assign module details into db
      Route::post('/assignmodule',[RoleController::class,'assignModule']);
