@@ -1,21 +1,21 @@
 @extends('frontend_home.leftmenu')
-
+ 
 <style>
     /* Custom CSS to adjust positioning */
     .main-content {
         margin-top: -30px; /* Adjust this value as needed */
     }
-
+ 
     /* Custom CSS to adjust width of input field */
     #roleName {
         width: 200px; /* Adjust the width as needed */
     }
-
+ 
     .card-footer.text-left button {
         margin-top: -5px; /* Adjust this value as needed */
     }
 </style>
-
+ 
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -63,7 +63,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody> 
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

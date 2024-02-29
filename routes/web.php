@@ -104,11 +104,31 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //     // Route::get('/manage-role',[SuperAdminController::class,'manageRole'])->name('manageRole');
 //     // Route::post('/update-role',[SuperAdminController::class,'updateRole'])->name('updateRole');
 
+//Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+
+
 Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
     //mention your routes here
 
     //if Hr logs in show him admin dashboard
     Route::get('/dashboard',[HrController::class,'dashboard']);
     Route::get('/employees',[HrController::class,'showEmployees']);
+    Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
+    Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
+    //show prev employment details form
+    //Route::get('/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
+    //store prevemp details upon clicking on save
+    Route::post('/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
+    //on clicking on next in prev emp form display store official details form
+    Route::get('/editemp/officialdetailsform/{id}',[HrController::class,'officialDetailsForm']);
+
+    //store official details and return view statutory complaince details
+    Route::post('/editemp/storeofficialdetails',[HrController::class,'storeOfficialDetailsForm']);
+
+    //store statutory compliance details and return then return view bank details
+    Route::post('/editemp/statutorydetails',[HrController::class,'statutoryDetails']);
+
+    //store bank details and then return salary structure form
+    Route::post('/editemp/bankdetails',[HrController::class,'bankDetails']);
 });
 

@@ -27,6 +27,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <tbody>
                                         @foreach($depts as $key => $dept)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
@@ -43,6 +44,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
+                                    </tbody>
                                     </tbody>
                                 </table>
                             </div>
