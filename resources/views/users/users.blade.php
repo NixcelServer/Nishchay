@@ -17,9 +17,9 @@
         <!-- Update action link with encrypted ID -->
         <a href="/admin/edituser/{{$user->encrypted_id}}">Update</a>
         <!-- Delete action form with encrypted ID -->
-        <form action="" method="POST">
+        <form action="/admin/delete/{{$user->encrypted_id}}" method="get">
             @csrf
-            @method('DELETE')
+            
             <button type="submit">Delete</button>
         </form>
         
