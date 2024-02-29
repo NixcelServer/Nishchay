@@ -27,28 +27,32 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.No</th>
+                                            <th>Employee Code</th>
                                             <th>Name</th>
-                                            <th>Email</th>
+                                            
                                             <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- <tbody>
-                                        @foreach($users as $key => $user)
+                                    <tbody>
+                                        @foreach($emps as $key => $emp)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
-                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $emp->emp_code }}</td>
+                                            <td>{{ $emp->first_name }} {{ $emp->middle_name }} {{ $emp->last_name }}</td>
+                                            
                                             <td>
-                                                @if($user->role_id == 1)
-                                                    Admin
-                                                @else
-                                                    User
+                                                @if($emp->role_id == 2)
+                                                    Hr
+                                                @elseif($emp->tbl_role_id == 3)
+                                                    Developer
+                                                @elseif($emp->tbl_role_id == 4)
+                                                    Manager    
                                                 @endif
                                             </td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="" class="btn btn-warning">Edit</a>
+                                                <a href="/hr/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning">Edit</a>
                                                 <!-- Delete action form with encrypted ID -->
                                                 <form action="" method="POST" style="display: inline;">
                                                     @csrf
@@ -58,7 +62,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody> --}}
+                                    </tbody> 
                                 </table>
                             </div>
                         </div>

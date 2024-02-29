@@ -1,16 +1,17 @@
+[16:55] Abhijeet Bhosale
 @extends('frontend_home.leftmenu')
-
+ 
 <style>
     /* Custom CSS to adjust positioning */
     .main-content {
         margin-top: -30px; /* Adjust this value as needed */
     }
-
+ 
     #designationName{
         width: 200px; /* Adjust the width as needed */
     }
 </style>
-
+ 
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -26,6 +27,7 @@
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#addDesignationModal">Add New Designation</button>
                             </div>
                         </div>
+
                         <!-- Table displaying designations -->
                         <div class="card-body">
                             <div class="table-responsive">
@@ -48,7 +50,9 @@
                                                     data-designation-id="{{ $designation->tbl_designation_id }}"
                                                     data-encrypted-id="{{ $designation->encrypted_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
+
                                                 <a href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger delete-designation" data-encrypted-id="{{ $designation->encrypted_id }}">Delete</a>
+
                                             </td>
                                         </tr>
                                         @endforeach
@@ -62,6 +66,7 @@
         </div>
     </section>
 </div>
+
 
 <!-- Add Designation Modal -->
 <div class="modal fade" id="addDesignationModal" tabindex="-1" role="dialog" aria-labelledby="addDesignationModalLabel" aria-hidden="true">
@@ -123,6 +128,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
 <script>
     // Script for delete confirmation with SweetAlert
     document.querySelectorAll('.delete-designation').forEach(function (button) {
@@ -155,4 +161,6 @@ document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
         $('#editDesignationModal_' + designationId).modal('show');
     });
 });
+
 </script>
+ 

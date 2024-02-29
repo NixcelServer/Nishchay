@@ -1,21 +1,21 @@
 @extends('frontend_home.leftmenu')
-
+ 
 <style>
     /* Custom CSS to adjust positioning */
     .main-content {
         margin-top: -30px; /* Adjust this value as needed */
     }
-
+ 
     /* Custom CSS to adjust width of input field */
     #roleName {
         width: 200px; /* Adjust the width as needed */
     }
-
+ 
     .card-footer.text-left button {
         margin-top: -5px; /* Adjust this value as needed */
     }
 </style>
-
+ 
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -33,7 +33,9 @@
                         </div>
 
 
+
                        <!-- Table displaying roles -->
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
@@ -54,16 +56,18 @@
                                                 <button class="btn btn-warning toggle-edit-form"
                                                     data-role-id="{{ $role->tbl_role_id }}"
                                                     data-encrypted-id="{{ $role->encrypted_id }}">Edit</button>
+
                                                 
                                                 <!-- Delete action form with encrypted ID -->
                                                 <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
                                                 
                                                 <!-- Assign Module action link -->
                                                 <a href="/admin/assignmodule" class="btn btn-info">Assign Module</a>
+
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody> 
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -73,6 +77,7 @@
         </div>
     </section>
 </div>
+
 
 <!-- Add Role Modal -->
 <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
@@ -138,6 +143,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
         // Script to handle deletion confirmation using SweetAlert
         document.querySelectorAll('.delete-role').forEach(function (button) {
@@ -173,6 +179,8 @@ document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
         var roleId = this.dataset.roleId;
         $('#editRoleModal_' + roleId).modal('show');
     });
+
 });
 
 </script>
+

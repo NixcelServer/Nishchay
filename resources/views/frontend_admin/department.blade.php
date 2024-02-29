@@ -1,5 +1,19 @@
 @extends('frontend_home.leftmenu')
 
+
+
+<style>
+    /* Custom CSS to adjust positioning */
+    .main-content {
+        margin-top: -30px; /* Adjust this value as needed */
+    }
+
+    #departmentName {
+        width: 200px; /* Adjust the width as needed */
+    }
+</style>
+
+
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -15,7 +29,9 @@
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#addDepartmentModal">Add New Department</button>
                             </div>
                         </div>
+
                         <!-- Table to display existing departments -->
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
@@ -36,10 +52,12 @@
                                                 <button class="btn btn-warning toggle-edit-form"
                                                     data-dept-id="{{ $dept->tbl_dept_id }}"
                                                     data-encrypted-id="{{ $dept->encrypted_id }}">Edit</button>
+
                                                 <!-- Delete action form with encrypted ID -->
                                                 <button class="btn btn-danger toggle-delete-form"
                                                     data-dept-id="{{ $dept->tbl_dept_id }}"
                                                     data-encrypted-id="{{ $dept->encrypted_id }}">Delete</button>
+
                                             </td>
                                         </tr>
                                         @endforeach
@@ -111,6 +129,7 @@
 @endforeach
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
     // Script to handle delete confirmation
     document.querySelectorAll('.toggle-delete-form').forEach(function (button) {
         button.addEventListener('click', function () {
@@ -130,13 +149,16 @@
                 }
             });
         });
+
     });
 
     // Script to toggle display of edit department form
     document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
         button.addEventListener('click', function () {
+
             var departmentId = this.dataset.deptId;
             $('#editDepartmentModal_' + departmentId).modal('show');
         });
     });
+
 </script>

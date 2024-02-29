@@ -30,7 +30,10 @@ class DesignationController extends Controller
     }
 
     public function storeDesignation(Request $request)
-    {
+    {   
+        $request -> validate([
+            'designationName' => 'required|unique:mst_tbl_designations,designation_name'
+        ]);
         //get user detials from session to add in add by colm
         $user = session('user');
         $user_id = $user->tbl_user_id;
@@ -58,7 +61,11 @@ class DesignationController extends Controller
     } 
 
     public function editDesignation(Request $request)
-    {
+    {   
+        $request -> validate([
+            'designationName' => 'required|unique:mst_tbl_designations,designation_name'
+        ]);
+        
          //get user details from session , they will be used in update by colm
          $user = session('user');
          $user_id = $user->tbl_user_id;

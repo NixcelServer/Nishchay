@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('tbl_prev_empl_detail_id');
             $table->integer('tbl_user_id')->nullable();
             $table->string('company_name')->nullable();
+            $table->string('designation')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->integer('add_by')->nullable();

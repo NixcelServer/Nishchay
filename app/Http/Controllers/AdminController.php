@@ -61,6 +61,16 @@ class AdminController extends Controller
     //create new user in db and redirect to user home page
     public function storeUser(Request $request){
 
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:mst_tbl_users,email',
+            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
+            'tbl_role_id' => 'required|integer'],
+            [
+                'password.regex' => 'The password must contain at least one letter and one number.',
+            ]);
         
         
         //get user details from session
@@ -82,17 +92,17 @@ class AdminController extends Controller
         //store details into employee also
         $userId = $user->tbl_user_id;
         
-        // $emp = new EmployeeDetail;
-        // $emp->tbl_user_id = $userId;
-        // $emp->first_name = $request->first_name;
-        // $emp->middle_name = $request->middle_name;
-        // $emp->last_name = $request->last_name;
-        // $emp->tbl_role_id = $request->tbl_role_id;
-        // $emp->add_by = $user_details->tbl_user_id;
-        // $emp->add_date = Date::now()->toDateString();
-        // $emp->add_time = Date::now()->toTimeString();
-        // $emp->flag ="show";
-        // $emp->save();
+        $emp = new EmployeeDetail;
+        $emp->tbl_user_id = $userId;
+        $emp->first_name = $request->first_name;
+        $emp->middle_name = $request->middle_name;
+        $emp->last_name = $request->last_name;
+        $emp->tbl_role_id = $request->tbl_role_id;
+        $emp->add_by = $user_details->tbl_user_id;
+        $emp->add_date = Date::now()->toDateString();
+        $emp->add_time = Date::now()->toTimeString();
+        $emp->flag ="show";
+        $emp->save();
         
         
 
@@ -157,7 +167,16 @@ class AdminController extends Controller
     //edit user details in db
     public function editUser(Request $request)
     {
-
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:mst_tbl_users,email',
+            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
+            'tbl_role_id' => 'required|integer'],
+            [
+                'password.regex' => 'The password must contain at least one letter and one number.',
+            ]);
         
         $userdetails = session('user');
         
@@ -185,13 +204,21 @@ class AdminController extends Controller
 
       
 
-        $user->add_by = $user->add_by;
-        $user->add_date = $user->add_date;
-        $user->add_time = $user->add_time;
+        
         $user->update_by = $userdetails->tbl_user_id;
         $user->update_date = Date::now()->toDateString();
         $user->update_time = Date::now()->toTimeString();
+
+        //saving the details in employee tables also
+        // $emp = EmployeeDetail::findOrFail($dec_id);
+        // $emp->first_name = $request->first_name;
+        // $emp->middle_name = $request->middle_name;
+        // $emp->last_name = $request->last_name;
         
+        // $emp->tbl_role_id = $request->tbl_role_id;
+        // $emp->save();
+
+
         $user->save();
         //dd("success");
         return redirect('/admin/users');
