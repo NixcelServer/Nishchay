@@ -1,8 +1,9 @@
 <?php
-
+ 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\HrController;
 
 
 
+
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,30 +23,7 @@ use App\Http\Controllers\HrController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-//when user tries to access server
-//entry point
-
-// Route::get('/', function () {
-//     //check if user exists in session
-//     if (session()->has('user')) {
-//         return redirect('/user');
-//     }
-//     return (new AdminController())->showLoginForm();
-// });
-
-// //login user verification
-// Route::post('/login',[AdminController::class,'login']);
-
-// //display create user form
-// Route::get('/createuserfrom',[AdminController::class,'showCreateUserForm']);
-
-// //submitting the create user form
-// Route::post('/createnewuser',[AdminController::class,'createUser']);
+ 
 
 
 
@@ -82,10 +62,10 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //edit dept and store into database
      Route::post('/editdept',[DeptController::class,'editDept']);
      //delete dept
-     Route::post('/deletedept',[DeptController::class,'deleteDept']);
+     Route::get('/deletedept/{id}',[DeptController::class,'deleteDept']);
 
      //designations
-     Route::get('/designation',[DesignationController::class,'showDesignation']);
+     Route::get('/designations',[DesignationController::class,'showDesignation']);
      //show new department form
      Route::get('/createdesignationform',[DesignationController::class,'createDesignation']);
      //create a new dept in db
@@ -95,7 +75,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
     //edit designation and store in db
      Route::post('/editdesignation',[DesignationController::class,'editDesignation']);
      //delete designation
-     Route::post('/deletedesignation',[DesignationController::class,'deleteDesignation']);
+     Route::get('/deletedesignation/{id}',[DesignationController::class,'deleteDesignation']);
 
      //Role
      //show roles
@@ -109,7 +89,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //store existing edited role into db
      Route::post('/editrole',[RoleController::class,'editRole']);
      //delete role
-     Route::post('/deleterole',[RoleController::class,'deleteRole']);
+     Route::get('/deleterole/{id}',[RoleController::class,'deleteRole']);
      //assign module form
      Route::get('/assignmodule/{id}',[RoleController::class,'assignModuleForm']);
      //store assign module details into db
@@ -123,10 +103,31 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //     // Route::get('/manage-role',[SuperAdminController::class,'manageRole'])->name('manageRole');
 //     // Route::post('/update-role',[SuperAdminController::class,'updateRole'])->name('updateRole');
 
+//Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+
+
 Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
     //mention your routes here
 
     //if Hr logs in show him admin dashboard
     Route::get('/dashboard',[HrController::class,'dashboard']);
     Route::get('/employees',[HrController::class,'showEmployees']);
+    Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
+    Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
+    //show prev employment details form
+    //Route::get('/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
+    //store prevemp details upon clicking on save
+    Route::post('/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
+    //on clicking on next in prev emp form display store official details form
+    Route::get('/editemp/officialdetailsform/{id}',[HrController::class,'officialDetailsForm']);
+
+    //store official details and return view statutory complaince details
+    Route::post('/editemp/storeofficialdetails',[HrController::class,'storeOfficialDetailsForm']);
+
+    //store statutory compliance details and return then return view bank details
+    Route::post('/editemp/statutorydetails',[HrController::class,'statutoryDetails']);
+
+    //store bank details and then return salary structure form
+    Route::post('/editemp/bankdetails',[HrController::class,'bankDetails']);
 });
+
