@@ -1,16 +1,18 @@
 @extends('frontend_home.leftmenu')
+
  
+
 <style>
     /* Custom CSS to adjust positioning */
     .main-content {
         margin-top: -30px; /* Adjust this value as needed */
     }
- 
+
     #roleName, #selectModule {
         width: 200px; /* Adjust the width as needed */
     }
 </style>
- 
+
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -20,6 +22,7 @@
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Modules</h4>
                         </div>
+
  
                         <!-- Form to add Role Name, Select Module, and Assign button -->
                         <div class="card-body">
@@ -38,10 +41,12 @@
                                      <option value="2">Create New Users</option>
                                      <!-- Add more options as needed -->
                                      </select>
+
                                 </div>
                                 <button type="submit" class="btn btn-primary">Assign</button>
                             </form>
                         </div>
+
  
                         <!-- Table displaying modules -->
                         <div class="card-body">
@@ -76,6 +81,7 @@
                                     @endforeach
                                 </tbody>
                              </table>
+
                             </div>
                         </div>
                     </div>
@@ -84,4 +90,4 @@
         </div>
     </section>
 </div>
- 
+

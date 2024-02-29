@@ -31,7 +31,7 @@
                                 <div class="form-group row">
                                     <div class="col">
                                         <input type="email" name="email" class="form-control" placeholder="Email"
-                                        value="{{ $user->email}}">>
+                                        value="{{ $user->email}}">
                                     </div>
                                     <div class="col">
                                         <input type="password" name="password" class="form-control" placeholder="Password">

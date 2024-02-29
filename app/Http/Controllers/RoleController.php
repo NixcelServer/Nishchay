@@ -82,7 +82,9 @@ class RoleController extends Controller
           $role = Role::findOrFail($dec_id);
           //edit the dept details from the attributes received in request
           $role->role_name = $request->roleName;
-          //$role->updated_by = $user_id;
+
+          //$role->update_by = $user_id;
+
           $role->updated_date = Date::now()->toDateString();
           $role->updated_time = Date::now()->toTimeString();
           $role->save();

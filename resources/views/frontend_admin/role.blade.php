@@ -27,41 +27,15 @@
                         </div>
                         <div class="col-12 text-right mt-n4">
                             <div class="buttons">
-                                <button id="toggleForm" class="btn btn-primary">Add New Role</button>
+                                <!-- Button to show Add New Role Modal -->
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">Add New Role</button>
                             </div>
                         </div>
-                        <!-- Form to add new role -->
-                        <div id="addRoleForm" style="display: none;">
-                            <form action="/admin/storerole" method="POST">
-                                @csrf
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="roleName">Enter Role Name</label>
-                                        <input type="text" class="form-control" id="roleName" name="roleName" required>
-                                    </div>
-                                </div>
-                                <div class="card-footer text-left">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- Hidden form for editing role -->
-                        @foreach($roles as $role)
-                        <form action="/admin/editrole" method="POST" id="editRoleForm_{{ $role->tbl_role_id }}"
-                            style="display: none;">
-                            @csrf
-                            <input type="hidden" name="enc_id" value="{{ $role->encrypted_id }}">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="roleName">Enter Role Name</label>
-                                    <input type="text" class="form-control" id="roleName" name="roleName" required>
-                                </div>
-                            </div>
-                            <div class="card-footer text-left">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                        @endforeach
+
+
+
+                       <!-- Table displaying roles -->
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
@@ -82,12 +56,14 @@
                                                 <button class="btn btn-warning toggle-edit-form"
                                                     data-role-id="{{ $role->tbl_role_id }}"
                                                     data-encrypted-id="{{ $role->encrypted_id }}">Edit</button>
-                                               
+
+                                                
                                                 <!-- Delete action form with encrypted ID -->
-                                                <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this role?')">Delete</a>
-                                               
+                                                <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
+                                                
                                                 <!-- Assign Module action link -->
-                                                <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-info">Assign Module</a>
+                                                <a href="/admin/assignmodule" class="btn btn-info">Assign Module</a>
+
                                             </td>
                                         </tr>
                                         @endforeach
@@ -101,35 +77,110 @@
         </div>
     </section>
 </div>
- 
+
+
+<!-- Add Role Modal -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/admin/addrole" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="roleName">Enter Role Name</label>
+                        <input type="text" class="form-control" id="roleName" name="roleName" required>
+                    </div>
+                    <!-- Add other fields related to adding a new role if needed -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Role Modal -->
+@foreach($roles as $role)
+<div class="modal fade" id="editRoleModal_{{ $role->tbl_role_id }}" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel_{{ $role->tbl_role_id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/admin/editrole" method="POST">
+                @csrf
+                <input type="hidden" name="enc_id" value="{{ $role->encrypted_id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRoleModalLabel_{{ $role->tbl_role_id }}">Edit Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editRoleName_{{ $role->tbl_role_id }}">Enter Role Name</label>
+                        <input type="text" class="form-control" id="editRoleName_{{ $role->tbl_role_id }}" name="roleName" value="{{ $role->role_name }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    // Script to toggle display of add role form
-    document.getElementById('toggleForm').addEventListener('click', function() {
-        var addRoleForm = document.getElementById('addRoleForm');
-        if (addRoleForm.style.display === 'none') {
-            addRoleForm.style.display = 'block';
-        } else {
-            addRoleForm.style.display = 'none';
-        }
-    });
- 
-    // Script to toggle display of edit role form
-    document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
-        button.addEventListener('click', function () {
-            var roleId = this.dataset.roleId; // Retrieve tbl_role_id from data attribute
-            var encryptedId = this.dataset.encryptedId; // Retrieve encrypted_id from data attribute
- 
-            // Set the value of the hidden field in the edit form
-            var editRoleForm = document.getElementById('editRoleForm_' + roleId);
-            var encryptedIdField = editRoleForm.querySelector('input[name="enc_id"]');
-            encryptedIdField.value = encryptedId;
- 
-            // Toggle display of the edit form
-            if (editRoleForm.style.display === 'none') {
-                editRoleForm.style.display = 'block';
-            } else {
-                editRoleForm.style.display = 'none';
-            }
+        // Script to handle deletion confirmation using SweetAlert
+        document.querySelectorAll('.delete-role').forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                var encryptedId = this.dataset.encryptedId; // Retrieve encrypted_id from data attribute
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to delete this role?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with deletion if confirmed
+                        window.location.href = '/admin/deleterole/' + encryptedId;
+                    }
+                });
+
+                // Prevent the default action of the link
+                event.preventDefault();
+            });
         });
+    
+
+
+
+    // Script to toggle display of edit role form
+document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
+    button.addEventListener('click', function () {
+        var roleId = this.dataset.roleId;
+        $('#editRoleModal_' + roleId).modal('show');
     });
+
+});
+
 </script>
+
