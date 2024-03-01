@@ -26,6 +26,7 @@
  
                         <!-- Form to add Role Name, Select Module, and Assign button -->
                         <div class="card-body">
+                        
                             <form action="/admin/assignmodule" method="POST">
                                 @csrf
                                 <div class="form-group">
@@ -37,13 +38,22 @@
                                 <div class="form-group">
                                      <label for="selectModule">Select Module</label>
                                      <select class="form-control" id="selectModule" name="selectModule">
-                                     <option value="1">Show Users</option>
-                                     <option value="2">Create New Users</option>
-                                     <!-- Add more options as needed -->
+                                     <option value="">Select Module</option>
+                                     @foreach($mod as $module)
+                                     <option value="{{ $module->encrypted_id }}">{{ $module->module_name }}</option>
+                                     @endforeach
                                      </select>
 
                                 </div>
+                                
                                 <button type="submit" class="btn btn-primary">Assign</button>
+                                @if(session('error'))
+                                <p class="text-danger">{{ session('error') }}</p>
+                                    </div>
+                                @endif
+                                @if(session('success'))
+                                    <p class="text-success">{{ session('success') }}</p>
+                                @endif
                             </form>
                         </div>
 

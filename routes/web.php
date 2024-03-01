@@ -30,6 +30,7 @@ use App\Http\Controllers\HrController;
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
+//Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
 
@@ -130,5 +131,19 @@ Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
 
     //store bank details and then return salary structure form
     Route::post('/editemp/bankdetails',[HrController::class,'bankDetails']);
+
+    //store salary details and then redirect to show employees page
+    Route::post('/eidtemp/saldetails',[HrController::class,'salDetails']);
+    
+});
+
+//Routes accessible to developer
+Route::group(['prefix' => '/dev','middleware'=>['web','isDev']],function(){
+    //when dev logs in show him the dashboard
+    Route::get('/dashboard',[HrController::class,'dashboard']);
+    //when dev clicks on Tasks
+    Route::get('/tasks',[HrController::class,'showTasks']);
+    //view task page
+    Route::get('/viewtask/{id}',[HrController::class,'viewTask']);
 });
 

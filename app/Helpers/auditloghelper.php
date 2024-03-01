@@ -14,9 +14,9 @@
             $log_details->activity_by = $activity_by;
             $log_details->activity_date = Date::now()->toDateString();
             $log_details->activity_time = Date::now()->toTimeString(); // Assuming $log_details is an object
-
+            $log_details->save();
             
-            dd($log_details);
+            
         }
     }
 

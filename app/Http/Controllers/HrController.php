@@ -11,6 +11,8 @@ use App\Models\PreviousEmploymentDetail;
 use App\Models\OfficialDetail;
 use App\Models\EpfEssiDetail;
 use App\Models\BankDetail;
+use App\Models\SalaryStructureDetail;
+
 
 class HrController extends Controller
 {
@@ -198,4 +200,34 @@ class HrController extends Controller
         return view('hr.sal_details',['enc_id'=>$enc_id]);
     }
 
+    public function salDetails(Request $request)
+    {
+        $userdetails = session('user');
+
+        $enc_id = $request->input('enc_id');
+        $action = 'decrypt';
+        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+
+        $salDetails = SalaryStructureDetail::where('tbl_user_id',$dec_id)->get();
+
+        $salDetails->actual_gross =$request->actual_gross;
+        $salDetails->basic = $request->basic;
+        $salDetails->hra = $request->hra;
+        $salDetails->special_allowance = $request->special_allowance;
+        $salDetails->medical_allowance = $request->medical_allowance;
+        $salDetails->statutory_bonus = $request->statutory_bonus;
+        $salDetails->payable_gross_salary = $request->payable_gross_salary;
+        $salDetails->pf = $request->pf;
+        $salDetails->tds = $request->tds;
+        $salDetails->pt = $request->pt;
+        $salDetails->net_salary = $request->net_salary;
+        $salDetails->ctc = $request->ctc;
+        $salDetails->add_by = $userdetails->tbl_user_id;
+        $salDetails->add_date = Date::now()->toDateString();
+        $salDetails->add_time = Date::now()->toTimeString();
+        $salDetails->save();
+
+        return redirect('/hr/employees');
+
+    }
 }

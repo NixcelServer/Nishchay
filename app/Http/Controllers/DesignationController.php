@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Designation;
 use App\Helpers\EncryptionDecryptionHelper;
 use Illuminate\Support\Facades\Date;
+use App\Helpers\AuditLogHelper;
+use App\Models\AuditLogDetail;
 
 
 class DesignationController extends Controller
@@ -38,6 +40,9 @@ class DesignationController extends Controller
         $user = session('user');
         $user_id = $user->tbl_user_id;
 
+        $user_details = session('user');
+        AuditLogHelper::logDetails('create designation', $user_id);
+
         $designation = new Designation;
         $designation->designation_name = $request->designationName;
         $designation->add_by = $user_id;
@@ -69,6 +74,9 @@ class DesignationController extends Controller
          //get user details from session , they will be used in update by colm
          $user = session('user');
          $user_id = $user->tbl_user_id;
+
+        
+        AuditLogHelper::logDetails('edit designation', $user_id);
  
          //decrypt the id and find the dept from tables 
          $enc_id = $request->input('enc_id');
@@ -88,7 +96,9 @@ class DesignationController extends Controller
 
     public function deleteDesignation($enc_id)
     {
-         //get the dept details from db and set the flag as deleted
+        $user_details = session('user');
+        AuditLogHelper::logDetails('delete designation', $user_details->tbl_user_id); 
+        //get the dept details from db and set the flag as deleted
         //
          $action = 'decrypt';
          $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
