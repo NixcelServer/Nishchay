@@ -13,6 +13,7 @@ use App\Models\EpfEssiDetail;
 use App\Models\BankDetail;
 use App\Models\SalaryStructureDetail;
 
+
 class HrController extends Controller
 {
     //When HR logs in show HR Dashboard

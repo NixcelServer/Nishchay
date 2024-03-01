@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('mst_tbl_modules', function (Blueprint $table) {
             $table->id('tbl_module_id');
             $table->string('module_name')->required();
-            $table->string('module_path')->required();
+            $table->string('parent')->required();
+            $table->string('module_path')->nullable();
             $table->integer('add_by')->nullable();
             $table->date('add_date')->nullable();
             $table->time('add_time')->nullable();

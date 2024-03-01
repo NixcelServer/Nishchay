@@ -30,6 +30,7 @@ use App\Http\Controllers\HrController;
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
+//Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
 
@@ -91,6 +92,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //delete role
      Route::get('/deleterole/{id}',[RoleController::class,'deleteRole']);
      //assign module form
+     Route::get('/assignmodule',[AdminController::class,'showmodules']);
      Route::get('/assignmodule/{id}',[RoleController::class,'assignModuleForm']);
      //store assign module details into db
      Route::post('/assignmodule',[RoleController::class,'assignModule']);

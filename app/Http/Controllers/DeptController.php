@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Helpers\EncryptionDecryptionHelper;
+use App\Helpers\AuditLogHelper;
+use App\Models\AuditLogDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
 
@@ -35,9 +37,13 @@ class DeptController extends Controller
      //create new dept in db
      public function storeDept(Request $request)
      {   
+
       $request->validate([
          'departmentName' => 'required|unique:mst_tbl_depts,dept_name'
       ]);  
+
+         $user_details = session('user');
+         AuditLogHelper::logDetails('create department', $user_details->tbl_user_id);
         //get user detials from session to add in add by colm
          $user = session('user');
          $user_id = $user->tbl_user_id;
@@ -70,7 +76,8 @@ class DeptController extends Controller
         //get user details from session , they will be used in update by colm
         $user = session('user');
         $user_id = $user->tbl_user_id;
-
+        
+        AuditLogHelper::logDetails('edit department', $user_id);
         //decrypt the id and find the dept from tables 
         $enc_id = $request->input('enc_id');
         $action = 'decrypt';
@@ -91,6 +98,9 @@ class DeptController extends Controller
      //delete dept 
      public function deleteDept($enc_id){
         //get the dept details from db and set the flag as deleted
+
+        $user_details = session('user');
+        AuditLogHelper::logDetails('delete department', $user_details->tbl_user_id);
         
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
