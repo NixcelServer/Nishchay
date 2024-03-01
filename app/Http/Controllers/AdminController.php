@@ -55,7 +55,10 @@ class AdminController extends Controller
     
     //display user registration form
     public function createUser(){
-        return view('frontend_admin.add_new_user_form');
+
+        $roles = Role::where('flag', 'show')->get();
+
+        return view('frontend_admin.add_new_user_form',compact('roles'));
     }
 
     //create new user in db and redirect to user home page
@@ -66,10 +69,10 @@ class AdminController extends Controller
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:mst_tbl_users,email',
-            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
+            'password' => ['required', 'min:8', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
             'tbl_role_id' => 'required|integer'],
             [
-                'password.regex' => 'The password must contain at least one letter and one number.',
+                'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
             ]);
         
         

@@ -35,6 +35,9 @@
                                         <label for="departmentName">Enter Department Name</label>
                                         <input type="text" class="form-control" id="departmentName" name="departmentName"
                                             required>
+                                            @error('departmentName')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
                                     </div>
                                 </div>
                                 <div class="card-footer text-left">

@@ -33,6 +33,9 @@
             
               <div class="card-body">
                 <h4 style="text-align: center; color: black;">Login</h4>
+                @if(session('error'))
+                <span class="text-danger">{{ session('error') }}</span>
+                @endif
                 <form method="POST" action="/login" class="needs-validation" novalidate="">
                   @csrf
                   <div class="form-group">

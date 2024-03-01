@@ -13,38 +13,47 @@
                             @csrf <!-- CSRF protection -->
                             <div class="card-body">
                                 <div class="form-group row">
-                                    <div class="col">
-                                        <input type="text" name="first_name" class="form-control" placeholder="First Name">
+                                <div class="col">
+                                 <input type="text" name="first_name" class="form-control" placeholder="Enter your first name" required>
                                     </div>
+
                                     <div class="col">
                                         <input type="text" name="middle_name" class="form-control" placeholder="Middle Name">
                                     </div>
                                     <div class="col">
-                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <div class="col">
-                                        <input type="email" name="email" class="form-control" placeholder="Email">
+                                        <input type="email" name="email" class="form-control" placeholder="Email" required>
                                     </div>
                                     <div class="col">
-                                        <input type="password" name="password" class="form-control" placeholder="Password">
-                                    </div>
+    <input type="password" name="password" class="form-control" placeholder="Password" required>
+    @error('password')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
                                     <div class="col">
-                                        <input type="password" class="form-control" placeholder="Confirm Password">
+                                        <input type="password" class="form-control" placeholder="Confirm Password" required>
                                     </div>
+                          
                                 </div>
 
                                 <div class="form-group row">
-                                    <div class="col">
-                                        <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 15%;">
-                                            <option value="1">Admin</option>
-                                            <option value="2">HR</option>
-                                            <option value="3">Developer</option>
-                                            <option value="4">Manager</option>
-                                        </select>
-                                    </div>
+                                <div class="col">
+    <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 15%;" required>
+        <option value="">Select Role</option> <!-- Blank option -->
+        @foreach($roles as $role)
+            @if($role->role_name !== 'Admin')
+                <option value="{{ $role->id }}">{{ $role->role_name }}</option>
+            @endif
+        @endforeach
+    </select>
+</div>
+
+
                                     <div class="col-auto">
                                         <button class="btn btn-primary" type="submit">Submit</button>
                                         <button class="btn btn-secondary" type="reset">Reset</button>
