@@ -59,7 +59,7 @@
                                                 <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
                                                 
                                                 <!-- Assign Module action link -->
-                                                <a href="/admin/assignmodule" class="btn btn-info">Assign Module</a>
+                                                <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-info">Assign Module</a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -78,7 +78,7 @@
 <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/admin/addrole" method="POST">
+            <form action="/admin/storerole" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>

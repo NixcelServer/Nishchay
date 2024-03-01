@@ -139,13 +139,17 @@ class RoleController extends Controller
                 ];
             }
         }
+
+    
+        
         //passing data to the view
         return view('frontend_admin.assign_module',['role'=>$role,'enc_id' => $enc_id,'moduleData' => $moduleData]);
     }
 
     //assign a new module to a particular role
     public function assignModule(Request $request)
-    {
+    {   
+        
         //get user details from session , they will be used in update by colm
         $user = session('user');
         $user_id = $user->tbl_user_id;
@@ -164,6 +168,7 @@ class RoleController extends Controller
         $role_module->add_time = Date::now()->toTimeString();
         $role_module->save();
 
+        
         return redirect()->back();
     }
 

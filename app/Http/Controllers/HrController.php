@@ -22,9 +22,11 @@ class HrController extends Controller
 
     public function showEmployees()
     {
-        $emps = EmployeeDetail::where('flag', 'show')
-        ->whereNotIn('tbl_role_id', [1])
-        ->get(); 
+        $emps=EmployeeDetail::all();
+        //dd($emps);
+        // $emps = EmployeeDetail::where('flag', 'show')
+        // ->whereNotIn('tbl_role_id', [1])
+        // ->get(); 
         
         
         //encrypt the id of emp and pass to the view
@@ -33,7 +35,7 @@ class HrController extends Controller
             $emp->encrypted_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id, 'encrypt');
         }
 
-        
+    
         return view('frontend_hr.new_employee_registration', compact('emps'));
     }
                 
@@ -51,7 +53,7 @@ class HrController extends Controller
 
          
         
-        return view('frontend_hr.editEmp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id]);
     }
 
     //add details into basic info
