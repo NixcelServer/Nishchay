@@ -42,7 +42,7 @@
                                     @enderror
                                     </div>
                                     <div class="col">
-                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required onkeyup="checkPasswordMatch();">
+                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required >
                                         <div id="passwordMatch"></div>
                                     </div>
                                 </div>
@@ -83,42 +83,4 @@
         }
     }
 
-    function validateForm() {
-        var firstName = document.getElementsByName("first_name")[0].value;
-        var middleName = document.getElementsByName("middle_name")[0].value;
-        var lastName = document.getElementsByName("last_name")[0].value;
-        var email = document.getElementsByName("email")[0].value;
-
-        var isValid = true;
-
-        if (!/^[A-Za-z\s]+$/.test(firstName)) {
-            document.getElementById("firstNameError").innerHTML = "Please enter a valid first name (no numbers)";
-            isValid = false;
-        } else {
-            document.getElementById("firstNameError").innerHTML = "";
-        }
-
-        if (middleName !== "" && !/^[A-Za-z\s]+$/.test(middleName)) {
-            document.getElementById("middleNameError").innerHTML = "Please enter a valid middle name (no numbers)";
-            isValid = false;
-        } else {
-            document.getElementById("middleNameError").innerHTML = "";
-        }
-
-        if (!/^[A-Za-z\s]+$/.test(lastName)) {
-            document.getElementById("lastNameError").innerHTML = "Please enter a valid last name (no numbers)";
-            isValid = false;
-        } else {
-            document.getElementById("lastNameError").innerHTML = "";
-        }
-
-        if (!/[a-z0-9._%+-]+@gmail\.com$/.test(email)) {
-            document.getElementById("emailError").innerHTML = "Please enter a valid Gmail address";
-            isValid = false;
-        } else {
-            document.getElementById("emailError").innerHTML = "";
-        }
-
-        return isValid;
-    }
 </script>

@@ -50,9 +50,13 @@ class AdminController extends Controller
             $user->encrypted_id = EncryptionDecryptionHelper::encdecId($user->tbl_user_id, 'encrypt');
         }
         
+        $roles = DB::table('mst_tbl_roles')->pluck('role_name', 'tbl_role_id')->toArray();
+
 
         // Pass the transformed users to the view
-    return view('frontend_admin.user', compact('users'));
+    //return view('frontend_admin.user', compact('users'));
+    return view('frontend_admin.user')->with(['users' => $users, 'roles' => $roles]);
+
            
     }
     
@@ -93,7 +97,7 @@ class AdminController extends Controller
         $enc_role_id = $request->tbl_role_id;
         
         $dec_role_id = EncryptionDecryptionHelper::encDecId($enc_role_id,'decrypt');
-        
+    
         //get user details from session
         $user_details = session('user');
         //get the details from the request and store into user object
@@ -113,17 +117,17 @@ class AdminController extends Controller
         //store details into employee also
         $userId = $user->tbl_user_id;
         
-        // $emp = new EmployeeDetail;
-        // $emp->tbl_user_id = $userId;
-        // $emp->first_name = $request->first_name;
-        // $emp->middle_name = $request->middle_name;
-        // $emp->last_name = $request->last_name;
-        // $emp->tbl_role_id = $dec_role_id;
-        // $emp->add_by = $user_details->tbl_user_id;
-        // $emp->add_date = Date::now()->toDateString();
-        // $emp->add_time = Date::now()->toTimeString();
-        // $emp->flag ="show";
-        // $emp->save();
+        $emp = new EmployeeDetail;
+        $emp->tbl_user_id = $userId;
+        $emp->first_name = $request->first_name;
+        $emp->middle_name = $request->middle_name;
+        $emp->last_name = $request->last_name;
+        $emp->tbl_role_id = $dec_role_id;
+        $emp->add_by = $user_details->tbl_user_id;
+        $emp->add_date = Date::now()->toDateString();
+        $emp->add_time = Date::now()->toTimeString();
+        $emp->flag ="show";
+        $emp->save();
         
         
 
@@ -196,6 +200,7 @@ class AdminController extends Controller
     //edit user details in db
     public function editUser(Request $request)
     {
+       
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -207,6 +212,7 @@ class AdminController extends Controller
             
             ]);
 
+            
             $user_details = session('user');
         AuditLogHelper::logDetails('edit user', $user_details->tbl_user_id);
         
@@ -218,19 +224,16 @@ class AdminController extends Controller
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
         
 
-        // $og_pass = $request->password;
-        
-        // $encrypted_pass = EncryptionDecryptionHelper::encryptData($og_pass);
-        
-        // dd($encrypted_pass);
+       
 
         $user = User::findOrFail($dec_id);
-        //dd($user);
+        
 
         //decrypt the role id
         $enc_role_id = $request->tbl_role_id;
         $dec_role_id = EncryptionDecryptionHelper::encdecId($enc_role_id,'decrypt');
 
+        
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;
@@ -238,24 +241,24 @@ class AdminController extends Controller
         $user->password = $request->password;
         $user->tbl_role_id = $dec_role_id;
 
-      
-
-        
         $user->update_by = $userdetails->tbl_user_id;
         $user->update_date = Date::now()->toDateString();
         $user->update_time = Date::now()->toTimeString();
+        $user->save();
+        
 
         //saving the details in employee tables also
-        // $emp = EmployeeDetail::findOrFail($dec_id);
-        // $emp->first_name = $request->first_name;
-        // $emp->middle_name = $request->middle_name;
-        // $emp->last_name = $request->last_name;
+        $emp = EmployeeDetail::where('tbl_user_id',$dec_id)->first();
         
-        // $emp->tbl_role_id = $request->tbl_role_id;
-        // $emp->save();
+        $emp->first_name = $request->first_name;
+        $emp->middle_name = $request->middle_name;
+        $emp->last_name = $request->last_name;
+        
+        $emp->tbl_role_id = $dec_role_id;
+        $emp->save();
 
 
-        $user->save();
+        
         //dd("success");
         return redirect('/admin/users');
 

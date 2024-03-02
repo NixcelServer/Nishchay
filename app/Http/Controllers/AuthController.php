@@ -62,6 +62,7 @@ class AuthController extends Controller
                 }
             }
 
+            Session::put('uniqueParentNames',$uniqueParentNames);
             
 
 

@@ -65,7 +65,10 @@
               class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="/assets/img/user.png"
                 class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
-              <div class="dropdown-title">Hello Admin</div>
+              @php
+              $user = Session::get('user');
+              @endphp
+              <div class="dropdown-title">Hello {{ $user->first_name }}</div>
               <div class="dropdown-divider"></div>
               <form action="/logout" method="POST">
                 @csrf
@@ -93,70 +96,35 @@
             </li>
 
             {{-- left menu for admin --}}
-
             @php 
-            $user = Session::get('user');
-            @endphp
-            @if($user->tbl_role_id == 1)
-            <ul class="menu">
-              <li>
-                <a href="/admin/users">
-                  Users
-                  <span class=""></span>
-                </a>
-              </li>
-            </ul>
-                
-            @endif
-            @if($user->tbl_role_id == 1)
-            <ul class="menu">
-              <li>
-                <a href="/admin/depts">
-                  Departments
-                  <span class=""></span>
-                </a>
-              </li>
-            </ul>
-                
-            @endif
-            @if($user->tbl_role_id == 1)
-                <ul class="menu">
-              <li>
-                <a href="/admin/designations">
-                  Designation
-                  <span class=""></span>
-                </a>
-              </li>
-            </ul>
-                
-            @endif
-            @if($user->tbl_role_id == 1)
-            <ul class="menu">
-              <li>
-                <a href="/admin/roles">
-                  Role
-                  <span class=""></span>
-                </a>
-              </li>
-            </ul>
-            @endif
+              $user = Session::get('user');
+              $uniqueParentNames = Session::get('uniqueParentNames');
+              @endphp
 
-            {{-- left menu for HR --}}
-
-            @php 
-            $user = Session::get('user');
-            @endphp
-            @if($user->tbl_role_id == 2)
-            <ul class="menu">
-              <li>
-                <a href="/hr/employees">
-                  Employee
-                  <span class=""></span>
-                </a>
-              </li>
-            </ul>
-                
-            @endif
+              @if($user->tbl_role_id == 1)
+              <ul class="menu">
+                <li>
+                  <a href="/admin/users">Users<span class=""></span></a>
+                </li>
+                <li>
+                  <a href="/admin/depts">Departments<span class=""></span></a>
+                </li>
+                <li>
+                  <a href="/admin/designations">Designation<span class=""></span></a>
+                </li>
+                <li>
+                  <a href="/admin/roles">Role<span class=""></span></a>
+                </li>
+              </ul>
+              @else
+              <ul class="menu">
+                @foreach($uniqueParentNames as $parentName)
+                <li>
+                  <a href="#">{{ $parentName }}<span class=""></span></a>
+                </li>
+                @endforeach
+              </ul>
+              @endif
 
 
 
