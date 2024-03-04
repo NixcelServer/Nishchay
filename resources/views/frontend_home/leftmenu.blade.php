@@ -132,6 +132,9 @@
         </aside>
       </div>    
           
+ 
+  
+      
   <!-- General JS Scripts -->
   <script src="/assets/js/app.min.js"></script>
   <!-- JS Libraies -->
@@ -142,6 +145,16 @@
   <script src="/assets/js/scripts.js"></script>
   <!-- Custom JS File -->
   <script src="/assets/js/custom.js"></script>
+
+
+  {{-- edit emp hr js files --}}
+  <script src="/assets/bundles/jquery-validation/dist/jquery.validate.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="/assets/bundles/jquery-steps/jquery.steps.min.js"></script>
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/page/form-wizard.js"></script>
+  
+  
 </body>
 
 

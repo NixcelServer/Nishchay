@@ -21,7 +21,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card" style="max-width: 650px;">
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Roles</h4>
                         </div>
@@ -33,20 +33,19 @@
                         </div>
 
 
-
                        <!-- Table displaying roles -->
-
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                                     <thead>
-                                        <tr>
+                                        <tr >
                                             <th>Sr.No</th>
                                             <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         @php
                                             $serialNumber = 0;
                                         @endphp
@@ -82,7 +81,6 @@
     </section>
 </div>
 
-
 <!-- Add Role Modal -->
 <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -98,12 +96,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="roleName">Enter Role Name</label>
-                        <input type="text" class="form-control" id="roleName" name="roleName" required>
+                        <input type="text" class="form-control" id="roleName" name="roleName" style="width: 450px;" required>
                     </div>
+                    
                     <!-- Add other fields related to adding a new role if needed -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -147,7 +145,6 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
         // Script to handle deletion confirmation using SweetAlert
         document.querySelectorAll('.delete-role').forEach(function (button) {
@@ -161,7 +158,7 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, Delete Role'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Proceed with deletion if confirmed
@@ -183,8 +180,6 @@ document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
         var roleId = this.dataset.roleId;
         $('#editRoleModal_' + roleId).modal('show');
     });
-
 });
 
 </script>
-

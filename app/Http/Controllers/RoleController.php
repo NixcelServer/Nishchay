@@ -148,6 +148,7 @@ class RoleController extends Controller
                 ];
             }
         }
+
         $mod = Module::all();
 
         foreach ($mod as $module) {
@@ -161,6 +162,7 @@ class RoleController extends Controller
 
     //assign a new module to a particular role
     public function assignModule(Request $request)
+
     {
         
         //get user details from session , they will be used in update by colm
@@ -200,6 +202,7 @@ class RoleController extends Controller
         $role_module->add_date = Date::now()->toDateString();
         $role_module->add_time = Date::now()->toTimeString();
         $role_module->save();
+
 
         return redirect()->back()->with('success', 'Module assigned successfully.');
 

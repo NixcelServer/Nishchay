@@ -1,18 +1,16 @@
 @extends('frontend_home.leftmenu')
-
  
-
 <style>
     /* Custom CSS to adjust positioning */
     .main-content {
         margin-top: -30px; /* Adjust this value as needed */
     }
-
+ 
     #roleName, #selectModule {
         width: 200px; /* Adjust the width as needed */
     }
 </style>
-
+ 
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -22,7 +20,6 @@
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Modules</h4>
                         </div>
-
  
                         <!-- Form to add Role Name, Select Module, and Assign button -->
                         <div class="card-body">
@@ -33,17 +30,17 @@
                                     <h4><label for="roleName">Role : {{ $role->role_name }} </label></h4>
                                    <!-- <input type="text" class="form-control" id="roleName" name="roleName"> -->
                                    <input type="hidden" id="enc_id" name="enc_id" value="{{ $enc_id }}">
-
+ 
                                 </div>
                                 <div class="form-group">
                                      <label for="selectModule">Select Module</label>
                                      <select class="form-control" id="selectModule" name="selectModule">
                                      <option value="">Select Module</option>
+
                                      @foreach($mod as $module)
                                      <option value="{{ $module->encrypted_id }}">{{ $module->module_name }}</option>
                                      @endforeach
                                      </select>
-
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary">Assign</button>
@@ -56,7 +53,6 @@
                                 @endif
                             </form>
                         </div>
-
  
                         <!-- Table displaying modules -->
                         <div class="card-body">
@@ -83,7 +79,7 @@
                                                         @method('POST')
                                                         <input type="hidden" name="moduleId" value="{{ $moduleItem['module']->id }}">
                                                         <input type="hidden" name="roleModuleId" value="{{ $moduleItem['enc_role_module_id'] }}"> <!-- Pass encrypted role module ID -->
-
+ 
                                                         <button type="submit" class="btn btn-danger">Delete</button>
                                                     </form>
                                                 </td>
@@ -91,7 +87,6 @@
                                     @endforeach
                                 </tbody>
                              </table>
-
                             </div>
                         </div>
                     </div>
@@ -100,4 +95,3 @@
         </div>
     </section>
 </div>
-
