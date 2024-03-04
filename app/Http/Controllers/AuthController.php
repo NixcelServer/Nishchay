@@ -49,6 +49,7 @@ class AuthController extends Controller
                 ];
             }
         }
+        Session::put('moduleData',$moduleData);
 
         $uniqueParentNames = [];
 
@@ -57,12 +58,13 @@ class AuthController extends Controller
                 $parentName = $data['module']->parent;
 
                 // Check if the parent name already exists
-                if (!in_array($parentName, $uniqueParentNames)) {
+                if ($parentName !== null && $parentName !== "" && !in_array($parentName, $uniqueParentNames)) {
                     // Add the parent name to the unique parent names array
                     $uniqueParentNames[] = $parentName;
                 }
+                
             }
-
+           // dd($uniqueParentNames);
             Session::put('uniqueParentNames',$uniqueParentNames);
             
 
