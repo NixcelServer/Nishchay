@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Date;
 
 
 
+
 class AdminController extends Controller
 {
     //when admin logs in show him the dashboard
@@ -54,12 +55,22 @@ class AdminController extends Controller
     
     //display user registration form
     public function createUser(){
-        return view('users.createuserform');
+        return view('frontend_admin.add_new_user_form');
     }
 
     //create new user in db and redirect to user home page
     public function storeUser(Request $request){
 
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:mst_tbl_users,email',
+            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
+            'tbl_role_id' => 'required|integer'],
+            [
+                'password.regex' => 'The password must contain at least one letter and one number.',
+            ]);
         
         
         //get user details from session
@@ -81,17 +92,17 @@ class AdminController extends Controller
         //store details into employee also
         $userId = $user->tbl_user_id;
         
-        // $emp = new EmployeeDetail;
-        // $emp->tbl_user_id = $userId;
-        // $emp->first_name = $request->first_name;
-        // $emp->middle_name = $request->middle_name;
-        // $emp->last_name = $request->last_name;
-        // $emp->tbl_role_id = $request->tbl_role_id;
-        // $emp->add_by = $user_details->tbl_user_id;
-        // $emp->add_date = Date::now()->toDateString();
-        // $emp->add_time = Date::now()->toTimeString();
-        // $emp->flag ="show";
-        // $emp->save();
+        $emp = new EmployeeDetail;
+        $emp->tbl_user_id = $userId;
+        $emp->first_name = $request->first_name;
+        $emp->middle_name = $request->middle_name;
+        $emp->last_name = $request->last_name;
+        $emp->tbl_role_id = $request->tbl_role_id;
+        $emp->add_by = $user_details->tbl_user_id;
+        $emp->add_date = Date::now()->toDateString();
+        $emp->add_time = Date::now()->toTimeString();
+        $emp->flag ="show";
+        $emp->save();
         
         
 
@@ -126,13 +137,13 @@ class AdminController extends Controller
         // $official_detail->tbl_user_id = $userId;
         // $official_detail->save();
 
-        $prev_emp_detail = new PreviousEmploymentDetail;
-        $prev_emp_detail->tbl_user_id = $userId;
-        $prev_emp_detail->save();
+        // $prev_emp_detail = new PreviousEmploymentDetail;
+        // $prev_emp_detail->tbl_user_id = $userId;
+        // $prev_emp_detail->save();
 
-        $sal = new SalaryStructureDetail;
-        $sal->tbl_user_id = $userId;
-        $sal->save();
+        // $sal = new SalaryStructureDetail;
+        // $sal->tbl_user_id = $userId;
+        // $sal->save();
 
         
 
@@ -150,17 +161,27 @@ class AdminController extends Controller
         
         $user = User::find($dec_id);
         
-        return view('users.edit',['user'=>'$user','enc_id' => $enc_id]);
+        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id]);
     }
 
     //edit user details in db
     public function editUser(Request $request)
     {
-
-
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:mst_tbl_users,email',
+            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
+            'tbl_role_id' => 'required|integer'],
+            [
+                'password.regex' => 'The password must contain at least one letter and one number.',
+            ]);
+        
         $userdetails = session('user');
         
         $enc_id = $request->input('enc_id');
+        
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
         
@@ -183,29 +204,80 @@ class AdminController extends Controller
 
       
 
-        $user->add_by = $user->add_by;
-        $user->add_date = $user->add_date;
-        $user->add_time = $user->add_time;
+        
         $user->update_by = $userdetails->tbl_user_id;
         $user->update_date = Date::now()->toDateString();
         $user->update_time = Date::now()->toTimeString();
+
+        //saving the details in employee tables also
+        // $emp = EmployeeDetail::findOrFail($dec_id);
+        // $emp->first_name = $request->first_name;
+        // $emp->middle_name = $request->middle_name;
+        // $emp->last_name = $request->last_name;
         
+        // $emp->tbl_role_id = $request->tbl_role_id;
+        // $emp->save();
+
+
         $user->save();
-        dd("success");
+        //dd("success");
         return redirect('/admin/users');
 
 
     }
 
     //delete user
-    public function deleteUser(Request $request)
-    {
-       //
-       return redirect('/admin/users');
-    } 
+     //delete user
+     public function deleteUser($enc_id)
+     {
+         $action = 'decrypt';
+         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
+         
+         $user = User::find($dec_id);
+         $user->flag = "deleted";
+         $user->save();
+ 
+        //  $emp = EmployeeDetail::find($dec_id);
+        //  $emp->flag = "deleted";
+        //  $emp->save();
+ 
+        //  $additional_detail = AdditionalDetail::find($dec_id);
+        //  $additional_detail->flag = "deleted";
+        //  $additonal_detail->save();
+ 
+        //  $epf_essi_detail = EpfEssiDetail::find($dec_id);
+        //  $epf_essi_detail->flag = "deleted";
+        //  $epf_essi_detail->flag->save();
+ 
+        //  $bank_detail = BankDetail::find($dec_id);
+        //  $bank_detail->flag = "deleted";
+        //  $bank_detail->save();
+
+        //  $kyc_detail = KycDetail::find($dec_id);
+        //  $kyc_detail->flag = "deleted";
+        //  $kyc_detail->save();
+ 
+        //  $official_detail = OfficialDetail::find($dec_id);
+        //  $official_detail->flag = "deleted";
+        //  $official_detail->save();
+ 
+        //  $prev_emp_detail = PreviousEmploymentDetail::find($dec_id);
+        //  $prev_emp_detail->flag = "deleted";
+        //  $prev_emp_detail->save();
+ 
+        //  $sal = SalaryStructureDetail::find($dec_id);
+        //  $sal->flag = "deleted";
+        //  $sal->save();
+ 
+ 
+        return redirect('/admin/users');
+     } 
 
    
-
+     public function showmodules()
+     {
+         return view('frontend_admin.assign_module');
+     }
  
 
 

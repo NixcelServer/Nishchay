@@ -64,12 +64,18 @@ class EncryptionDecryptionHelper{
             $output = openssl_encrypt($id, $ciphering,
 
 	        $encryption_key, $options, $encryption_iv);
+
+
+            $output = base64_encode($output);
         }
         //decryption 
         else if($action =='decrypt')
         {
 
-           
+
+           // Base64 decode the ID
+             $id = base64_decode($id);
+
 
             $output = openssl_decrypt($id, $ciphering,
 

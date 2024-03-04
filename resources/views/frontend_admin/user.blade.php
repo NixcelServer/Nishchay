@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-12 text-right mt-n4">
                             <div class="buttons">
-                                <a href="add_new_user_form" class="btn btn-primary">Add New User</a>
+                                <a href="/admin/createuser" class="btn btn-primary">Add New User</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -40,21 +40,23 @@
                                             <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                @if($user->tbl_role_id == 1)
-                                                    Admin
-                                                @else
-                                                    User
-                                                @endif
+                                            @if($user->tbl_role_id == 1)
+                                                Admin
+                                            @elseif($user->tbl_role_id == 2)
+                                                Hr
+                                            @elseif($user->tbl_role_id == 3)
+                                                Developer
+                                            @elseif($user->tbl_role_id == 4)
+                                                Manager
+                                            @else
+                                                Unknown Role
+                                            @endif
                                             </td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="" class="btn btn-warning">Edit</a>
-                                                <!-- Delete action form with encrypted ID -->
-                                                <form action="" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                                                </form>
+                                                <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning btn-sm">Edit</a>
+                                                <!-- Delete action form with encrypted ID and SweetAlert confirmation -->
+                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger btn-sm delete-user" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -68,3 +70,32 @@
         </div>
     </section>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Script to handle SweetAlert confirmation for user deletion
+    document.querySelectorAll('.delete-user').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default action of the link
+            
+            var encryptedId = this.dataset.encryptedId; // Retrieve encrypted_id from data attribute
+
+            // Display SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this User?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete User'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the delete URL if user confirms
+                    window.location.href = "/admin/delete/" + encryptedId;
+                }
+            });
+        });
+    });
+</script>

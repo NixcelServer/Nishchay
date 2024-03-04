@@ -11,6 +11,7 @@ class EmployeeDetail extends Model
 
     protected $table = 'tbl_emp_details';
     public $timestamps = false;
+    protected $primaryKey = 'tbl_employee_detail_id';
 
     protected $attributes = [
         'offer_letter_no' => null, // Default to null

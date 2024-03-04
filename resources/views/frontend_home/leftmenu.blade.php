@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <!-- Add the CSRF token meta tag here -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Nixcel - LeftMenu Template</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="/assets/css/app.min.css">
@@ -120,7 +122,7 @@
             @if($user->tbl_role_id == 1)
                 <ul class="menu">
               <li>
-                <a href="/admin/designation">
+                <a href="/admin/designations">
                   Designation
                   <span class=""></span>
                 </a>
@@ -131,7 +133,7 @@
             @if($user->tbl_role_id == 1)
             <ul class="menu">
               <li>
-                <a href="/admin/role">
+                <a href="/admin/roles">
                   Role
                   <span class=""></span>
                 </a>
@@ -147,7 +149,7 @@
             @if($user->tbl_role_id == 2)
             <ul class="menu">
               <li>
-                <a href="/hr/employee">
+                <a href="/hr/employees">
                   Employee
                   <span class=""></span>
                 </a>
@@ -175,6 +177,16 @@
   <script src="/assets/js/scripts.js"></script>
   <!-- Custom JS File -->
   <script src="/assets/js/custom.js"></script>
+
+
+  {{-- edit emp hr js files --}}
+  <script src="/assets/bundles/jquery-validation/dist/jquery.validate.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="/assets/bundles/jquery-steps/jquery.steps.min.js"></script>
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/page/form-wizard.js"></script>
+  
+  
 </body>
 
 
