@@ -17,15 +17,15 @@ return new class extends Migration
             $table->integer('selected_user_id')->required();
             $table->date('task_delivery_date');
             $table->date('task_completion_date');
-            $table->string('task_status');
-            $table->string('task_solution');
+            $table->string('task_status')->nullable();
+            $table->string('task_solution')->nullable();
             $table->integer('add_by');
-            $table->date('add_date');
-            $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
-            $table->string('flag');
+            $table->date('add_date')->nullable();
+            $table->time('add_time')->nullable();
+            $table->integer('update_by')->nullable();
+            $table->date('update_date')->nullable();
+            $table->time('update_time')->nullable();
+            $table->string('flag')->default('show');
 
         });
     }

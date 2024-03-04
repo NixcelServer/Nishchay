@@ -68,6 +68,8 @@ class Kernel extends HttpKernel
         //custom auth middlewares
         'isAdmin' => \App\Http\Middleware\AdminAuthentication::class,
         'isHr' => \App\Http\Middleware\HrAuthentication::class,
-        'isDev' => \App\Http\Middleware\DevAuthentication::class
+        'isDev' => \App\Http\Middleware\DevAuthentication::class,
+        'preventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
+        'validLogin' => \App\Http\Middleware\ValidLogin::class
     ];
 }

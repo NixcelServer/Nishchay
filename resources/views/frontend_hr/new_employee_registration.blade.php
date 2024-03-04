@@ -56,7 +56,7 @@
                                             </td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="/hr/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="/Employees/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
                                                 <!-- Delete action form with encrypted ID -->
                                                 <form action="" method="POST" style="display: inline;">
                                                     @csrf

@@ -12,6 +12,7 @@ use App\Http\Controllers\HrController;
 
 
 
+
  
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +26,13 @@ use App\Http\Controllers\HrController;
 */
  
 
-
+//Route::group(['middleware'=>'preventBackHistory'],function(){
+//Route::middleware('validLogin')->group(function () {
 
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
-//Route::get('/dashboard',[AuthController::class,'dashboard']);
+Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
 
@@ -108,12 +110,10 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
 
 
-Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
+Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     //mention your routes here
 
-    //if Hr logs in show him admin dashboard
-    Route::get('/dashboard',[HrController::class,'dashboard']);
-    Route::get('/employees',[HrController::class,'showEmployees']);
+    Route::get('/',[HrController::class,'showEmployees']);
     Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
     Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
     //show prev employment details form
@@ -138,12 +138,27 @@ Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
 });
 
 //Routes accessible to developer
-Route::group(['prefix' => '/dev','middleware'=>['web','isDev']],function(){
-    //when dev logs in show him the dashboard
-    Route::get('/dashboard',[HrController::class,'dashboard']);
+Route::group(['prefix' => '/Tasks','middleware'=>['web','isDev']],function(){
+    
     //when dev clicks on Tasks
-    Route::get('/tasks',[HrController::class,'showTasks']);
+    Route::get('/tasks',[TaskController::class,'showTasks']);
     //view task page
-    Route::get('/viewtask/{id}',[HrController::class,'viewTask']);
+    Route::get('/viewtask/{id}',[TaskController::class,'viewTask']);
+
+    Route::post('/updatetaskstatus',[TaskController::class,'updateTaskStatus']);
+
+    Route::get('/transfertask/{id}',[TaskController::class,'transferTaskForm']);
+    Route::get('/showreassignedtasks',[TaskController::class,'showReassignedTasks']);
+
+    Route::get('/inprogresstasks',[TaskController::class,'showInProcessTasks']);
+
+    Route::get('/completedtasks',[TaskController::class,'completedTasks']);
+
+    Route::get('/createtask',[TaskController::class,'createTask']);
+
+
 });
 
+//});
+
+//});

@@ -12,6 +12,9 @@ use App\Models\OfficialDetail;
 use App\Models\EpfEssiDetail;
 use App\Models\BankDetail;
 use App\Models\SalaryStructureDetail;
+use App\Models\Department;
+use App\Models\Designation;
+use App\Models\Role;
 
 
 class HrController extends Controller
@@ -53,9 +56,26 @@ class HrController extends Controller
 
         $emp = EmployeeDetail::where('tbl_user_id', $dec_id)->first();
 
+        $depts = Department::where('flag','show')->get();
+        foreach ($depts as $dept) {
+            // Encode the user's ID using the helper function
+            $dept->enc_dept_id = EncryptionDecryptionHelper::encdecId($dept->tbl_dept_id, 'encrypt');
+        }
+
+        $designations = Designation::where('flag','show')->get();
+        foreach($designations as $designation){
+            $designation->desg_enc_id = EncryptionDecryptionHelper::encdecId($designation->tbl_designation_id, 'encrypt');
+        }
+
+        $roles = Designation::where('flag','show')->get();
+        foreach($roles as $role){
+            $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
+        }
+
+
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designation'=>$designations,'roles'=> $roles]);
     }
 
     //add details into basic info

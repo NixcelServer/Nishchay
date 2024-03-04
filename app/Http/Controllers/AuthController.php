@@ -10,6 +10,7 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use App\Models\RoleModule;
 use App\Models\Module;
+use Illuminate\Http\Response;
  
 class AuthController extends Controller
 {
@@ -89,14 +90,14 @@ class AuthController extends Controller
             Session::put('user', $user);
 
             //redirectDash will check if the role of the user and redirect to respective dashboard
-            $route = $this->redirectDash();
+            //$route = $this->redirectDash();
            
 
            // return view($route, ['moduleData' => $moduleData, 'uniqueParentNames' => $uniqueParentNames]);
             //return redirect($route)->with(['moduleData' => $moduleData, 'uniqueParentNames' => $uniqueParentNames]);
 
             //return redirect($route)->with(['moduleData' => $moduleData, 'uniqueParentNames' => $uniqueParentNames]);
-            return redirect($route);
+            return redirect('/dashboard');
 
         } else {
             // if passwords are not same display following msg
@@ -146,9 +147,28 @@ class AuthController extends Controller
         AuditLogHelper::logDetails('logout', $user_details->tbl_user_id);
         $request->session()->flush();
         Auth::logout();
+
+    //     $response = new Response();
+    //     $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    //     $response->headers->set('Pragma', 'no-cache');
+    //     $response->headers->set('Expires', '0');
+
+    //     $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
+    //     $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+    //     $response->headers->set('Pragma', 'no-cache');
+
+    //     $response->setContent('<script>window.location.replace("/");</script>');
+
+    // return $response;
+
+        //return $response->redirectToRoute('/');
         return redirect('/');
     }
-
+    
+    public function dashboard()
+    {
+        return view('frontend_home.dashboard');
+    }
 
     
 
