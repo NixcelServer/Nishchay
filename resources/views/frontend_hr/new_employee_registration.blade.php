@@ -16,7 +16,7 @@
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Users</h4>
                         </div>
-                        <div class="col-12 text-right mt-n4">
+                        <div class="col-12 text-right mt-n1">
                             
                         </div>
                         <div class="card-body">
@@ -56,12 +56,12 @@
                                             </td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="/hr/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning">Edit</a>
+                                                <a href="/hr/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
                                                 <!-- Delete action form with encrypted ID -->
                                                 <form action="" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>

@@ -52,7 +52,6 @@
                                     </div>
                                     <div class="col-auto">
                                         <button class="btn btn-primary" type="submit">Submit</button>
-                                        <button class="btn btn-secondary" type="reset">Reset</button>
                                     </div>
                                 </div>
                             </div>

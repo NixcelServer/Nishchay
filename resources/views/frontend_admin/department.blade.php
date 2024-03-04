@@ -5,7 +5,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card" style="max-width: 600px;">
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Departments</h4>
                         </div>
@@ -20,31 +20,29 @@
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                                     <thead>
-                                        <tr>
+                                        <tr >
                                             <th>Sr.No</th>
                                             <th>Department Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <tbody>
                                         @foreach($depts as $key => $dept)
-                                        <tr>
+                                        <tr style="font-size: 15px;">
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $dept->dept_name }}</td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <button class="btn btn-warning toggle-edit-form"
+                                                <button class="btn btn-warning btn-sm toggle-edit-form"
                                                     data-dept-id="{{ $dept->tbl_dept_id }}"
                                                     data-encrypted-id="{{ $dept->encrypted_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <button class="btn btn-danger toggle-delete-form"
+                                                <button class="btn btn-danger btn-sm toggle-delete-form"
                                                     data-dept-id="{{ $dept->tbl_dept_id }}"
                                                     data-encrypted-id="{{ $dept->encrypted_id }}">Delete</button>
                                             </td>
                                         </tr>
                                         @endforeach
-                                    </tbody>
                                     </tbody>
                                 </table>
                             </div>
@@ -55,6 +53,7 @@
         </div>
     </section>
 </div>
+
 
 <!-- Add Department Modal -->
 <!-- Add Department Modal -->
@@ -120,12 +119,12 @@
             var encryptedId = this.dataset.encryptedId;
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "You want to delete this Department?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, Delete Department'
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "/admin/deletedept/" + encryptedId;

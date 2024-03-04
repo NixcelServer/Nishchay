@@ -34,6 +34,7 @@
                                 <div class="form-group">
                                      <label for="selectModule">Select Module</label>
                                      <select class="form-control" id="selectModule" name="selectModule">
+                                     <option value="">Select Module</option>
                                      <option value="1">Show Users</option>
                                      <option value="2">Create New Users</option>
                                      <!-- Add more options as needed -->

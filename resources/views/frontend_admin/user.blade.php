@@ -54,9 +54,9 @@
                                             </td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning">Edit</a>
+                                                <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning btn-sm">Edit</a>
                                                 <!-- Delete action form with encrypted ID and SweetAlert confirmation -->
-                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger delete-user" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
+                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger btn-sm delete-user" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -84,12 +84,12 @@
             // Display SweetAlert confirmation dialog
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "You want to delete this User?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, Delete User'
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to the delete URL if user confirms

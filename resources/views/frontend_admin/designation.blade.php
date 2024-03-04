@@ -17,7 +17,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card" style="max-width: 600px;">
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Designation</h4>
                         </div>
@@ -46,16 +46,13 @@
                                             <td>{{ $designation->designation_name }}</td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <button class="btn btn-warning toggle-edit-form"
-                                                    data-designation-id="{{ $designation->tbl_designation_id }}"
-                                                    data-encrypted-id="{{ $designation->encrypted_id }}">Edit</button>
-                                                <!-- Edit action link with encrypted ID -->
-                                                <button class="btn btn-warning toggle-edit-form"
+                                                <button class="btn btn-warning btn-sm toggle-edit-form"
                                                     data-designation-id="{{ $designation->tbl_designation_id }}"
                                                     data-encrypted-id="{{ $designation->encrypted_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <a href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger delete-designation" data-encrypted-id="{{ $designation->encrypted_id }}">Delete</a>
+                                                <a href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger btn-sm delete-designation" data-encrypted-id="{{ $designation->encrypted_id }}">Delete</a>
                                             </td>
+
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -85,11 +82,10 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="designationName">Enter Designation Name</label>
-                        <input type="text" class="form-control" id="designationName" name="designationName" required>
+                        <input type="text" class="form-control" id="designationName" name="designationName" style="width: 450px;" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -140,12 +136,12 @@
             // Use SweetAlert to confirm the delete action
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "You want to delete this Designation?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, Delete Designation'
             }).then((result) => {
                 if (result.isConfirmed) {
                     // If confirmed, redirect to the delete URL

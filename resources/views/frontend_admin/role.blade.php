@@ -21,7 +21,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card" style="max-width: 650px;">
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Roles</h4>
                         </div>
@@ -38,7 +38,7 @@
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                                     <thead>
-                                        <tr>
+                                        <tr >
                                             <th>Sr.No</th>
                                             <th>Role</th>
                                             <th>Action</th>
@@ -46,20 +46,20 @@
                                     </thead>
                                     <tbody>
                                         @foreach($roles as $key => $role)
-                                        <tr>
+                                        <tr >
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $role->role_name }}</td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <button class="btn btn-warning toggle-edit-form"
+                                                <button class="btn btn-warning btn-sm toggle-edit-form"
                                                     data-role-id="{{ $role->tbl_role_id }}"
                                                     data-encrypted-id="{{ $role->encrypted_id }}">Edit</button>
                                                 
                                                 <!-- Delete action form with encrypted ID -->
-                                                <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
+                                                <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger btn-sm delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
                                                 
                                                 <!-- Assign Module action link -->
-                                                <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-info">Assign Module</a>
+                                                <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-info btn-sm">Assign Module</a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -89,12 +89,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="roleName">Enter Role Name</label>
-                        <input type="text" class="form-control" id="roleName" name="roleName" required>
+                        <input type="text" class="form-control" id="roleName" name="roleName" style="width: 450px;" required>
                     </div>
+                    
                     <!-- Add other fields related to adding a new role if needed -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -151,7 +151,7 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, Delete Role'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Proceed with deletion if confirmed
