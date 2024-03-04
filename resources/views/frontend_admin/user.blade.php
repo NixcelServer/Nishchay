@@ -40,18 +40,12 @@
                                             <td>{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                            @if($user->tbl_role_id == 1)
-                                                Admin
-                                            @elseif($user->tbl_role_id == 2)
-                                                Hr
-                                            @elseif($user->tbl_role_id == 3)
-                                                Developer
-                                            @elseif($user->tbl_role_id == 4)
-                                                Manager
-                                            @else
-                                                Unknown Role
-                                            @endif
-                                            </td>
+                                                @if(isset($roles[$user->tbl_role_id]))
+                                                    {{ $roles[$user->tbl_role_id] }}
+                                                @else
+                                                    Unknown Role
+                                                @endif
+                                            </td> 
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
                                                 <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning btn-sm">Edit</a>

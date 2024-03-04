@@ -45,25 +45,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($roles as $key => $role)
-                                        <tr >
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $role->role_name }}</td>
-                                            <td>
-                                                <!-- Edit action link with encrypted ID -->
-                                                <button class="btn btn-warning btn-sm toggle-edit-form"
-                                                    data-role-id="{{ $role->tbl_role_id }}"
-                                                    data-encrypted-id="{{ $role->encrypted_id }}">Edit</button>
-                                                
-                                                <!-- Delete action form with encrypted ID -->
-                                                <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger btn-sm delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
-                                                
-                                                <!-- Assign Module action link -->
-                                                <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-info btn-sm">Assign Module</a>
-                                            </td>
-                                        </tr>
+
+                                        @php
+                                            $serialNumber = 0;
+                                        @endphp
+                                        @foreach($roles as $role)
+                                            @if($role->tbl_role_id !== 1)
+                                                <tr>
+                                                    <td>{{ ++$serialNumber }}</td>
+                                                    <td>{{ $role->role_name }}</td>
+                                                    <td>
+                                                        <!-- Edit action link with encrypted ID -->
+                                                        <button class="btn btn-warning toggle-edit-form"
+                                                                data-role-id="{{ $role->tbl_role_id }}"
+                                                                data-encrypted-id="{{ $role->encrypted_id }}">Edit</button>
+
+                                                        <!-- Delete action form with encrypted ID -->
+                                                        <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
+
+                                                        <!-- Assign Module action link -->
+                                                        <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-info">Assign Module</a>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>

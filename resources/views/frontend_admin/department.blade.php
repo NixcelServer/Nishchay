@@ -65,13 +65,15 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="addDepartmentModalLabel">Add New Department</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="departmentName">Enter Department Name</label>
                         <input type="text" class="form-control" id="departmentName" name="departmentName" required>
+                        <span id="departmentNameError" class="text-danger"></span>
+                        
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -82,12 +84,11 @@
     </div>
 </div>
 
-<!-- Edit Department Modal -->
 @foreach($depts as $dept)
 <div class="modal fade" id="editDepartmentModal_{{ $dept->tbl_dept_id }}" tabindex="-1" role="dialog" aria-labelledby="editDepartmentModalLabel_{{ $dept->tbl_dept_id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/admin/editdept" method="POST">
+            <form id="editDepartmentForm_{{ $dept->tbl_dept_id }}" action="/admin/editdept" method="POST">
                 @csrf
                 <input type="hidden" name="enc_id" value="{{ $dept->encrypted_id }}">
                 <div class="modal-header">
@@ -98,8 +99,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="editDepartmentName_{{ $dept->tbl_dept_id }}">Enter Department Name</label>
-                        <input type="text" class="form-control" id="editDepartmentName_{{ $dept->tbl_dept_id }}" name="departmentName" value="{{ $dept->dept_name }}" required>
+                        <label for="editDepartmentName_{{ $dept->tbl_dept_id }}">Edit Department Name</label>
+                        <input type="text" class="form-control departmentName" id="editDepartmentName_{{ $dept->tbl_dept_id }}" name="departmentName" value="{{ $dept->dept_name }}" required>
+                        <span class="departmentNameError text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -110,7 +112,11 @@
     </div>
 </div>
 @endforeach
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
 <script>
     // Script to handle delete confirmation
     document.querySelectorAll('.toggle-delete-form').forEach(function (button) {

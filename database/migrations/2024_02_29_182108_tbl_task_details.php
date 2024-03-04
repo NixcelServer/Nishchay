@@ -17,6 +17,8 @@ return new class extends Migration
             $table->integer('selected_user_id')->required();
             $table->date('task_delivery_date');
             $table->date('task_completion_date');
+            $table->string('task_status');
+            $table->string('task_solution');
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');

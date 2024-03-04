@@ -71,7 +71,7 @@
 <div class="modal fade" id="addDesignationModal" tabindex="-1" role="dialog" aria-labelledby="addDesignationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/admin/storedesignation" method="POST">
+            <form  action="/admin/storedesignation" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="addDesignationModalLabel">Add New Designation</h5>
@@ -82,7 +82,10 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="designationName">Enter Designation Name</label>
-                        <input type="text" class="form-control" id="designationName" name="designationName" style="width: 450px;" required>
+
+                        <input type="text" class="form-control" id="designationName" name="designationName" required>
+                        <span id="designationNameError" class="text-danger"></span>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -94,11 +97,11 @@
 </div>
 
 <!-- Edit Designation Modal -->
-@foreach($designations as $designation)
+@foreach($designations as $designation) 
 <div class="modal fade" id="editDesignationModal_{{ $designation->tbl_designation_id }}" tabindex="-1" role="dialog" aria-labelledby="editDesignationModalLabel_{{ $designation->tbl_designation_id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/admin/editdesignation" method="POST">
+            <form id=editDesignationForm action="/admin/editdesignation" method="POST">
                 @csrf
                 <input type="hidden" name="enc_id" value="{{ $designation->encrypted_id }}">
                 <div class="modal-header">
@@ -110,7 +113,9 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="editDesignationName_{{ $designation->tbl_designation_id }}">Enter Designation Name</label>
-                        <input type="text" class="form-control" id="editDesignationName_{{ $designation->tbl_designation_id }}" name="designationName" value="{{ $designation->designation_name }}" required>
+                        <input type="text" class="form-control designationName" id="editDesignationName_{{ $designation->tbl_designation_id }}" name="designationName" value="{{ $designation->designation_name }}" required>
+<span class="text-danger designationNameError"></span>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -159,4 +164,39 @@ document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
     });
 });
 </script>
- 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- <script>
+    $(document).ready(function() {
+        $('#editDesignationForm').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            var designationName = $(this).find('.designationName').val();
+            console.log(designationName);
+            var designations = {!! json_encode($designations) !!}; // Convert PHP array to JavaScript array
+
+            //Perform validation
+            if (designationName.trim() === '') {
+                $(this).find('.designationNameError').text('Please enter designation name.');
+                return;
+            }
+
+            // Check if designation name already exists
+            var exists = designations.some(function(designation) {
+                return designation.designation_name === designationName;
+            });
+
+            if (exists) {
+                $(this).find('.designationNameError').text('Designation with this name already exists.');
+                return;
+            }
+
+            // If validation passes, submit the form
+            this.submit();
+        });
+        $('.designationName').on('input', function() {
+            $(this).siblings('.designationNameError').text('');
+        });
+    });
+</script> -->
+

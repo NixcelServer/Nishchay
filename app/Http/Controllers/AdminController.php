@@ -35,6 +35,9 @@ class AdminController extends Controller
     public function showUsers()
     {
        // $users = User::where('flag','show')->get();
+       
+    //    $user_details = session('user');
+    //    AuditLogHelper::logDetails('users', $user_details->tbl_user_id);
 
         $users = User::where('flag', 'show')
              ->whereNotIn('tbl_role_id', [1])
@@ -47,32 +50,54 @@ class AdminController extends Controller
             $user->encrypted_id = EncryptionDecryptionHelper::encdecId($user->tbl_user_id, 'encrypt');
         }
         
+        $roles = DB::table('mst_tbl_roles')->pluck('role_name', 'tbl_role_id')->toArray();
+
 
         // Pass the transformed users to the view
-    return view('frontend_admin.user', compact('users'));
+    //return view('frontend_admin.user', compact('users'));
+    return view('frontend_admin.user')->with(['users' => $users, 'roles' => $roles]);
+
            
     }
     
     //display user registration form
     public function createUser(){
-        return view('frontend_admin.add_new_user_form');
+
+        // $user_details = session('user');
+        // AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
+
+        $roles = Role::where('flag', 'show')->get();
+
+        foreach ($roles as $role) {
+            // Encode the role ID using the helper function
+            $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
+        }
+
+        return view('frontend_admin.add_new_user_form',compact('roles'));
     }
 
     //create new user in db and redirect to user home page
     public function storeUser(Request $request){
+        
+        $user_details = session('user');
+        AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
 
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:mst_tbl_users,email',
-            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
-            'tbl_role_id' => 'required|integer'],
+            'password' => ['required', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'],
+            'tbl_role_id' => 'required'],
             [
-                'password.regex' => 'The password must contain at least one letter and one number.',
+                'email.unique' => 'This email address is already in use.',
+                'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
             ]);
         
+        $enc_role_id = $request->tbl_role_id;
         
+        $dec_role_id = EncryptionDecryptionHelper::encDecId($enc_role_id,'decrypt');
+    
         //get user details from session
         $user_details = session('user');
         //get the details from the request and store into user object
@@ -82,7 +107,7 @@ class AdminController extends Controller
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->tbl_role_id = $request->tbl_role_id;
+        $user->tbl_role_id = $dec_role_id;
         $user->add_by = $user_details->tbl_user_id;
         $user->add_date = Date::now()->toDateString();
         $user->add_time = Date::now()->toTimeString();
@@ -97,7 +122,7 @@ class AdminController extends Controller
         $emp->first_name = $request->first_name;
         $emp->middle_name = $request->middle_name;
         $emp->last_name = $request->last_name;
-        $emp->tbl_role_id = $request->tbl_role_id;
+        $emp->tbl_role_id = $dec_role_id;
         $emp->add_by = $user_details->tbl_user_id;
         $emp->add_date = Date::now()->toDateString();
         $emp->add_time = Date::now()->toTimeString();
@@ -156,27 +181,40 @@ class AdminController extends Controller
     public function editUserForm($enc_id)
     {
         
+
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
         
         $user = User::find($dec_id);
+
+        $roles = Role::where('flag', 'show')->get();
+
+        foreach ($roles as $role) {
+            // Encode the role ID using the helper function
+            $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
+        }
         
-        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id]);
+        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles]);
     }
 
     //edit user details in db
     public function editUser(Request $request)
     {
+       
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:mst_tbl_users,email',
-            'password' => ['required', 'min:6', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',], // Minimum length of 6, at least one letter, and at least one number
-            'tbl_role_id' => 'required|integer'],
+            'password' => ['required', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'],
+            'tbl_role_id' => 'required'],
             [
-                'password.regex' => 'The password must contain at least one letter and one number.',
+                'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            
             ]);
+
+            
+            $user_details = session('user');
+        AuditLogHelper::logDetails('edit user', $user_details->tbl_user_id);
         
         $userdetails = session('user');
         
@@ -186,40 +224,41 @@ class AdminController extends Controller
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
         
 
-        // $og_pass = $request->password;
-        
-        // $encrypted_pass = EncryptionDecryptionHelper::encryptData($og_pass);
-        
-        // dd($encrypted_pass);
+       
 
         $user = User::findOrFail($dec_id);
         
 
+        //decrypt the role id
+        $enc_role_id = $request->tbl_role_id;
+        $dec_role_id = EncryptionDecryptionHelper::encdecId($enc_role_id,'decrypt');
+
+        
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->tbl_role_id = $request->tbl_role_id;
+        $user->tbl_role_id = $dec_role_id;
 
-      
-
-        
         $user->update_by = $userdetails->tbl_user_id;
         $user->update_date = Date::now()->toDateString();
         $user->update_time = Date::now()->toTimeString();
+        $user->save();
+        
 
         //saving the details in employee tables also
-        // $emp = EmployeeDetail::findOrFail($dec_id);
-        // $emp->first_name = $request->first_name;
-        // $emp->middle_name = $request->middle_name;
-        // $emp->last_name = $request->last_name;
+        $emp = EmployeeDetail::where('tbl_user_id',$dec_id)->first();
         
-        // $emp->tbl_role_id = $request->tbl_role_id;
-        // $emp->save();
+        $emp->first_name = $request->first_name;
+        $emp->middle_name = $request->middle_name;
+        $emp->last_name = $request->last_name;
+        
+        $emp->tbl_role_id = $dec_role_id;
+        $emp->save();
 
 
-        $user->save();
+        
         //dd("success");
         return redirect('/admin/users');
 
@@ -230,6 +269,9 @@ class AdminController extends Controller
      //delete user
      public function deleteUser($enc_id)
      {
+        $user_details = session('user');
+        AuditLogHelper::logDetails('delete user', $user_details->tbl_user_id);
+
          $action = 'decrypt';
          $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
          

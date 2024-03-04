@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Helpers\EncryptionDecryptionHelper;
+use App\Helpers\AuditLogHelper;
+use App\Models\RoleModule;
+use App\Models\Module;
  
 class AuthController extends Controller
 {
@@ -28,8 +31,40 @@ class AuthController extends Controller
 
     {   
         //check if user exists 
-        $user = User::where('email',$request->email)->first();
         
+        $user = User::where('email',$request->email)->first();
+        $role_id = $user->tbl_role_id;
+        $roleModules = RoleModule::where('tbl_role_id',$role_id)->get();
+
+        $moduleData = [];
+        foreach($roleModules as $roleModule){
+            
+            $module = Module::find($roleModule->tbl_module_id);
+            
+            if ($module) {
+                
+                $moduleData[] = [
+                    'module' => $module,
+                ];
+            }
+        }
+
+        $uniqueParentNames = [];
+
+        // Iterate over $moduleData to extract unique parent names
+            foreach ($moduleData as $data) {
+                $parentName = $data['module']->parent;
+
+                // Check if the parent name already exists
+                if (!in_array($parentName, $uniqueParentNames)) {
+                    // Add the parent name to the unique parent names array
+                    $uniqueParentNames[] = $parentName;
+                }
+            }
+
+            Session::put('uniqueParentNames',$uniqueParentNames);
+            
+
 
         //get the password from request
         $password =$request->password;
@@ -44,10 +79,10 @@ class AuthController extends Controller
         //if user exists validate password and redirect to respective page
         if (strcmp($user->password, $encrypted_pass) === 0) {
 
-            // $activity_name = "login";
-            // $activity_by = $user->tbl_user_id;
+             $activity_name = "login";
+             $activity_by = $user->tbl_user_id;
         
-            // AuditLogHelper::logDetails($activity_name, $activity_by);
+             AuditLogHelper::logDetails($activity_name, $activity_by);
 
             auth()->login($user);
             
@@ -55,19 +90,20 @@ class AuthController extends Controller
 
             //redirectDash will check if the role of the user and redirect to respective dashboard
             $route = $this->redirectDash();
-            
-            // $userss = Auth::user();
+           
 
-            // $user12 = session('user');
-            // $userid = $user12->tbl_user_id;
-            // dd($userid);
+           // return view($route, ['moduleData' => $moduleData, 'uniqueParentNames' => $uniqueParentNames]);
+            //return redirect($route)->with(['moduleData' => $moduleData, 'uniqueParentNames' => $uniqueParentNames]);
 
-        
-
+            //return redirect($route)->with(['moduleData' => $moduleData, 'uniqueParentNames' => $uniqueParentNames]);
             return redirect($route);
+
         } else {
             // if passwords are not same display following msg
-             return redirect()->back()->with('error', 'Invalid email or password');
+            // return redirect()->back()->with('error', 'Invalid email or password');
+            // return redirect()->back()->withInput();
+            return redirect()->back()->withInput()->with('error', 'Invalid email or password.Please enter valid credentials.');
+
         }
     }
  
@@ -105,7 +141,9 @@ class AuthController extends Controller
     }
  
     public function logout(Request $request)
-    {
+    {   
+        $user_details = session('user');
+        AuditLogHelper::logDetails('logout', $user_details->tbl_user_id);
         $request->session()->flush();
         Auth::logout();
         return redirect('/');
