@@ -30,4 +30,9 @@ class DevController extends Controller
 
         return view('dev.showTasks',compact('tasks'));
     }
+
+    public function viewTask($enc_id)
+    {
+         
+    }
 }

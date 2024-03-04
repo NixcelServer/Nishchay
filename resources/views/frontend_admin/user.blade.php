@@ -45,7 +45,7 @@
                                                 @else
                                                     Unknown Role
                                                 @endif
-                                            </td>
+                                            </td> 
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
                                                 <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning">Edit</a>
