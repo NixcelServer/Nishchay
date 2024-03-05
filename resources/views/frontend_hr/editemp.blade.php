@@ -96,7 +96,7 @@
                                   <div class="row">
                                       <div class="col-md-4">
                                           <label class="form-label">Email</label>
-                                          <input type="text" class="form-control" name="email" >
+                                          <input type="text" class="form-control" name="email" placeholder={{ $emp->email }} readonly>
                                       </div>
                                       <div class="col-md-4">
                                           <label class="form-label">Contact No</label>

@@ -55,13 +55,39 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @php
+                                                $moduleData = Session::get('moduleData');
+                                                $containsEditEmployeeModule = false;
+                                                $containsDeleteEmployeeModule = false;
+
+                                                                                            
+                                                if($moduleData){
+                                                    foreach($moduleData as $data){
+                                                        $moduleName = $data['module']->module_name; // Assuming 'name' is the property that contains the module name
+                                                        if($moduleName == 'Edit Employee'){
+                                                            $containsEditEmployeeModule = true;
+                                                        }
+                                                        if($moduleName == 'Delete Employee'){
+                                                            $containsDeleteEmployeeModule = true;
+                                                        }
+                                                        if ($containsEditEmployeeModule && $containsDeleteEmployeeModule) {
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                @endphp
+                                               
+                                                @if($containsEditEmployeeModule)
                                                 <!-- Edit action link with encrypted ID -->
-                                                <a href="/hr/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="/Employees/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
+                                               @endif
+                                               @if($containsDeleteEmployeeModule)
                                                 <!-- Delete action form with encrypted ID -->
                                                 <form action="" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                               @endif     
                                                 </form>
                                             </td>
                                         </tr>

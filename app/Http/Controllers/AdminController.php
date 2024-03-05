@@ -122,6 +122,7 @@ class AdminController extends Controller
         $emp->first_name = $request->first_name;
         $emp->middle_name = $request->middle_name;
         $emp->last_name = $request->last_name;
+        $emp->email = $request->email;
         $emp->tbl_role_id = $dec_role_id;
         $emp->add_by = $user_details->tbl_user_id;
         $emp->add_date = Date::now()->toDateString();
