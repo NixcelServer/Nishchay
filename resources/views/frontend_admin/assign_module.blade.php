@@ -57,36 +57,35 @@
                         <!-- Table displaying modules -->
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th>Sr.No</th>
-                                                    <th>Role</th>
-                                                    <th>Modules</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                 @foreach ($moduleData as $key => $moduleItem)
-                                                <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>{{ $role->role_name }}</td>
-                                                    <td>{{ $moduleItem['module']->module_name }}</td>
-                                                    <!-- Display other module information as needed -->
-                                                    <td>
-                                                    <form action="/admin/deletemodule" method="POST">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <input type="hidden" name="moduleId" value="{{ $moduleItem['module']->id }}">
-                                                        <input type="hidden" name="roleModuleId" value="{{ $moduleItem['enc_role_module_id'] }}"> <!-- Pass encrypted role module ID -->
- 
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                                    </form>
-                                                </td>
-                                                </tr>
-                                    @endforeach
-                                </tbody>
-                             </table>
+                                <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Role</th>
+                                            <th>Modules</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($moduleData as $key => $moduleItem)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $role->role_name }}</td>
+                                            <td>{{ $moduleItem['module']->module_name }}</td>
+                                            <!-- Display other module information as needed -->
+                                            <td>
+                                                <form id="deleteForm{{ $moduleItem['module']->id }}" action="/admin/deletemodule" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+                                                    <input type="hidden" name="moduleId" value="{{ $moduleItem['module']->id }}">
+                                                    <input type="hidden" name="roleModuleId" value="{{ $moduleItem['enc_role_module_id'] }}"> <!-- Pass encrypted role module ID -->
+                                                    <button type="button" class="btn btn-danger btn-sm delete-module" data-module-id="{{ $moduleItem['module']->id }}">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -95,3 +94,32 @@
         </div>
     </section>
 </div>
+
+<!-- Include SweetAlert script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Script to handle deletion confirmation using SweetAlert
+    document.querySelectorAll('.delete-module').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var moduleId = this.dataset.moduleId; // Retrieve module ID from data attribute
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to delete this module?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete Module'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Proceed with deletion if confirmed
+                    document.getElementById('deleteForm' + moduleId).submit();
+                }
+            });
+        });
+    });
+</script>
+
+

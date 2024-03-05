@@ -5,7 +5,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card" style="max-width: 600px;">
+                    <div class="card" style="max-width: 1000px;">
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Departments</h4>
                         </div>
@@ -54,7 +54,11 @@
     </section>
 </div>
 
-
+<style>
+    .modal-body .form-group {
+        margin-bottom: 0; /* Remove bottom margin */
+    }
+</style>
 <!-- Add Department Modal -->
 <!-- Add Department Modal -->
 <div class="modal fade" id="addDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
@@ -76,7 +80,7 @@
                         
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -104,7 +108,7 @@
                         <span class="departmentNameError text-danger"></span>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>

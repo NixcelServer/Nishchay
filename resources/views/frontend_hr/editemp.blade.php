@@ -57,7 +57,7 @@
 
 
 
-                      <h3>Basic Information</h3>
+                      <h3>Basic Information <br>.</h3>
                       <fieldset>
                           <div class="form-group form-float">
                               <div class="form-line">
@@ -198,7 +198,7 @@
 
                       
                       
-                      <h3>Previous Employee Details</h3>
+                      <h3>Previous Employee <br> Details</h3>
                       <fieldset>
                           <div class="form-group form-float">
                               <div class="form-line">
@@ -272,7 +272,7 @@
 
                         
                       
-                      <h3>Official Details</h3>
+                      <h3>Official Details <br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
                           <div class="form-line">
@@ -394,7 +394,7 @@
 
 
 
-                      <h3>Bank Details</h3>
+                      <h3>Bank Details<br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
                           <div class="form-line">
@@ -462,7 +462,7 @@
 
 
 
-                      <h3>Salary Details</h3>
+                      <h3>Salary Details<br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
                           <div class="form-line">
