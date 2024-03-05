@@ -67,24 +67,26 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                 @foreach ($moduleData as $key => $moduleItem)
+                                                @foreach ($moduleData as $key => $moduleItem)
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $role->role_name }}</td>
                                                     <td>{{ $moduleItem['module']->module_name }}</td>
-                                                    <!-- Display other module information as needed -->
                                                     <td>
-                                                    <form action="/admin/deletemodule" method="POST">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <input type="hidden" name="moduleId" value="{{ $moduleItem['module']->id }}">
-                                                        <input type="hidden" name="roleModuleId" value="{{ $moduleItem['enc_role_module_id'] }}"> <!-- Pass encrypted role module ID -->
- 
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                                    </form>
-                                                </td>
+                                                        <!-- Delete button triggers SweetAlert confirmation -->
+                                                        <button type="button" class="btn btn-danger" onclick="deleteModule('{{ $moduleItem['module']->id }}', '{{ $moduleItem['enc_role_module_id'] }}')">Delete</button>
+                                                        
+                                                        <!-- Form for deletion (hidden) -->
+                                                        <form id="deleteForm{{ $moduleItem['module']->id }}" action="/admin/deletemodule" method="POST" style="display: none;">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <input type="hidden" name="moduleId" value="{{ $moduleItem['module']->id }}">
+                                                            <input type="hidden" name="roleModuleId" value="{{ $moduleItem['enc_role_module_id'] }}">
+                                                        </form>
+                                                    </td>
                                                 </tr>
-                                    @endforeach
+                                            @endforeach
+                                            
                                 </tbody>
                              </table>
                             </div>
@@ -95,3 +97,26 @@
         </div>
     </section>
 </div>
+
+<!-- SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Function to handle delete action
+    function deleteModule(moduleId, roleModuleId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, submit the form for deletion
+                document.getElementById('deleteForm' + moduleId).submit();
+            }
+        });
+    }
+</script>

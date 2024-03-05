@@ -8,7 +8,7 @@
     }
  
     #designationName{
-        width: 200px; /* Adjust the width as needed */
+        width: 400px; /* Adjust the width as needed */
     }
 </style>
  
@@ -17,7 +17,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card" style="max-width: 600px;">
+                    <div class="card" style="max-width: 1000px;">
                         <div class="card-header">
                             <h4 class="mt-2">Nixcel Software Solutions Designation</h4>
                         </div>
@@ -66,7 +66,11 @@
         </div>
     </section>
 </div>
-
+<style>
+    .modal-body .form-group {
+        margin-bottom: 0; /* Remove bottom margin */
+    }
+</style>
 <!-- Add Designation Modal -->
 <div class="modal fade" id="addDesignationModal" tabindex="-1" role="dialog" aria-labelledby="addDesignationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -88,7 +92,7 @@
 
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center"> <!-- Add justify-content-center class -->
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -118,7 +122,7 @@
 
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>

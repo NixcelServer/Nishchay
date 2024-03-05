@@ -49,7 +49,7 @@
 
                                 <div class="form-group row">
                                 <div class="col">
-                                    <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 15%;" required>
+                                    <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 35%;" required>
                                         <option value="">Select Role</option> <!-- Blank option -->
                                         @foreach($roles as $role)
                                             @if($role->role_name !== 'Admin')

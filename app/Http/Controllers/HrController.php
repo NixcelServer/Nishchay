@@ -61,6 +61,7 @@ class HrController extends Controller
     //add details into basic info
     public function basicInfo(Request $request)
     {
+        dd("hi in basic info");
            //get session details
           $userdetails = session('user');
 

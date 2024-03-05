@@ -120,7 +120,7 @@
               <ul class="menu">
                 @foreach($uniqueParentNames as $parentName)
                 <li>
-                  <a href="#">{{ $parentName }}<span class=""></span></a>
+                  <a href="/hr/employees">{{ $parentName }}<span class=""></span></a>
                 </li>
                 @endforeach
               </ul>

@@ -39,17 +39,7 @@
   .table {
         background-color: #bcdafd; /* Background color for the table */
     }
-
-    h3 {
-    font-size: 78px; /* You can adjust the font size as needed */
-}
-
-.section-body h3 {
-            margin-top: 50px; /* Adjust the top margin as needed */
-        }
 </style>
-
-
 <body>
       <!-- Main Content -->
       <div class="main-content">
@@ -66,7 +56,7 @@
                     <form id="wizard_with_validation" method="POST">
                       @csrf
 
-                      <h3>Basic Information<br>.</h3>
+                      <h3>Basic Information</h3>
                       <fieldset>
                           <div class="form-group form-float">
                               <div class="form-line">
@@ -207,7 +197,7 @@
 
                       
                       
-                      <h3>Previous Employee <br>Details</h3>
+                      <h3>Previous Employee Details</h3>
                       <fieldset>
                           <div class="form-group form-float">
                               <div class="form-line">
@@ -281,8 +271,7 @@
 
                         
                       
-                      <h3>Official Details <br><br>.</h3>
-                      
+                      <h3>Official Details</h3>
                       <fieldset>
                         <div class="form-group form-float">
                           <div class="form-line">
@@ -404,7 +393,7 @@
 
 
 
-                      <h3>Bank Details<br><br>.</h3>
+                      <h3>Bank Details</h3>
                       <fieldset>
                         <div class="form-group form-float">
                           <div class="form-line">
@@ -472,7 +461,7 @@
 
 
 
-                      <h3>Salary Details<br><br>.</h3>
+                      <h3>Salary Details</h3>
                       <fieldset>
                         <div class="form-group form-float">
                           <div class="form-line">
@@ -566,6 +555,75 @@
             });
         });
       </script>
+
+<script>
+    // Function to handle form submission based on active section
+    function submitForm(action) {
+        var form = $('#wizard_with_validation');
+        form.attr('action', action);
+        form.submit();
+    }
+
+    // Next button logic
+    $('.next').click(function(){
+        var currentFieldset = $(this).closest('fieldset');
+        var nextFieldset = currentFieldset.next();
+
+        // Validate current fieldset
+        if (validateFieldset(currentFieldset)) {
+            // If validated, hide current fieldset and show next fieldset
+            currentFieldset.hide();
+            nextFieldset.show();
+
+            // If next fieldset is the last one, show Finish button
+            if (nextFieldset.next().length == 0) {
+                $('.next').hide();
+                $('.finish').show();
+            }
+
+            // Determine the action based on the next fieldset
+            var action = '';
+            switch(nextFieldset.find('h3').text()) {
+                case 'Previous Employee Details':
+                    action = '/editemp/basicinfo'';
+                    break;
+                case 'Official Details':
+                    action = '/editemp/storeofficialdetails';
+                    break;
+                case 'Statutory Compliance Details':
+                    action = '/editemp/storestatutorydetails';
+                    break;
+                case 'Bank Details':
+                    action = '/editemp/storebankdetails';
+                    break;
+                case 'Salary Details':
+                    action = '/editemp/storesalarydetails';
+                    break;
+            }
+
+            // Set the action for the form submission
+            $('#wizard_with_validation').attr('action', action);
+        }
+    });
+
+    // Finish button logic (submit form)
+    $('.finish').click(function(){
+        // Display a message or perform any final actions
+        alert('Form submitted successfully!');
+    });
+
+    // Function to validate a fieldset
+    function validateFieldset(fieldset) {
+        // Your validation logic here
+        // Return true if validation passes, false otherwise
+        return true;
+    }
+</script>
+
+
+
+
+
 
 
       <script>

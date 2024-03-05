@@ -108,34 +108,34 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
 
 
-Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
-    //mention your routes here
+// Route::group(['prefix' => '/hr','middleware'=>['web','isHr']],function(){
+//     //mention your routes here
 
-    //if Hr logs in show him admin dashboard
-    Route::get('/dashboard',[HrController::class,'dashboard']);
-    Route::get('/employees',[HrController::class,'showEmployees']);
-    Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
-    Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
-    //show prev employment details form
-    //Route::get('/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
-    //store prevemp details upon clicking on save
-    Route::post('/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
-    //on clicking on next in prev emp form display store official details form
-    Route::get('/editemp/officialdetailsform/{id}',[HrController::class,'officialDetailsForm']);
+//     //if Hr logs in show him admin dashboard
+//     Route::get('/dashboard',[HrController::class,'dashboard']);
+//     Route::get('/employees',[HrController::class,'showEmployees']);
+//     Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
+//     Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
+//     //show prev employment details form
+//     //Route::get('/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
+//     //store prevemp details upon clicking on save
+//     Route::post('/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
+//     //on clicking on next in prev emp form display store official details form
+//     Route::get('/editemp/officialdetailsform/{id}',[HrController::class,'officialDetailsForm']);
 
-    //store official details and return view statutory complaince details
-    Route::post('/editemp/storeofficialdetails',[HrController::class,'storeOfficialDetailsForm']);
+//     //store official details and return view statutory complaince details
+//     Route::post('/editemp/storeofficialdetails',[HrController::class,'storeOfficialDetailsForm']);
 
-    //store statutory compliance details and return then return view bank details
-    Route::post('/editemp/statutorydetails',[HrController::class,'statutoryDetails']);
+//     //store statutory compliance details and return then return view bank details
+//     Route::post('/editemp/statutorydetails',[HrController::class,'statutoryDetails']);
 
-    //store bank details and then return salary structure form
-    Route::post('/editemp/bankdetails',[HrController::class,'bankDetails']);
+//     //store bank details and then return salary structure form
+//     Route::post('/editemp/bankdetails',[HrController::class,'bankDetails']);
 
-    //store salary details and then redirect to show employees page
-    Route::post('/eidtemp/saldetails',[HrController::class,'salDetails']);
+//     //store salary details and then redirect to show employees page
+//     Route::post('/eidtemp/saldetails',[HrController::class,'salDetails']);
     
-});
+// });
 
 //Routes accessible to developer
 Route::group(['prefix' => '/dev','middleware'=>['web','isDev']],function(){
@@ -147,3 +147,14 @@ Route::group(['prefix' => '/dev','middleware'=>['web','isDev']],function(){
     Route::get('/viewtask/{id}',[HrController::class,'viewTask']);
 });
 
+
+
+
+   Route::get('/hr/dashboard',[HrController::class,'dashboard']);
+   Route::get('/hr/employees',[HrController::class,'showEmployees']);
+   Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+   Route::post('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+   Route::get('/hr/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
+   Route::post('/hr/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
+   Route::post('/hr/editemp/basicinfo',[HrController::class,'basicInfo']);
+   Route::post('/hr/editemp/storeofficialdetails',[HrController::class,'storeOfficialDetailsForm']);
