@@ -29,11 +29,11 @@ class HrController extends Controller
 
     public function showEmployees()
     {
-        $emps=EmployeeDetail::all();
+       // $emps=EmployeeDetail::all();
         //dd($emps);
-        // $emps = EmployeeDetail::where('flag', 'show')
-        // ->whereNotIn('tbl_role_id', [1])
-        // ->get(); 
+         $emps = EmployeeDetail::where('flag', 'show')
+         ->whereNotIn('tbl_role_id', [1])
+         ->get(); 
         
         
         //encrypt the id of emp and pass to the view
@@ -85,7 +85,7 @@ class HrController extends Controller
 
     public function storeDetails(Request $request)
     {   
-        dd($request);
+        //dd($request);
     
         
          //get session details
@@ -122,10 +122,13 @@ class HrController extends Controller
         
 
          $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
-         $additionalDetials->employment_status = $request->employmentstatus;
+
+       
+
+         $additionalDetails->employment_status = $request->employmentstatus;
          $additionalDetails->technology = $request->technology;
          $additionalDetails->module = $request->module;
-         $additonalDetails->join_date = Date::now()->toDateString(); 
+         $additionalDetails->join_date = Date::now()->toDateString(); 
 
          //store details in official details form
          $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->first();

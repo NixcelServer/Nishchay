@@ -80,13 +80,13 @@
                                                 <!-- Edit action link with encrypted ID -->
                                                 <a href="/Employees/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
                                                @endif
-                                               @if($containsDeleteEmployeeModule)
+                                               {{-- @if($containsDeleteEmployeeModule)
                                                 <!-- Delete action form with encrypted ID -->
                                                 <form action="" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                                               @endif     
+                                               @endif      --}}
                                                 </form>
                                             </td>
                                         </tr>

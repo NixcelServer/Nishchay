@@ -183,11 +183,14 @@ class AdminController extends Controller
     public function editUserForm($enc_id)
     {
         
-
         $action = 'decrypt';
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
         
         $user = User::find($dec_id);
+    
+
+        $roleName = Role::where('tbl_role_id',$user->tbl_role_id)->value('role_name');;
+        
 
         $roles = Role::where('flag', 'show')->get();
 
@@ -196,7 +199,8 @@ class AdminController extends Controller
             $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
         
-        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles]);
+        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles,'roleName' => $roleName]);
+        
     }
 
     //edit user details in db
@@ -281,37 +285,37 @@ class AdminController extends Controller
          $user->flag = "deleted";
          $user->save();
  
-        //  $emp = EmployeeDetail::find($dec_id);
-        //  $emp->flag = "deleted";
-        //  $emp->save();
+         $emp = EmployeeDetail::find($dec_id);
+         $emp->flag = "deleted";
+         $emp->save();
  
-        //  $additional_detail = AdditionalDetail::find($dec_id);
-        //  $additional_detail->flag = "deleted";
-        //  $additonal_detail->save();
+         $additional_detail = AdditionalDetail::find($dec_id);
+         $additional_detail->flag = "deleted";
+         $additional_detail->save();
  
-        //  $epf_essi_detail = EpfEssiDetail::find($dec_id);
-        //  $epf_essi_detail->flag = "deleted";
-        //  $epf_essi_detail->flag->save();
+         $epf_essi_detail = EpfEssiDetail::find($dec_id);
+         $epf_essi_detail->flag = "deleted";
+         $epf_essi_detail->save();
  
-        //  $bank_detail = BankDetail::find($dec_id);
-        //  $bank_detail->flag = "deleted";
-        //  $bank_detail->save();
+         $bank_detail = BankDetail::find($dec_id);
+         $bank_detail->flag = "deleted";
+         $bank_detail->save();
 
-        //  $kyc_detail = KycDetail::find($dec_id);
-        //  $kyc_detail->flag = "deleted";
-        //  $kyc_detail->save();
+         $kyc_detail = KycDetail::find($dec_id);
+         $kyc_detail->flag = "deleted";
+         $kyc_detail->save();
  
-        //  $official_detail = OfficialDetail::find($dec_id);
-        //  $official_detail->flag = "deleted";
-        //  $official_detail->save();
+         $official_detail = OfficialDetail::find($dec_id);
+         $official_detail->flag = "deleted";
+         $official_detail->save();
  
-        //  $prev_emp_detail = PreviousEmploymentDetail::find($dec_id);
-        //  $prev_emp_detail->flag = "deleted";
-        //  $prev_emp_detail->save();
+         $prev_emp_detail = PreviousEmploymentDetail::find($dec_id);
+         $prev_emp_detail->flag = "deleted";
+         $prev_emp_detail->save();
  
-        //  $sal = SalaryStructureDetail::find($dec_id);
-        //  $sal->flag = "deleted";
-        //  $sal->save();
+         $sal = SalaryStructureDetail::find($dec_id);
+         $sal->flag = "deleted";
+         $sal->save();
  
  
         return redirect('/admin/users');

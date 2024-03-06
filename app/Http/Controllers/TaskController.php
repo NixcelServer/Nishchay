@@ -113,7 +113,7 @@ class TaskController extends Controller
     //     }
 
 
-        return view('frontend_tasks.myCompletedTasks',['tasks'=>$tasks]);
+        //return view('frontend_tasks.myCompletedTasks',['tasks'=>$tasks]);
 
     }
 
