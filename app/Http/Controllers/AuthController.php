@@ -21,10 +21,10 @@ class AuthController extends Controller
     public function loadLogin()
     {
         //check if user is logged in, redirect to request orelse redirect to login page
-        if(Auth::user()){
-            $route = $this->redirectDash();
-            return redirect($route);
-        }
+        // if(Auth::user()){
+        //     $route = $this->redirectDash();
+        //     return redirect($route);
+        // }
         return view('frontend_home.home');
     }
  
@@ -134,7 +134,7 @@ class AuthController extends Controller
 
         }
         else if(Auth::user() && Auth::user()->tbl_role_id == 3){
-            dd("Developer");
+            //dd("Developer");
         }
         else{
             $redirect ='/';

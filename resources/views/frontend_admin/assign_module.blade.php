@@ -30,7 +30,7 @@
                                     <h4><label for="roleName">Role : {{ $role->role_name }} </label></h4>
                                    <!-- <input type="text" class="form-control" id="roleName" name="roleName"> -->
                                    <input type="hidden" id="enc_id" name="enc_id" value="{{ $enc_id }}">
- 
+
                                 </div>
                                 <div class="form-group">
                                      <label for="selectModule">Select Module</label>
@@ -61,7 +61,7 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.No</th>
-                                            <th>Role</th>
+                                            {{-- <th>Role</th> --}}
                                             <th>Modules</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,7 +70,7 @@
                                         @foreach ($moduleData as $key => $moduleItem)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $role->role_name }}</td>
+                                            {{-- <td>{{ $role->role_name }}</td> --}}
                                             <td>{{ $moduleItem['module']->module_name }}</td>
                                             <!-- Display other module information as needed -->
                                             <td>

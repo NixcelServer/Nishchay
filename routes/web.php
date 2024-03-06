@@ -8,6 +8,8 @@ use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\TaskController;
+
 
 
 
@@ -112,10 +114,10 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
 Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     //mention your routes here
-
+    Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
     Route::get('/',[HrController::class,'showEmployees']);
     Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
-    Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
+    // Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
     //show prev employment details form
     //Route::get('/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
     //store prevemp details upon clicking on save
@@ -137,11 +139,13 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     
 });
 
+
+
 //Routes accessible to developer
-Route::group(['prefix' => '/Tasks','middleware'=>['web','isDev']],function(){
+
     
     //when dev clicks on Tasks
-    Route::get('/tasks',[TaskController::class,'showTasks']);
+    Route::get('/Tasks',[TaskController::class,'showTasks']);
     //view task page
     Route::get('/viewtask/{id}',[TaskController::class,'viewTask']);
 
@@ -156,8 +160,15 @@ Route::group(['prefix' => '/Tasks','middleware'=>['web','isDev']],function(){
 
     Route::get('/createtask',[TaskController::class,'createTask']);
 
+    //abhitasksroutes
+    Route::get('/Tasks/pending_tasks',[TaskController::class,'PendingTasks']);
+    Route::get('/Tasks/completed_tasks',[TaskController::class,'CompletedTasks']);
+    Route::get('/Tasks/inprogress_tasks',[TaskController::class,'InprogessTasks']);
+    Route::get('/Tasks/reassigned_tasks',[TaskController::class,'ReassignedTasks']);
+    Route::get('/Tasks/view_task_page',[TaskController::class,'ViewTasks']);
 
-});
+
+
 
 //});
 

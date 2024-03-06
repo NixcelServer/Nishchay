@@ -81,7 +81,8 @@ class HrController extends Controller
     //add details into basic info
     public function basicInfo(Request $request)
     {
-           //get session details
+        //dd($request);   
+        //get session details
           $userdetails = session('user');
 
           $enc_id = $request->input('enc_id');
@@ -90,6 +91,7 @@ class HrController extends Controller
           $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
           $emp = EmployeeDetail::findOrFail($dec_id);
+          dd($emp);
 
           $emp->emp_code = $request->emp_code;
           $emp->title = $request->title;

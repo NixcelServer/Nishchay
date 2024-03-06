@@ -10,17 +10,18 @@ class TaskController extends Controller
      //show tasks
      public function showTasks()
      {
-         $userdetails = session('user');
-         $user_id = $userdetails->tbl_user_id;
+        //  $userdetails = session('user');
+        //  $user_id = $userdetails->tbl_user_id;
  
-         $tasks = TaskDetail::where('tbl_user_id', $user_id)->where('flag', 'show')->get();
+        //  $tasks = TaskDetail::where('tbl_user_id', $user_id)->where('flag', 'show')->get();
  
-         foreach ($tasks as $task) {
-             // Encode the task ID using the helper function
-             $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
-         }
+        //  foreach ($tasks as $task) {
+        //      // Encode the task ID using the helper function
+        //      $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
+        //  }
  
-         return view('frontend_tasks.showTasks',compact('tasks'));
+         return view('frontend_tasks.showTasks');
+        //  ,compact('tasks'));
      }
 
     public function viewTask($enc_task_id)
@@ -86,22 +87,22 @@ class TaskController extends Controller
 
     }
 
-    public function completedTasks()
-    {
-        $userdetails = session('user');
-        $user_id = $userdetails->tbl_user_id;
+    // public function completedTasks()
+    // {
+    //     $userdetails = session('user');
+    //     $user_id = $userdetails->tbl_user_id;
  
-        $tasks = TaskDetail::where('tbl_user_id', $user_id)->where('flag', 'show')->where('status','completed')->get();
+    //     $tasks = TaskDetail::where('tbl_user_id', $user_id)->where('flag', 'show')->where('status','completed')->get();
 
-        foreach($tasks as $task)
-        {
-            // Encode the task ID using the helper function
-            $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
-        }
+    //     foreach($tasks as $task)
+    //     {
+    //         // Encode the task ID using the helper function
+    //         $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
+    //     }
 
-        return view('frontend_tasks.completedTasks',['tasks'=>$tasks]);
+    //     return view('frontend_tasks.completedTasks',['tasks'=>$tasks]);
 
-    }
+    // }
 
     //show create task form
     public function createTask()
@@ -117,5 +118,36 @@ class TaskController extends Controller
 
     }
 
+
+    public function PendingTasks()
+    {
+        return view('frontend_tasks.pending_tasks');
+
+    }
+    public function CompletedTasks()
+    {
+        return view('frontend_tasks.completed_tasks');
+
+    }
+    
+    
+    public function InprogessTasks()
+    {
+        return view('frontend_tasks.inprogress_tasks');
+
+    }
+    public function ReassignedTasks()
+    {
+        return view('frontend_tasks.reassigned_tasks');
+
+    }
+    public function ViewTasks()
+    {
+        return view('frontend_tasks.view_task_page');
+
+    }
+
+    
+    
     
 }
