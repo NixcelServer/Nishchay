@@ -7,7 +7,15 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Task Form</title>
-  <!-- Add your CSS files here -->
+  <style>
+    .small-dropdown {
+        width: 150px; /* Adjust the width value as needed */
+    }
+
+    .small-textarea {
+    height: 50px; /* Adjust the height value as needed */
+}
+</style>
 </head>
 
 <body>
@@ -24,22 +32,38 @@
                 <label for="task_title">Task Title</label>
                 {{-- <input type="text" class="form-control" id="task_title" name="task_title" required> --}}
               </div>
-              <div class="form-group">
-                <label for="assign_date">Assign Date</label>
-                <input type="date" class="form-control" id="assign_date" name="assign_date">
-              </div>
-              <div class="form-group">
-                <label for="completed_date">Completed Task Date</label>
-                <input type="date" class="form-control" id="completed_date" name="completed_date">
-              </div>
-              <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" class="form-control" id="status" name="status">
-              </div>
-              <div class="form-group">
-                <label for="solution">Solution</label>
-                <textarea class="form-control" id="solution" name="solution" rows="3"></textarea>
-              </div>
+              <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="assign_date">Assign Date</label>
+                        <input type="date" class="form-control" id="assign_date" name="assign_date">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="completed_date">Completed Task Date</label>
+                        <input type="date" class="form-control" id="completed_date" name="completed_date">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control small-dropdown" id="status" name="status">
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="in_progress">In Progress</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="solution">Solution</label>
+              <textarea class="form-control small-textarea" id="solution" name="solution" rows="1"></textarea>
+          </div>
+              <!-- Reassign Task Button -->
+              <a href="/Tasks/reassigned_tasks" class="btn btn-warning" id="reassign_task_btn">Reassign Task</a>
+              <!-- Submit Button -->
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>

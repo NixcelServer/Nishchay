@@ -116,6 +116,7 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Gender</label>
                                         <select class="form-control" name="gender">
+                                            <option value="Male">Select Gender</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                             <option value="Other">Other</option>
@@ -176,36 +177,47 @@
                                         <input type="text" class="form-control" name="address" value="{{ $emp->address }}">
                                     </div>
 
-                                      <div class="col-md-4">
-                                          <label class="form-label">Select Department</label>
-                                          <select class="form-control" name="department" >
-                                              <option value="">Select Department</option>
-                                              <!-- Add department options here -->
-                                          </select>
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">Select Designation</label>
-                                          <select class="form-control" name="designation" >
-                                              <option value="">Select Designation</option>
-                                              <!-- Add designation options here -->
-                                          </select>
-                                      </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Select Department</label>
+                                        <select class="form-control" name="department">
+                                            <option value="">Select Department</option> <!-- Blank option -->
+                                            <!-- Add department options here -->
+                                            @foreach($depts as $dept)
+                                                <option value="{{ $dept->enc_dept_id }}">{{ $dept->dept_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Select Designation</label>
+                                        <select class="form-control" name="designation">
+                                            <option value="">Select Designation</option> <!-- Blank option -->
+                                            <!-- Add designation options here -->
+                                            @foreach($designations as $designation)
+                                                <option value="{{ $designation->desg_enc_id }}">{{ $designation->designation_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                   </div>
                               </div>
                           </div>
                           <div class="form-group form-float">
-                              <div class="form-line">
-                                  <div class="row">
-                                      <div class="col-md-4">
-                                          <label class="form-label">Select Role</label>
-                                          <select class="form-control" name="role" >
-                                              <option value="">Select Role</option>
-                                              <!-- Add role options here -->
-                                          </select>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Select Role</label>
+                                        <select class="form-control" name="role">
+                                            <option value="">Select Role</option>
+                                            <!-- Add role options here -->
+                                            @foreach($roles as $role)
+                                                @if($role->role_name !== 'Admin')
+                                                    <option value="{{ $role->enc_role_id }}">{{ $role->role_name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
  
                       </fieldset>
@@ -299,9 +311,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Select Reporting Manager</label>
                                         <select class="form-control" name="selectreportingmanager">
-                                            <option value="manager1" {{ $emp->reporting_manager === 'manager1' ? 'selected' : '' }}>Manager 1</option>
-                                            <option value="manager2" {{ $emp->reporting_manager === 'manager2' ? 'selected' : '' }}>Manager 2</option>
-                                            <option value="manager3" {{ $emp->reporting_manager === 'manager3' ? 'selected' : '' }}>Manager 3</option>
+                                            <option value= 1 {{ $emp->reporting_manager === 'manager1' ? 'selected' : '' }}>Manager 1</option>
+                                            <option value= 2 {{ $emp->reporting_manager === 'manager2' ? 'selected' : '' }}>Manager 2</option>
+                                            <option value= 3 {{ $emp->reporting_manager === 'manager3' ? 'selected' : '' }}>Manager 3</option>
                                         </select>
                                     </div>
                                 </div>
@@ -502,7 +514,97 @@
         </section>
        
  
-       
+       {{-- ---------------------old---------------------- --}}
+
+
+       <section class="section">
+        <div class="section-body">
+          <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Edit Employee Details</h4>
+                </div>
+                <div class="card-body">
+                  <form id="wizard_with_validation" method="POST">
+                      @csrf
+
+                      <h5 style="color: black;">Previous Employee Details</h5>
+                    <fieldset>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <input type="hidden" name="enc_id" value="{{ $enc_id }}">
+
+                                      <label class="form-label">Company Name</label>
+                                      <input type="text" class="form-control" name="company_name" value="{{ $emp->company_name }}">
+                                  </div>
+                                  <div class="col-md-6">
+                                      <label class="form-label">Designation</label>
+                                      <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
+                                  </div>
+
+                                </div>
+                            </div>
+                        </div>
+                   
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                      <label class="form-label">Start Date</label>
+                                      <input type="date" class="form-control" name="star_tdate" value="{{ $emp->start_date }}">
+                                  </div>
+                                  <div class="col-md-6">
+                                      <label class="form-label">End Date</label>
+                                      <input type="date" class="form-control" name="end_date" value="{{ $emp->end_date }}">
+                                  </div>
+
+                                 
+                                </div>
+                            </div>
+                        </div>
+                   
+                        <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
+                   
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Company Name</th>
+                                    <th>Designation</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table rows will be dynamically added -->
+                            </tbody>
+                        </table>
+                    </fieldset>                    
+                   
+                   
+                    <!-- Include jQuery and jQuery UI libraries here -->
+                       
+                    <script>
+                      // jQuery Datepicker initialization
+                      $(document).ready(function(){
+                          $('.datepicker').datepicker({
+                              format: 'yyyy-mm-dd',
+                              autoclose: true
+                          });
+                      });
+                  </script>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
  
       </div>
  

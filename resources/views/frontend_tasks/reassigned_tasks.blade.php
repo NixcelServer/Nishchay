@@ -24,18 +24,28 @@
                 <label for="task_title">Task Title</label>
                 {{-- <input type="text" class="form-control" id="task_title" name="task_title" required> --}}
               </div>
-              <div class="form-group">
-                <label for="assign_date">Assign Date</label>
-                <input type="date" class="form-control" id="assign_date" name="assign_date">
-              </div>
-              <div class="form-group">
-                <label for="completed_date">Completed Task Date</label>
-                <input type="date" class="form-control" id="completed_date" name="completed_date">
-              </div>
-              <div class="form-group">
-                <label for="status">Remark</label>
-                <input type="text" class="form-control" id="status" name="status">
-              </div>
+              <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="assign_date">Assign Date</label>
+                        <input type="date" class="form-control" id="assign_date" name="assign_date" readonly>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="completed_date">Completed Task Date</label>
+                        <input type="date" class="form-control" id="completed_date" name="completed_date" readonly>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="status">Remark</label>
+                        <input type="text" class="form-control" id="status" name="status">
+                    </div>
+                </div>
+            </div>
+            
+            
               
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>

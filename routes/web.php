@@ -154,7 +154,7 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     //when dev clicks on Tasks
 
     Route::get('/Tasks',[TaskController::class,'showTasks']);
-
+ 
     Route::get('/mytasks',[TaskController::class,'myTasks']);
 
     //view task page
@@ -184,6 +184,8 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     Route::get('/Tasks/inprogress_tasks',[TaskController::class,'InprogessTasks']);
     Route::get('/Tasks/reassigned_tasks',[TaskController::class,'ReassignedTasks']);
     Route::get('/Tasks/view_task_page',[TaskController::class,'ViewTasks']);
+    Route::get('/Tasks/create_task',[TaskController::class,'CreateTasks']);
+
 
 
     Route::post('/assigntask',[TaskController::class,'assignTask']);

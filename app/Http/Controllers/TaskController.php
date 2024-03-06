@@ -123,7 +123,7 @@ class TaskController extends Controller
 
 
     //mng show task
-    public function showTask()
+    public function showTasks()
     {
         $tasks = TaskDetail::whereNotIn('task_status',['Completed'])->where('flag', 'show')->get();
 
@@ -318,8 +318,12 @@ class TaskController extends Controller
         return view('frontend_tasks.view_task_page');
 
     }
-
     
+    public function CreateTasks()
+    {
+        return view('frontend_tasks.create_tasks');
+
+    }
     
     
 

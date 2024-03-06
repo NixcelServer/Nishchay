@@ -31,9 +31,10 @@ class HrController extends Controller
     {
        // $emps=EmployeeDetail::all();
         //dd($emps);
-         $emps = EmployeeDetail::where('flag', 'show')
-         ->whereNotIn('tbl_role_id', [1])
-         ->get(); 
+        $emps = EmployeeDetail::where('flag', 'show')
+                      ->where('tbl_role_id', '<>', 1)
+                      ->get();
+ 
         
         
         //encrypt the id of emp and pass to the view
@@ -68,8 +69,9 @@ class HrController extends Controller
         foreach($designations as $designation){
             $designation->desg_enc_id = EncryptionDecryptionHelper::encdecId($designation->tbl_designation_id, 'encrypt');
         }
+       
 
-        $roles = Designation::where('flag','show')->get();
+        $roles = Role::where('flag','show')->get();
         foreach($roles as $role){
             $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
@@ -78,7 +80,7 @@ class HrController extends Controller
         
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designation'=>$designations,'roles'=> $roles]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles]);
     }
 
 
@@ -277,7 +279,7 @@ class HrController extends Controller
     //store prev employment details in the db
     public function storePrevEmpDetails(Request $request)
     {
-        dd($request);
+        //dd($request);
         //get session details
         $userdetails = session('user');
 
