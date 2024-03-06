@@ -39,9 +39,7 @@ class RoleController extends Controller
         $request->validate([
             'roleName' => 'required|unique:mst_tbl_roles,role_name',
         ]);
-        
-        
-        
+           
         $user = session('user');
          $user_id = $user->tbl_user_id;
 

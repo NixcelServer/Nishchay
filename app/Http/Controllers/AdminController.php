@@ -12,6 +12,7 @@ use App\Models\AdditionalDetail;
 use App\Models\EpfEssiDetail;
 use App\Models\BankDetail;
 use App\Models\KycDetail;
+use App\Models\Module;
 use App\Models\OfficialDetail;
 use App\Models\PreviousEmploymentDetail;
 use App\Models\SalaryStructureDetail;
@@ -132,44 +133,44 @@ class AdminController extends Controller
         
         
 
-        // $additonal_detail = new AdditionalDetail;
-        // $additonal_detail->tbl_user_id = $userId;
-        // $additonal_detail->flag ="show";
-        // $additonal_detail->save();
+        $additonal_detail = new AdditionalDetail;
+        $additonal_detail->tbl_user_id = $userId;
+        $additonal_detail->flag ="show";
+        $additonal_detail->save();
 
        
 
-        // $bank_detail = new BankDetail;
-        // $bank_detail-> tbl_user_id = $userId;
-        // $bank_detail->flag = "show";
-        // $bank_detail->save();
+        $bank_detail = new BankDetail;
+        $bank_detail-> tbl_user_id = $userId;
+        $bank_detail->flag = "show";
+        $bank_detail->save();
 
-        // $epf_essi_detail = new EpfEssiDetail;
-        // $epf_essi_detail->tbl_user_id = $userId;
-        // $epf_essi_detail->flag = "show";
-        // $epf_essi_detail->save();
+        $epf_essi_detail = new EpfEssiDetail;
+        $epf_essi_detail->tbl_user_id = $userId;
+        $epf_essi_detail->flag = "show";
+        $epf_essi_detail->save();
 
-        // $kyc_detail = new KycDetail;
-        // $kyc_detail->tbl_user_id = $userId;
-        // $kyc_detail->flag = "show";
-        // $kyc_detail->save();
+        $kyc_detail = new KycDetail;
+        $kyc_detail->tbl_user_id = $userId;
+        $kyc_detail->flag = "show";
+        $kyc_detail->save();
 
 
-        // $module = new Module;
-        // $module->tbl_user_id = $userId;
-        // $module->flag = "show";
+        $module = new Module;
+        $module->tbl_user_id = $userId;
+        $module->flag = "show";
 
-        // $official_detail = new OfficialDetail;
-        // $official_detail->tbl_user_id = $userId;
-        // $official_detail->save();
+        $official_detail = new OfficialDetail;
+        $official_detail->tbl_user_id = $userId;
+        $official_detail->save();
 
-        // $prev_emp_detail = new PreviousEmploymentDetail;
-        // $prev_emp_detail->tbl_user_id = $userId;
-        // $prev_emp_detail->save();
+        $prev_emp_detail = new PreviousEmploymentDetail;
+        $prev_emp_detail->tbl_user_id = $userId;
+        $prev_emp_detail->save();
 
-        // $sal = new SalaryStructureDetail;
-        // $sal->tbl_user_id = $userId;
-        // $sal->save();
+        $sal = new SalaryStructureDetail;
+        $sal->tbl_user_id = $userId;
+        $sal->save();
 
         
 

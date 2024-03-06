@@ -11,6 +11,7 @@ class EpfEssiDetail extends Model
 
     protected $table = 'tbl_epf_essi_details';
     public $timestamps = false;
+    protected $primaryKey = 'tbl_user_id';
 
     protected $attributes = [
         'tbl_epf_essi_detail_id' => null,

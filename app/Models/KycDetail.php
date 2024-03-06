@@ -11,6 +11,8 @@ class KycDetail extends Model
 
     protected $table = 'tbl_kyc_details';
     public $timestamps = false;
+    
+    protected $primaryKey = 'tbl_user_id';
 
     protected $attributes = [
         'tbl_kyc_detail_id' => null,

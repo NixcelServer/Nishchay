@@ -11,6 +11,8 @@ class SalaryStructureDetail extends Model
 
     protected $table = 'tbl_sal_details';
     public $timestamps = false;
+    
+    protected $primaryKey = 'tbl_user_id';
 
     protected $attributes = [
         'tbl_sal_detail_id' => null,

@@ -13,6 +13,12 @@ class EmployeeDetail extends Model
     public $timestamps = false;
     protected $primaryKey = 'tbl_employee_detail_id';
 
+    protected $fillable = [
+        // Other fields...
+        'address', // Update column name from 'permanent_address' to 'address'
+        // Other fields...
+    ];
+
     protected $attributes = [
         'offer_letter_no' => null, // Default to null
         'emp_code' => null, // Default to null

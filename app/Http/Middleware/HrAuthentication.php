@@ -37,3 +37,4 @@ class HrAuthentication
         return redirect('/');
     }
 }
+ 
