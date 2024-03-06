@@ -11,6 +11,7 @@ class BankDetail extends Model
 
     protected $table = 'tbl_bank_details';
     public $timestamps = false;
+    protected $primaryKey = 'tbl_user_id';
 
     protected $attributes = [
         'tbl_user_id' => null,

@@ -17,10 +17,11 @@ class ValidLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!session()->has('user')) {
-            return redirect('/');
-        }
-
-        return $next($request);
+    
+        if (session()->has('user')) {
+            return $next($request);
+        } 
+        return redirect('/');
+        
     }
 }

@@ -26,13 +26,13 @@ use App\Http\Controllers\TaskController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
- 
-
-//Route::group(['middleware'=>'preventBackHistory'],function(){
-//Route::middleware('validLogin')->group(function () {
-
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
+//Route::group(['middleware'=>'preventBackHistory'],function(){
+Route::middleware(['validLogin','preventBackHistory'])->group(function () {
+
+
+
 Route::post('/logout',[AuthController::class,'logout']);
 Route::get('/dashboard',[AuthController::class,'dashboard']);
 
@@ -114,7 +114,14 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
 Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     //mention your routes here
+
     Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
+
+
+    Route::post('/storeempdetails',[HrController::class,'storeDetails']);
+
+
+
     Route::get('/',[HrController::class,'showEmployees']);
     Route::get('/editemp/{id}',[HrController::class,'editEmpForm']);
     // Route::post('/editemp/basicinfo',[HrController::class,'basicInfo']);
@@ -145,20 +152,31 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     
     //when dev clicks on Tasks
+
     Route::get('/Tasks',[TaskController::class,'showTasks']);
+
+    Route::get('/mytasks',[TaskController::class,'myTasks']);
+
     //view task page
-    Route::get('/viewtask/{id}',[TaskController::class,'viewTask']);
+    Route::get('/viewmytask/{id}',[TaskController::class,'viewMyTask']);
 
-    Route::post('/updatetaskstatus',[TaskController::class,'updateTaskStatus']);
+    Route::post('/updatemytaskstatus',[TaskController::class,'updateMyTaskStatus']);
 
-    Route::get('/transfertask/{id}',[TaskController::class,'transferTaskForm']);
-    Route::get('/showreassignedtasks',[TaskController::class,'showReassignedTasks']);
+    Route::get('/transfermytask/{id}',[TaskController::class,'transferMyTaskForm']);
+    //Route::get('/showreassignedtasks',[TaskController::class,'showReassignedTasks']);
+    Route::post('transfermytask',[TaskController::class,'transferMyTask']);
 
-    Route::get('/inprogresstasks',[TaskController::class,'showInProcessTasks']);
+    Route::get('/myinprogresstasks',[TaskController::class,'showMyInProcessTasks']);
 
-    Route::get('/completedtasks',[TaskController::class,'completedTasks']);
+    Route::get('/mycompletedtasks',[TaskController::class,'myCompletedTasks']);
+
+    //mng
+    Route::get('/showtasks',[TaskController::class,'showTasks']);
+
+    Route::get('/viewtask',[TaskController::class,'viewTask']);
 
     Route::get('/createtask',[TaskController::class,'createTask']);
+
 
     //abhitasksroutes
     Route::get('/Tasks/pending_tasks',[TaskController::class,'PendingTasks']);
@@ -168,8 +186,20 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     Route::get('/Tasks/view_task_page',[TaskController::class,'ViewTasks']);
 
 
+    Route::post('/assigntask',[TaskController::class,'assignTask']);
+
+    Route::get('/completedtask',[TaskController::class,'completedTask']);
+
+    Route::get('/inprogresstask',[TaskController::class,'inProgressTask']);
+
+    Route::get('/showreassignedtask',[TaskController::class,'showReassignedTask']);
+
+    Route::get('/viewreassigntask/{id}',[TaskController::class,'viewReassignTask']);
+
+    Route::post('/reassigntask',[TaskController::class,'reassignTask']);
 
 
-//});
+
+});
 
 //});

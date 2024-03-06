@@ -18,14 +18,18 @@ class DevAuthentication
          // Retrieve the authenticated user
          $user = session('user');
 
-        // Check if the user is authenticated and has role ID 1
-        if ($user && $user->tbl_role_id == 3) {
-            // User has role ID 1, proceed with the request
-            return $next($request);
-        } else {
-            // User does not have role ID 1, unauthorized access
-            abort(403, 'Unauthorized');
-        }
+         if($user)
+         {
+            $modules = session('uniqueParentNames');
+
+            if(in_array('Tasks',$modules)){
+                return $next($request);
+            }
+            else{
+                return redirect('/dashboard');
+            }
+         }
+
  
         return redirect('/');
     }

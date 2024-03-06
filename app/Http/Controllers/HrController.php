@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Date;
 use App\Models\PreviousEmploymentDetail;
 use App\Models\OfficialDetail;
 use App\Models\EpfEssiDetail;
+use App\Models\AdditionalDetail;
 use App\Models\BankDetail;
 use App\Models\SalaryStructureDetail;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Role;
+use App\Models\KycDetail;
 
 
 class HrController extends Controller
@@ -73,16 +75,160 @@ class HrController extends Controller
         }
 
 
+        
          
         
         return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designation'=>$designations,'roles'=> $roles]);
     }
 
+
+
+    public function storeDetails(Request $request)
+    {   
+        dd($request);
+    
+        
+         //get session details
+         $userdetails = session('user');
+        
+         $enc_id = $request->input('enc_id');
+        
+         $action = 'decrypt';
+         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+
+         
+         //store details into emp table
+         $emp = EmployeeDetail::where('tbl_user_id',$dec_id)->first();
+    
+         $emp->emp_code = $request->empcode;
+         $emp->title = $request->title;
+         $emp->contact_no = $request->contact_no;
+         $emp->gender = $request->gender;
+         $emp->birth_date = $request->dob;
+         $emp->current_age = $request->age;
+         $emp->country = $request->country;
+         $emp->state = $request->state;
+         $emp->city = $request->city;
+         $emp->pincode = $request->pincode;
+         $emp->permanent_address = $request->address;
+         $emp->tbl_dept_id = $request->tbl_dept_id;
+         $emp->tbl_designation_id = $request->tbl_designation_id;
+         $emp->tbl_role_id = $request->tbl_role_id;
+         $emp->add_by = $userdetails->tbl_user_id;
+         $emp->add_date = Date::now()->toDateString();
+         $emp->add_time = Date::now()->toTimeString();
+         $emp->save();
+        
+        
+
+         $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
+         $additionalDetials->employment_status = $request->employmentstatus;
+         $additionalDetails->technology = $request->technology;
+         $additionalDetails->module = $request->module;
+         $additonalDetails->join_date = Date::now()->toDateString(); 
+
+         //store details in official details form
+         $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->first();
+         $officialDetails->official_email_id = $request->email;
+         $officialDetails->work_location = $request->worklocation;
+         $officialDetails->reporting_manager_id = $request->selectreportingmanager;
+         $officialDetails->add_by = $userdetails->tbl_user_id;
+         $officialDetails->add_date = Date::now()->toDateString();
+         $officialDetails->add_time = Date::now()->toTimeString();
+       
+         
+
+
+         //store statutory detaisl
+         $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
+        $statDetails->uan = $request->uan_no;
+        $statDetails->old_epf_no = $request->old_epf_no;
+        $statDetails->nixcel_epf_no = $request->nixcel_epf_no;
+        $statDetails->nixcel_essi_no = $request->nixcel_essi_no;
+        $statDetails->nominee_name = $request->nominee_name;
+        $statDetails->relation_with_nominee = $request->relation_with_nominee;
+        $statDetails->add_by = $userdetails->tbl_user_id;
+        $statDetails->add_date = Date::now()->toDateString();
+        $statDetails->add_time = Date::now()->toTimeString();
+        $statDetails->flag = "show";
+        
+        
+        
+        
+        
+        //bank details
+        $bankDetails = BankDetail::where('tbl_user_id',$dec_id)->first();
+        
+        $bankDetails->bank_name = $request->bank_name;
+        $bankDetails->city = $request->city;
+        $bankDetails->ifsc = $request->ifsccode;
+        $bankDetails->branch = $request->branchname;
+        $bankDetails->account_no = $request->accountno;
+        $bankDetails->add_by = $userdetails->tbl_user_id;
+        $bankDetails->add_date = Date::now()->toDateString();
+        $bankDetails->add_time = Date::now()->toTimeString();
+        
+        
+
+        //kyc details
+        $kycDetails = KycDetail::where('tbl_user_id',$dec_id)->first();
+        $kycDetails->aadharcard_no = $request->aadharno;
+        $kycDetails->pancard_no = $request->pancardno;
+        $kycDetails->add_by = $userdetails->tbl_user_id;
+        $kycDetails->add_date = Date::now()->toDateString();
+        $kycDetails->add_time = Date::now()->toTimeString();
+        
+
+
+        //sal details
+        $salDetails = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
+
+        $salDetails->actual_gross =$request->actual_gross;
+        $salDetails->basic = $request->basic;
+        $salDetails->hra = $request->hra;
+        $salDetails->special_allowance = $request->special_allowance;
+        $salDetails->medical_allowance = $request->medical;
+        $salDetails->statutory_bonus = $request->statutory_bonus;
+        $salDetails->payable_gross_salary = $request->payable_gross;
+        $salDetails->pf = $request->pf;
+        $salDetails->tds = $request->tds;
+        $salDetails->pt = $request->pt;
+        $salDetails->net_salary = $request->net_salary;
+        $salDetails->ctc = $request->ctc;
+        $salDetails->add_by = $userdetails->tbl_user_id;
+        $salDetails->add_date = Date::now()->toDateString();
+        $salDetails->add_time = Date::now()->toTimeString();
+       
+
+        try {
+           // $emp->save();
+            $officialDetails->save();
+            $additionalDetails->save();
+            $statDetails->save();
+            $bankDetails->save();
+            $kycDetails->save();
+            $salDetails->save();
+        } catch (\Exception $e) {
+            // Handle the error, e.g., log it or return an error response
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+        
+        
+        return redirect('/Employees');
+    }
+
+
+
+
+
+
     //add details into basic info
     public function basicInfo(Request $request)
     {
-        //dd($request);   
-        //get session details
+
+        dd($request);
+           //get session details
+
           $userdetails = session('user');
 
           $enc_id = $request->input('enc_id');
@@ -128,6 +274,7 @@ class HrController extends Controller
     //store prev employment details in the db
     public function storePrevEmpDetails(Request $request)
     {
+        dd($request);
         //get session details
         $userdetails = session('user');
 

@@ -10,6 +10,7 @@ class PreviousEmploymentDetail extends Model
     use HasFactory;
 
     protected $table = 'tbl_prev_emp_details';
+    
     public $timestamps = false;
 
     protected $attributes = [
