@@ -55,18 +55,18 @@
                   <div class="card-body">
                     <form id="wizard_with_validation" method="POST">
                         @csrf
- 
- 
- 
+
                       <h3>Basic Information <br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <div class="row">
                                     <div class="col-md-4">
+
                                     <input type="hidden" name="enc_id" value="{{ $enc_id }}">
                                         <label class="form-label">EMP Code</label>
                                         <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}">
+
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Title</label><br>
@@ -75,11 +75,13 @@
                                         <input type="radio" id="mrs" name="title" value="Mrs">
                                         <label for="mrs">Mrs</label>
                                     </div>
+
                                    
                                 </div>
                             </div>
                         </div>
                        
+
                           <div class="form-group form-float">
                               <div class="form-line">
                                   <div class="row">
@@ -107,7 +109,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Contact No</label>
+
                                         <input type="text" class="form-control" name="contact_no" value="{{ $emp->contact_no }}">
+
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Gender</label>
@@ -117,8 +121,7 @@
                                             <option value="Other">Other</option>
                                         </select>
                                     </div>
-                                   
-                                     
+
                                   </div>
                               </div>
                           </div>
@@ -139,7 +142,7 @@
                                             <option value="">Select Country</option>
                                         </select>
                                     </div>
-                                   
+
                                   </div>
                               </div>
                           </div>
@@ -152,7 +155,7 @@
                                             <option value="">Select State</option>
                                         </select>
                                     </div>
-                                   
+
                                     <div class="col-md-4">
                                         <label class="form-label">City/Village</label>
                                         <input type="text" class="form-control" name="city" value="{{ $emp->city }}">
@@ -161,7 +164,7 @@
                                         <label class="form-label">Pincode</label>
                                         <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}">
                                     </div>
-                                   
+
                                   </div>
                               </div>
                           </div>
@@ -172,7 +175,7 @@
                                         <label class="form-label">Address</label>
                                         <input type="text" class="form-control" name="address" value="{{ $emp->address }}">
                                     </div>
-                                   
+
                                       <div class="col-md-4">
                                           <label class="form-label">Select Department</label>
                                           <select class="form-control" name="department" >
@@ -203,6 +206,7 @@
                                   </div>
                               </div>
                           </div>
+
  
                       </fieldset>
                      
@@ -211,6 +215,7 @@
  
                      
                      
+
                       <h3>Previous Employee <br> Details</h3>
                       <fieldset>
                           <div class="form-group form-float">
@@ -224,7 +229,7 @@
                                         <label class="form-label">Designation</label>
                                         <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
                                     </div>
-                                   
+
                                   </div>
                               </div>
                           </div>
@@ -240,6 +245,7 @@
                                         <label class="form-label">End Date</label>
                                         <input type="date" class="form-control" name="enddate" value="{{ $emp->end_date }}">
                                     </div>
+
                                    
                                   </div>
                               </div>
@@ -247,6 +253,7 @@
                      
                           <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
                      
+
                           <table class="table">
                               <thead>
                                   <tr>
@@ -275,18 +282,7 @@
                             });
                         });
                     </script>
- 
- 
- 
- 
-                     
- 
- 
- 
- 
- 
-                       
-                     
+
                       <h3>Official Details <br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
@@ -311,7 +307,7 @@
                                 </div>
                             </div>
                         </div>
-                       
+
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <div class="row">
@@ -334,26 +330,7 @@
                             </div>
                         </div>
                     </fieldset>
-                   
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
                       <h3>Statutory Compliance Details</h3>
                       <fieldset>
                         <div class="form-group form-float">
@@ -393,21 +370,7 @@
                             </div>
                         </div>
                     </fieldset>
-                   
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
                       <h3>Bank Details<br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
@@ -415,7 +378,9 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">Adhaar No</label>
+
                                         <input type="text" class="form-control" name="aadharno" value=" ">
+
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Pancard No</label>
@@ -423,7 +388,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Bank Name</label>
+
                                         <input type="text" class="form-control" name="bank_name" value=" ">
+
                                     </div>
                                 </div>
                             </div>
@@ -457,24 +424,7 @@
                             </div>
                         </div>
                     </fieldset>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
                       <h3>Salary Details<br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
@@ -537,13 +487,12 @@
                                 </div>
                             </div>
                         </div>
+
                         <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/storeempdetails">Submit</button>
                     </fieldset>
                    
  
- 
- 
- 
+
                     </form>
                   </div>
                 </div>
