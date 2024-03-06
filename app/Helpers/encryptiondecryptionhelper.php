@@ -72,10 +72,11 @@ class EncryptionDecryptionHelper{
         else if($action =='decrypt')
         {
 
-
+          
            // Base64 decode the ID
              $id = base64_decode($id);
 
+             
 
             $output = openssl_decrypt($id, $ciphering,
 
@@ -83,6 +84,7 @@ class EncryptionDecryptionHelper{
 
         }
        
+        
         return $output;
     }
 }    

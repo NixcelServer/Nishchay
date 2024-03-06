@@ -122,7 +122,7 @@ class HrController extends Controller
         
 
          $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
-         $additionalDetials->employment_status = $request->employmentstatus;
+         $additionalDetails->employment_status = $request->employmentstatus;
          $additionalDetails->technology = $request->technology;
          $additionalDetails->module = $request->module;
          $additonalDetails->join_date = Date::now()->toDateString(); 
