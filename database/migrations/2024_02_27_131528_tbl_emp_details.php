@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('contact_no')->nullable();
             $table->string('gender')->nullable();
             $table->date('birth_date')->nullable();
             $table->integer('current_age')->nullable();
@@ -27,7 +29,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('city')->nullable();
             $table->integer('pincode')->nullable();
-            $table->string('permanent_address')->nullable();
+            $table->string('address')->nullable();
             $table->integer('tbl_dept_id')->nullable();
             $table->integer('tbl_designation_id')->nullable();
             $table->integer('tbl_role_id')->nullable();

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -13,19 +13,19 @@
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="/assets/css/custom.css">
   <link rel='shortcut icon' type='image/x-icon' href='/assets/img/favicon.ico' />
-
+ 
     <!-- Include Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
+   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+ 
 <!-- jQuery UI library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-    
+ 
+   
 </head>
-
+ 
 @extends('frontend_home.leftmenu')
 <style>
   .submit-button {
@@ -35,7 +35,7 @@
         background-color: #000000; /* Add your desired color code */
         color: #000000; /* Text color for better contrast */
     }
-
+ 
   .table {
         background-color: #bcdafd; /* Background color for the table */
     }
@@ -43,7 +43,7 @@
 <body>
       <!-- Main Content -->
       <div class="main-content">
-
+ 
         <section class="section">
           <div class="section-body">
             <div class="row clearfix">
@@ -54,63 +54,47 @@
                   </div>
                   <div class="card-body">
                     <form id="wizard_with_validation" method="POST">
-
-
-
-                      <h3>Basic Information</h3>
+                        @csrf
+ 
+ 
+ 
+                      <h3>Basic Information <br>.</h3>
                       <fieldset>
-                          <div class="form-group form-float">
-                              <div class="form-line">
-                                  <label class="form-label">Title</label><br>
-                                  <div class="row">
-                                      <div class="col-md-4">
-                                          <input type="radio" id="mr" name="title" value="Mr">
-                                          <label for="mr">Mr</label>
-                                          <input type="radio" id="mrs" name="title" value="Mrs">
-                                          <label for="mrs">Mrs</label>
-                                      </div>
-                                      
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="form-group form-float">
-                              <div class="form-line">
-                                  <div class="row">
-                                      <div class="col-md-4">
-                                          <label class="form-label">First Name</label>
-                                          <input type="text" class="form-control" name="firstname" placeholder={{ $emp->first_name }} >
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">Middle Name</label>
-                                          <input type="text" class="form-control" name="middlename" placeholder={{ $emp->middle_name }}>
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">Last Name</label>
-                                          <input type="text" class="form-control" name="lastname" placeholder={{ $emp->last_name }}>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="form-group form-float">
-                              <div class="form-line">
-                                  <div class="row">
-                                      <div class="col-md-4">
-                                          <label class="form-label">Email</label>
-                                          <input type="text" class="form-control" name="email" placeholder={{ $emp->email }} readonly>
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">Contact No</label>
-                                          <input type="text" class="form-control" name="contact" >
-                                      </div>
-                                      <div class="col-md-4">
-                                        <label class="form-label">Gender</label>
-                                        <select class="form-control" name="gender" >
-                                            <option value="">Male</option>
-                                            <option value="">Female</option>
-                                            <option value="">Other</option>
-                                        </select>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                    <input type="hidden" name="enc_id" value="{{ $enc_id }}">
+                                        <label class="form-label">EMP Code</label>
+                                        <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}">
                                     </div>
-                                      
+                                    <div class="col-md-4">
+                                        <label class="form-label">Title</label><br>
+                                        <input type="radio" id="mr" name="title" value="Mr">
+                                        <label for="mr">Mr</label>
+                                        <input type="radio" id="mrs" name="title" value="Mrs">
+                                        <label for="mrs">Mrs</label>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                       
+                          <div class="form-group form-float">
+                              <div class="form-line">
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" name="firstname" value="{{ $emp->first_name }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Middle Name</label>
+                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" name="lastname"  value="{{ $emp->last_name }}">
+                                    </div>
                                   </div>
                               </div>
                           </div>
@@ -118,19 +102,44 @@
                               <div class="form-line">
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <label class="form-label">Date of Birth</label>
-                                      <input type="date" class="form-control" name="dob">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control" name="email" value="{{ $emp->email }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Contact No</label>
+                                        <input type="text" class="form-control" name="contact_no" value="{{ $emp->contact_no }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Gender</label>
+                                        <select class="form-control" name="gender">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                   
+                                     
                                   </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">Current Age</label>
-                                          <input type="text" class="form-control" name="age" >
-                                      </div>
-                                      <div class="col-md-4">
+                              </div>
+                          </div>
+                          <div class="form-group form-float">
+                              <div class="form-line">
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Date of Birth</label>
+                                        <input type="date" class="form-control" name="dob" value="{{ $emp->date_of_birth }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Current Age</label>
+                                        <input type="text" class="form-control" name="age" value="{{ $emp->current_age }}">
+                                    </div>
+                                    <div class="col-md-4">
                                         <label class="form-label">Country</label>
-                                        <select class="form-control" id="countrySelect" name="country" >
+                                        <select class="form-control" id="countrySelect" name="country">
                                             <option value="">Select Country</option>
                                         </select>
                                     </div>
+                                   
                                   </div>
                               </div>
                           </div>
@@ -138,29 +147,32 @@
                               <div class="form-line">
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <label class="form-label">State</label>
-                                      <select class="form-control" id="stateSelect" name="state" >
-                                          <option value="">Select State</option>
-                                      </select>
-                                  </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">City/Village</label>
-                                          <input type="text" class="form-control" name="city" >
-                                      </div>
-                                      <div class="col-md-4">
-                                          <label class="form-label">Pincode</label>
-                                          <input type="text" class="form-control" name="pincode" >
-                                      </div>
+                                        <label class="form-label">State</label>
+                                        <select class="form-control" id="stateSelect" name="state">
+                                            <option value="">Select State</option>
+                                        </select>
+                                    </div>
+                                   
+                                    <div class="col-md-4">
+                                        <label class="form-label">City/Village</label>
+                                        <input type="text" class="form-control" name="city" value="{{ $emp->city }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Pincode</label>
+                                        <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}">
+                                    </div>
+                                   
                                   </div>
                               </div>
                           </div>
                           <div class="form-group form-float">
                               <div class="form-line">
                                   <div class="row">
-                                      <div class="col-md-4">
-                                          <label class="form-label">Address</label>
-                                          <input type="text" class="form-control" name="address" >
-                                      </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control" name="address" value="{{ $emp->address }}">
+                                    </div>
+                                   
                                       <div class="col-md-4">
                                           <label class="form-label">Select Department</label>
                                           <select class="form-control" name="department" >
@@ -191,47 +203,50 @@
                                   </div>
                               </div>
                           </div>
+ 
                       </fieldset>
-                      
-
-                      
-
-                      
-                      
-                      <h3>Previous Employee Details</h3>
+                     
+ 
+                     
+ 
+                     
+                     
+                      <h3>Previous Employee <br> Details</h3>
                       <fieldset>
                           <div class="form-group form-float">
                               <div class="form-line">
                                   <div class="row">
-                                      <div class="col-md-6">
-                                          <label class="form-label">Company Name</label>
-                                          <input type="text" class="form-control" name="companyname">
-                                      </div>
-                                      <div class="col-md-6">
-                                          <label class="form-label">Designation</label>
-                                          <input type="text" class="form-control" name="designation">
-                                      </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Company Name</label>
+                                        <input type="text" class="form-control" name="companyname" value="{{ $emp->company_name }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Designation</label>
+                                        <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
+                                    </div>
+                                   
                                   </div>
                               </div>
                           </div>
-                      
+                     
                           <div class="form-group form-float">
                               <div class="form-line">
                                   <div class="row">
-                                      <div class="col-md-6">
-                                          <label class="form-label">Start Date</label>
-                                          <input type="date" class="form-control" name="startdate">
-                                      </div>
-                                      <div class="col-md-6">
-                                          <label class="form-label">End Date</label>
-                                          <input type="date" class="form-control" name="enddate">
-                                      </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Start Date</label>
+                                        <input type="date" class="form-control" name="startdate" value="{{ $emp->start_date }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">End Date</label>
+                                        <input type="date" class="form-control" name="enddate" value="{{ $emp->end_date }}">
+                                    </div>
+                                   
                                   </div>
                               </div>
                           </div>
-                      
-                          <button type="submit" class="btn btn-primary submit-button" formaction="/editemp/storeprevempdetails">Submit</button>
-                      
+                     
+                          <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
+                     
                           <table class="table">
                               <thead>
                                   <tr>
@@ -246,9 +261,9 @@
                                   <!-- Table rows will be dynamically added -->
                               </tbody>
                           </table>
-                      </fieldset>                     
-                      
-                      
+                      </fieldset>                    
+                     
+                     
                       <!-- Include jQuery and jQuery UI libraries here -->
                          
                       <script>
@@ -260,276 +275,275 @@
                             });
                         });
                     </script>
-
-
-
-
-                      
-
-
-
-
-
-                        
-                      
-                      <h3>Official Details</h3>
+ 
+ 
+ 
+ 
+                     
+ 
+ 
+ 
+ 
+ 
+                       
+                     
+                      <h3>Official Details <br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Official Email</label>
-                                      <input type="text" class="form-control" name="officialemail">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Work Location</label>
-                                      <input type="text" class="form-control" name="worklocation">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Select Reporting Manager</label>
-                                      <select class="form-control" name="selectreportingmanager">
-                                          <option value="manager1">Manager 1</option>
-                                          <option value="manager2">Manager 2</option>
-                                          <option value="manager3">Manager 3</option>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      
-                      <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Employment Status</label>
-                                      <select class="form-control" name="employmentstatus">
-                                          <option value="fulltime">Active</option>
-                                          <option value="parttime">InActive</option>
-                                          
-                                      </select>
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Technology</label>
-                                      <input type="text" class="form-control" name="technology">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Module</label>
-                                      <input type="text" class="form-control" name="module">
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      
-                      </fieldset>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Official Email</label>
+                                        <input type="text" class="form-control" name="officialemail" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Work Location</label>
+                                        <input type="text" class="form-control" name="worklocation" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Select Reporting Manager</label>
+                                        <select class="form-control" name="selectreportingmanager">
+                                            <option value="manager1" {{ $emp->reporting_manager === 'manager1' ? 'selected' : '' }}>Manager 1</option>
+                                            <option value="manager2" {{ $emp->reporting_manager === 'manager2' ? 'selected' : '' }}>Manager 2</option>
+                                            <option value="manager3" {{ $emp->reporting_manager === 'manager3' ? 'selected' : '' }}>Manager 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Employment Status</label>
+                                        <select class="form-control" name="employmentstatus">
+                                            <option value="fulltime" {{ $emp->employment_status === 'fulltime' ? 'selected' : '' }}>Active</option>
+                                            <option value="parttime" {{ $emp->employment_status === 'parttime' ? 'selected' : '' }}>InActive</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Technology</label>
+                                        <input type="text" class="form-control" name="technology" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Module</label>
+                                        <input type="text" class="form-control" name="module" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
                       <h3>Statutory Compliance Details</h3>
                       <fieldset>
                         <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">UAN No</label>
-                                      <input type="text" class="form-control" name="uan_no" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Old EPF No</label>
-                                      <input type="text" class="form-control" name="old_epf_no" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Nixcel EPF No</label>
-                                      <input type="text" class="form-control" name="nixcel_epf_no" >
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Nixcel ESSI No</label>
-                                      <input type="text" class="form-control" name="nixcel_essi_no" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Nominee Name</label>
-                                      <input type="text" class="form-control" name="nominee_name" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Relation With Nominee</label>
-                                      <input type="text" class="form-control" name="relation_with_nominee" >
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      
-                      </fieldset>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                      <h3>Bank Details</h3>
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">UAN No</label>
+                                        <input type="text" class="form-control" name="uan_no" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Old EPF No</label>
+                                        <input type="text" class="form-control" name="old_epf_no" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Nixcel EPF No</label>
+                                        <input type="text" class="form-control" name="nixcel_epf_no" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Nixcel ESSI No</label>
+                                        <input type="text" class="form-control" name="nixcel_essi_no" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Nominee Name</label>
+                                        <input type="text" class="form-control" name="nominee_name" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Relation With Nominee</label>
+                                        <input type="text" class="form-control" name="relation_with_nominee" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                      <h3>Bank Details<br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Adhaar No</label>
-                                      <input type="text" class="form-control" name="adhaarno" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Pancard No</label>
-                                      <input type="text" class="form-control" name="pancardno" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Bank Name</label>
-                                      <input type="text" class="form-control" name="bankname" >
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Branch Name</label>
-                                      <input type="text" class="form-control" name="branchname" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">City</label>
-                                      <input type="text" class="form-control" name="city" >
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">IFSC Code</label>
-                                      <input type="text" class="form-control" name="ifsccode" >
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Account No</label>
-                                      <input type="text" class="form-control" name="accountno" >
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      
-                      </fieldset>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                      <h3>Salary Details</h3>
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Adhaar No</label>
+                                        <input type="text" class="form-control" name="aadharno" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Pancard No</label>
+                                        <input type="text" class="form-control" name="pancardno" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Bank Name</label>
+                                        <input type="text" class="form-control" name="bank_name" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Branch Name</label>
+                                        <input type="text" class="form-control" name="branchname" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">City</label>
+                                        <input type="text" class="form-control" name="city" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">IFSC Code</label>
+                                        <input type="text" class="form-control" name="ifsccode" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Account No</label>
+                                        <input type="text" class="form-control" name="accountno" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                      <h3>Salary Details<br><br>.</h3>
                       <fieldset>
                         <div class="form-group form-float">
-                          <div class="form-line">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Actual Gross</label>
-                                      <input type="text" class="form-control" name="actual_gross">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Basic</label>
-                                      <input type="text" class="form-control" name="basic">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">HRA</label>
-                                      <input type="text" class="form-control" name="hra">
-                                  </div>
-                              </div>
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Medical</label>
-                                      <input type="text" class="form-control" name="medical">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Special Allowance</label>
-                                      <input type="text" class="form-control" name="special_allowance">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Statutory Bonus</label>
-                                      <input type="text" class="form-control" name="statutory_bonus">
-                                  </div>
-                              </div>
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">Payable Gross</label>
-                                      <input type="text" class="form-control" name="payable_gross">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">PF</label>
-                                      <input type="text" class="form-control" name="pf">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">TDS</label>
-                                      <input type="text" class="form-control" name="tds">
-                                  </div>
-                              </div>
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <label class="form-label">PT</label>
-                                      <input type="text" class="form-control" name="pt">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">Net Salary</label>
-                                      <input type="text" class="form-control" name="net_salary">
-                                  </div>
-                                  <div class="col-md-4">
-                                      <label class="form-label">CTC</label>
-                                      <input type="text" class="form-control" name="ctc">
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      
-                      </fieldset>
-
-
-
-
+                            <div class="form-line">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Actual Gross</label>
+                                        <input type="text" class="form-control" name="actual_gross" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Basic</label>
+                                        <input type="text" class="form-control" name="basic" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">HRA</label>
+                                        <input type="text" class="form-control" name="hra" value=" ">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Medical</label>
+                                        <input type="text" class="form-control" name="medical" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Special Allowance</label>
+                                        <input type="text" class="form-control" name="special_allowance" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Statutory Bonus</label>
+                                        <input type="text" class="form-control" name="statutory_bonus" value=" ">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Payable Gross</label>
+                                        <input type="text" class="form-control" name="payable_gross" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">PF</label>
+                                        <input type="text" class="form-control" name="pf" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">TDS</label>
+                                        <input type="text" class="form-control" name="tds" value=" ">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">PT</label>
+                                        <input type="text" class="form-control" name="pt" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Net Salary</label>
+                                        <input type="text" class="form-control" name="net_salary" value=" ">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">CTC</label>
+                                        <input type="text" class="form-control" name="ctc" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/storeempdetails">Submit</button>
+                    </fieldset>
+                   
+ 
+ 
+ 
+ 
                     </form>
                   </div>
                 </div>
@@ -537,19 +551,19 @@
             </div>
           </div>
         </section>
-        
-
-        
-
+       
+ 
+       
+ 
       </div>
-
+ 
       <script>
         // Fetch country data from the REST Countries API
         fetch('https://restcountries.com/v3.1/all')
             .then(response => response.json())
             .then(data => {
                 const countrySelect = document.getElementById('countrySelect');
-    
+   
                 // Iterate over the data and create an option for each country
                 data.forEach(country => {
                     const option = document.createElement('option');
@@ -560,8 +574,8 @@
             })
             .catch(error => console.error('Error fetching country data:', error));
     </script>
-
-
+ 
+ 
 <script>
   const states = [
       { "state_id": 1, "state_name": "Andaman and Nicobar Islands" },
@@ -602,9 +616,9 @@
       { "state_id": 35, "state_name": "Uttarakhand" },
       { "state_id": 36, "state_name": "West Bengal" }
   ];
-
+ 
   const stateSelect = document.getElementById('stateSelect');
-
+ 
   states.forEach(state => {
       const option = document.createElement('option');
       option.value = state.state_id;
@@ -612,10 +626,10 @@
       stateSelect.appendChild(option);
   });
 </script>
-
-
+ 
+ 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+ 
 <script>
   // Wait for the document to be fully loaded
   document.addEventListener('DOMContentLoaded', function() {
@@ -630,6 +644,6 @@
       });
   });
 </script>
-
+ 
 </body>
 </html>

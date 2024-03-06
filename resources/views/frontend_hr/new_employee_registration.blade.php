@@ -60,10 +60,9 @@
                                                 $containsEditEmployeeModule = false;
                                                 $containsDeleteEmployeeModule = false;
 
-                                                                                            
                                                 if($moduleData){
                                                     foreach($moduleData as $data){
-                                                        $moduleName = $data['module']->module_name; // Assuming 'name' is the property that contains the module name
+                                                        $moduleName = $data['module']->module_name; 
                                                         if($moduleName == 'Edit Employee'){
                                                             $containsEditEmployeeModule = true;
                                                         }

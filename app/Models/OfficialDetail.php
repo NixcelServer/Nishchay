@@ -10,6 +10,7 @@ class OfficialDetail extends Model
     use HasFactory;
 
     protected $table = 'tbl_official_details';
+    protected $primaryKey = 'tbl_user_id';
     public $timestamps = false;
 
     protected $attributes = [
