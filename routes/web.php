@@ -8,6 +8,7 @@ use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\TaskController;
 
 
 
@@ -144,7 +145,7 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 Route::group(['prefix' => '/Tasks','middleware'=>['web','isDev']],function(){
     
     //when dev clicks on Tasks
-    Route::get('/mytasks',[TaskController::class,'myTasks']);
+    Route::get('/',[TaskController::class,'myTasks']);
     //view task page
     Route::get('/viewmytask/{id}',[TaskController::class,'viewMyTask']);
 

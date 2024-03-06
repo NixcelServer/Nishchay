@@ -23,15 +23,62 @@ class TaskController extends Controller
      {
          $userdetails = session('user');
          $user_id = $userdetails->tbl_user_id;
+
+         $moduleData = session('moduleData');
+            $myTasksExist = false;
+            $showTasksExist = false;
+
+            foreach ($moduleData as $data) {
+                if ($data['module']->module_name === 'My Tasks') {
+                    $myTasksExist = true;
+                }
+                if ($data['module']->module_name === 'Show Tasks') {
+                    $showTasksExist = true;
+                }
+
+                // If both modules are found, exit the loop early
+                if ($myTasksExist && $showTasksExist) {
+                    break;
+                }
+            }
+
+            if ($myTasksExist && $showTasksExist) {
+                // Both modules exist
+                // Do something...
+            } elseif ($myTasksExist) {
+                $tasks = TaskDetail::where('tbl_user_id', $user_id)->where('flag', 'show')->get();
+        
+                foreach ($tasks as $task) 
+                {
+                    // Encode the task ID using the helper function
+                    $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
+                }
+        
+                return view('frontend_tasks.showMyTasks',compact('tasks'));
+                        
+            } elseif ($showTasksExist) {
+                 $tasks = TaskDetail::whereNotIn('task_status',['Completed'])->where('flag', 'show')->get();
+
+                foreach($tasks as $task)
+                    {
+                        // Encode the task ID using the helper function
+                        $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
+                    }
+                
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks]);
+             
+            } else {
+                // Neither module exists
+                 // Do something else...
+            }
+
+
+         
+         
+         
+
  
-         $tasks = TaskDetail::where('tbl_user_id', $user_id)->where('flag', 'show')->get();
- 
-         foreach ($tasks as $task) {
-             // Encode the task ID using the helper function
-             $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
-         }
- 
-         return view('frontend_tasks.showMyTasks',compact('tasks'));
+         
      }
 
     public function viewMyTask($enc_task_id)
@@ -120,15 +167,7 @@ class TaskController extends Controller
     //mng show task
     public function showTask()
     {
-        $tasks = TaskDetail::whereNotIn('task_status',['Completed'])->where('flag', 'show')->get();
-
-        foreach($tasks as $task)
-        {
-            // Encode the task ID using the helper function
-            $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
-        }
-
-        return view('frontend_tasks.showTasks',['tasks'=>$tasks]);
+       
 
     }
 

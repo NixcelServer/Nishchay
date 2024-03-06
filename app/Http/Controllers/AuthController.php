@@ -47,6 +47,7 @@ class AuthController extends Controller
             }
         }
         Session::put('moduleData',$moduleData);
+        
 
         $uniqueParentNames = [];
 
@@ -61,7 +62,28 @@ class AuthController extends Controller
                 }
                 
             }
-           // dd($uniqueParentNames);
+
+            // // Iterate over $moduleData to extract unique parent names
+            // foreach ($moduleData as $data) {
+            //     $parentName = $data['module']->parent;
+                
+            //     // Check if the parent name is not empty and has not been processed yet
+            //     if ($parentName !== null && $parentName !== "" && !in_array($parentName, array_column($uniqueParentNames, 'parent_name'))) {
+            //         // Fetch the parent modules if they exist
+            //         $parentModules = Module::where('parent', $parentName)->get();
+                    
+            //         // Loop through each parent module
+            //         foreach ($parentModules as $parentModule) {
+            //             // Add the parent name and module name to the unique parent names array
+            //             $uniqueParentNames[] = [
+            //                 'parent_name' => $parentModule->parent,
+            //                 'module_name' => $parentModule->module_name,
+            //             ];
+            //         }
+            //     }
+            // }
+            
+            //dd($uniqueParentNames);
             Session::put('uniqueParentNames',$uniqueParentNames);
             
 

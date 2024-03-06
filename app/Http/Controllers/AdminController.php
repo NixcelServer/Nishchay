@@ -188,6 +188,10 @@ class AdminController extends Controller
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
         
         $user = User::find($dec_id);
+    
+
+        $roleName = Role::where('tbl_role_id',$user->tbl_role_id)->value('role_name');;
+        
 
         $roles = Role::where('flag', 'show')->get();
 
@@ -196,7 +200,7 @@ class AdminController extends Controller
             $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
         
-        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles]);
+        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles,'roleName' => $roleName]);
     }
 
     //edit user details in db
