@@ -116,7 +116,9 @@
                 <li>
                   <a href="/admin/roles">Role<span class=""></span></a>
                 </li>
-                
+                <li>
+                  <a href="/admin/auditlogdetails">Audit Log<span class=""></span></a>
+                </li>
               </ul>
               @else
               <ul class="menu">

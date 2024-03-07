@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('task_completion_date');
             $table->string('task_status')->nullable();
             $table->string('task_solution')->nullable();
+            $table->string('remark')->nullable();
+            $table->string('transferred_status')->nullable();
             $table->integer('add_by');
             $table->date('add_date')->nullable();
             $table->time('add_time')->nullable();
