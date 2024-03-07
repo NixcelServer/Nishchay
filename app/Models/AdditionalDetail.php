@@ -11,6 +11,7 @@ class AdditionalDetail extends Model
 
     protected $table = 'tbl_additional_details';
     public $timestamps = false;
+    protected $primaryKey = 'tbl_user_id';
 
     protected $attributes = [
         'tbl_user_id' => null,

@@ -59,7 +59,7 @@
                                         <option value="">Select Role</option> <!-- Blank option -->
                                         @foreach($roles as $role)
                                             @if($role->role_name !== 'Admin')
-                                                <option value="{{ $role->encrypted_id }}">{{ $role->role_name }}</option>
+                                                <option value="{{ $role->encrypted_id }}"{{ $roleName == $role->role_name ? 'selected' : '' }}>{{ $role->role_name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
