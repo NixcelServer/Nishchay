@@ -102,6 +102,8 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //delete assigned module
      Route::post('/deletemodule',[RoleController::class,'deleteModule']);
 
+     Route::get('/auditlogdetails',[AdminController::class,'auditlogDetails']);
+
  });
 
  //     // Route::get('/users',[SuperAdminController::class,'users'])->name('superAdminUsers');
@@ -129,6 +131,8 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     //store prevemp details upon clicking on save
     Route::post('/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
     //on clicking on next in prev emp form display store official details form
+
+    Route::get('/deleteprevemploymentdetails/{id}',[HrController::class,'deletePrevEmploymentDetails']);
     Route::get('/editemp/officialdetailsform/{id}',[HrController::class,'officialDetailsForm']);
 
     //store official details and return view statutory complaince details

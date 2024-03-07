@@ -327,7 +327,13 @@ class AdminController extends Controller
          return view('frontend_admin.assign_module');
      }
  
+     public function auditlogDetails()
+     {
+     //   $auditlogdetails = AuditLogDetail::all();
+        $auditlogdetails = AuditLogDetail::select('activity_name')->get();
 
+        return view('frontend_admin.auditlog_details');
+     }
 
     
 }

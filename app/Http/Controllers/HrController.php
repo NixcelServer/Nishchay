@@ -17,6 +17,9 @@ use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Role;
 use App\Models\KycDetail;
+use App\Models\Module;
+use App\Models\RoleModule;
+
 
 
 class HrController extends Controller
@@ -40,6 +43,30 @@ class HrController extends Controller
         foreach ($emps as $emp) {
             // Encode the user's ID using the helper function
             $emp->encrypted_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id, 'encrypt');
+            $desg_id = $emp->tbl_designation_id;
+            $designation = Designation::where('tbl_designation_id',$desg_id)->first();
+            if ($designation) {
+                $emp->desg_name = $designation->designation_name;
+            } else {
+                $emp->desg_name = 'Unknown'; // or any default value you prefer
+            }
+            
+            $dept_id = $emp->tbl_dept_id;
+            $department = Department::where('tbl_dept_id',$dept_id)->first();
+            if ($department) {
+                $emp->dept_name = $department->dept_name;
+            } else {
+                $emp->dept_name = 'Unknown'; // or any default value you prefer
+            }
+
+            $role_id = $emp->tbl_role_id;
+            $role = Role::where('tbl_role_id',$role_id)->first();
+            if ($role) {
+                $emp->role_name = $role->role_name;
+            } else {
+                $emp->role_name = 'Unknown'; // or any default value you prefer
+            }
+
         }
 
     
@@ -74,14 +101,42 @@ class HrController extends Controller
             $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
 
+        //passing data of previous employment details
+        $prev_details = PreviousEmploymentDetail::where('tbl_user_id',$dec_id)->get();
 
+        foreach($prev_details as $prev_detail)
+        {
+            $prev_detail->enc_prev_detail_id = EncryptionDecryptionHelper::encdecId($prev_detail->tbl_prev_emp_detail_id,'encrypt');
+        }
+
+        //passing manager data to display in drop down
+        $managers = [];
+        $modules = Module::where('module_name', 'Create New Task')->first();
         
-         
+        if ($modules) {
+            $roleModules = RoleModule::where('tbl_module_id', $modules->tbl_module_id)->pluck('tbl_role_id');
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles]);
+            foreach ($roleModules as $roleModule) {
+                $user_details = User::where('tbl_role_id', $roleModule)->get();
+        
+                foreach ($user_details as $user_detail) {
+                    $user_enc_id = EncryptionDecryptionHelper::encdecId($user_detail->tbl_user_id, 'encrypt');
+                    $user_name = $user_detail->first_name . " " . $user_detail->last_name;
+        
+                    $managers[] = [
+                        'user_enc_id' => $user_enc_id,
+                        'user_name' => $user_name,
+                    ];
+                }
+            }
+        }
+        
+         dd($managers);
+        
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers]);
     }
 
-
+ 
 
     public function storeDetails(Request $request)
     {   
@@ -96,10 +151,20 @@ class HrController extends Controller
          $action = 'decrypt';
          $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
-         
+         $dec_role_id = EncryptionDecryptionHelper::encdecId($request->tbl_role_id,'decrypt');
+         $dec_dept_id = EncryptionDecryptionHelper::encdecId($request->tbl_dept_id,'decrypt');
+         $dec_desg_id = EncryptionDecryptionHelper::encdecId($request->tbl_desg_id,'decrypt');
+
+         $user = User::where('tbl_user_id',$dec_id)->first();
+         $user->tbl_role_id = $dec_role_id;
+         $user->save();
+
+
          //store details into emp table
          $emp = EmployeeDetail::where('tbl_user_id',$dec_id)->first();
-    
+
+         
+
          $emp->emp_code = $request->empcode;
          $emp->title = $request->title;
          $emp->contact_no = $request->contact_no;
@@ -111,9 +176,9 @@ class HrController extends Controller
          $emp->city = $request->city;
          $emp->pincode = $request->pincode;
          $emp->permanent_address = $request->address;
-         $emp->tbl_dept_id = $request->tbl_dept_id;
-         $emp->tbl_designation_id = $request->tbl_designation_id;
-         $emp->tbl_role_id = $request->tbl_role_id;
+         $emp->tbl_dept_id = $dec_dept_id;
+         $emp->tbl_designation_id = $dec_desg_id;
+         $emp->tbl_role_id = $dec_role_id;
          $emp->add_by = $userdetails->tbl_user_id;
          $emp->add_date = Date::now()->toDateString();
          $emp->add_time = Date::now()->toTimeString();
@@ -140,7 +205,7 @@ class HrController extends Controller
 
 
          //store statutory detaisl
-         $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
+        $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
         $statDetails->uan = $request->uan_no;
         $statDetails->old_epf_no = $request->old_epf_no;
         $statDetails->nixcel_epf_no = $request->nixcel_epf_no;
@@ -152,10 +217,7 @@ class HrController extends Controller
         $statDetails->add_time = Date::now()->toTimeString();
         $statDetails->flag = "show";
         
-        
-        
-        
-        
+
         //bank details
         $bankDetails = BankDetail::where('tbl_user_id',$dec_id)->first();
         
@@ -298,107 +360,117 @@ class HrController extends Controller
         return redirect()->back();
     }
 
-    //show official details form
-    public function officialDetailsForm($enc_id)
+    public function deletePrevEmploymentDetails($enc_prev_detail_id)
     {
-        return view('hr.official_details_form',['enc_id'=>$enc_id]);
-    }
+        $dec_prev_detail_id = EncryptionDecryptionHelper::encdecId($enc_prev_detail_id,'decrypt');
 
-    public function storeOfficialDetails(Request $request)
-    {
-        $userdetails = session('user');
+        $prev_emp_detail = PreviousEmploymentDetail::findOrFail($dec_prev_detail_id);
 
-        $enc_id = $request->input('enc_id');
-        $action = 'decrypt';
-        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
-
-        $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->get();
-        $officialDetails->official_email_id = $request->email;
-        $officialDetails->work_location = $request->work_location;
-        $officialDetails->reporting_manager_id = $request->reporting_manager_id;
-        $officialDetails->add_by = $userdetails->tbl_user_id;
-        $officialDetails->add_date = Date::now()->toDateString();
-        $officialDetails->add_time = Date::now()->toTimeString();
-        $officialDetails->save();
-
-        return view('hr.statutory_comp_form',['enc_id'=>$enc_id]);
-    }
-
-    public function statutoryDetails(Request $request)
-    {
-        $userdetails = session('user');
-
-        $enc_id = $request->input('enc_id');
-        $action = 'decrypt';
-        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
-
-        $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->get();
-        $statDetails->uan = $request->uan;
-        $statDetails->old_epf_no = $request->old_epf_no;
-        $statDetails->nixcel_epf_no = $request->nixcel_epf_no;
-        $statDetails->nixcel_essi_no = $request->nixcel_essi_no;
-        $statDetails->nominee_name = $request->nominee_name;
-        $statDetails->relation_with_nominee = $request->relation_with_nominee;
-        $statDetails->add_by = $userdetails->tbl_user_id;
-        $statDetails->add_date = Date::now()->toDateString();
-        $statDetails->add_time = Date::now()->toTimeString();
-        $statDetails->flag = "show";
-
-        $statDetails->save();
-
-        return view('hr.bank_details_form',['enc_id'=>$enc_id]);
+        $prev_emp_detail->delete();
 
     }
 
-    public function bankDetails(Request $request)
-    {
-        $userdetails = session('user');
+    // //show official details form
+    // public function officialDetailsForm($enc_id)
+    // {
+    //     return view('hr.official_details_form',['enc_id'=>$enc_id]);
+    // }
 
-        $enc_id = $request->input('enc_id');
-        $action = 'decrypt';
-        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+    // public function storeOfficialDetails(Request $request)
+    // {
+    //     $userdetails = session('user');
 
-        $bankDetails = BankDetail::where('tbl_user_id',$enc_id)->get();
-        $bankDetails->bank_name = $request->bank_name;
-        $bankDetails->city = $request->city;
-        $bankDetails->ifsc = $request->ifsc;
-        $bankDetails->account_no = $request->account_no;
-        $bankDetails->add_by = $userdetails->tbl_user_id;
-        $bankDetails->add_date = Date::now()->toDateString();
-        $bankDetails->add_time = Date::now()->toTimeString();
-        $bankDetails->save();
+    //     $enc_id = $request->input('enc_id');
+    //     $action = 'decrypt';
+    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
-        return view('hr.sal_details',['enc_id'=>$enc_id]);
-    }
+    //     $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->get();
+    //     $officialDetails->official_email_id = $request->email;
+    //     $officialDetails->work_location = $request->work_location;
+    //     $officialDetails->reporting_manager_id = $request->reporting_manager_id;
+    //     $officialDetails->add_by = $userdetails->tbl_user_id;
+    //     $officialDetails->add_date = Date::now()->toDateString();
+    //     $officialDetails->add_time = Date::now()->toTimeString();
+    //     $officialDetails->save();
 
-    public function salDetails(Request $request)
-    {
-        $userdetails = session('user');
+    //     return view('hr.statutory_comp_form',['enc_id'=>$enc_id]);
+    // }
 
-        $enc_id = $request->input('enc_id');
-        $action = 'decrypt';
-        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+    // public function statutoryDetails(Request $request)
+    // {
+    //     $userdetails = session('user');
 
-        $salDetails = SalaryStructureDetail::where('tbl_user_id',$dec_id)->get();
+    //     $enc_id = $request->input('enc_id');
+    //     $action = 'decrypt';
+    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
-        $salDetails->actual_gross =$request->actual_gross;
-        $salDetails->basic = $request->basic;
-        $salDetails->hra = $request->hra;
-        $salDetails->special_allowance = $request->special_allowance;
-        $salDetails->medical_allowance = $request->medical_allowance;
-        $salDetails->statutory_bonus = $request->statutory_bonus;
-        $salDetails->payable_gross_salary = $request->payable_gross_salary;
-        $salDetails->pf = $request->pf;
-        $salDetails->tds = $request->tds;
-        $salDetails->pt = $request->pt;
-        $salDetails->net_salary = $request->net_salary;
-        $salDetails->ctc = $request->ctc;
-        $salDetails->add_by = $userdetails->tbl_user_id;
-        $salDetails->add_date = Date::now()->toDateString();
-        $salDetails->add_time = Date::now()->toTimeString();
-        $salDetails->save();
+    //     $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->get();
+    //     $statDetails->uan = $request->uan;
+    //     $statDetails->old_epf_no = $request->old_epf_no;
+    //     $statDetails->nixcel_epf_no = $request->nixcel_epf_no;
+    //     $statDetails->nixcel_essi_no = $request->nixcel_essi_no;
+    //     $statDetails->nominee_name = $request->nominee_name;
+    //     $statDetails->relation_with_nominee = $request->relation_with_nominee;
+    //     $statDetails->add_by = $userdetails->tbl_user_id;
+    //     $statDetails->add_date = Date::now()->toDateString();
+    //     $statDetails->add_time = Date::now()->toTimeString();
+    //     $statDetails->flag = "show";
 
-        return redirect('/hr/employees');
+    //     $statDetails->save();
 
-    }
+    //     return view('hr.bank_details_form',['enc_id'=>$enc_id]);
+
+    // }
+
+    // public function bankDetails(Request $request)
+    // {
+    //     $userdetails = session('user');
+
+    //     $enc_id = $request->input('enc_id');
+    //     $action = 'decrypt';
+    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+
+    //     $bankDetails = BankDetail::where('tbl_user_id',$enc_id)->get();
+    //     $bankDetails->bank_name = $request->bank_name;
+    //     $bankDetails->city = $request->city;
+    //     $bankDetails->ifsc = $request->ifsc;
+    //     $bankDetails->account_no = $request->account_no;
+    //     $bankDetails->add_by = $userdetails->tbl_user_id;
+    //     $bankDetails->add_date = Date::now()->toDateString();
+    //     $bankDetails->add_time = Date::now()->toTimeString();
+    //     $bankDetails->save();
+
+    //     return view('hr.sal_details',['enc_id'=>$enc_id]);
+    // }
+
+    // public function salDetails(Request $request)
+    // {
+    //     $userdetails = session('user');
+
+    //     $enc_id = $request->input('enc_id');
+    //     $action = 'decrypt';
+    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+
+    //     $salDetails = SalaryStructureDetail::where('tbl_user_id',$dec_id)->get();
+
+    //     $salDetails->actual_gross =$request->actual_gross;
+    //     $salDetails->basic = $request->basic;
+    //     $salDetails->hra = $request->hra;
+    //     $salDetails->special_allowance = $request->special_allowance;
+    //     $salDetails->medical_allowance = $request->medical_allowance;
+    //     $salDetails->statutory_bonus = $request->statutory_bonus;
+    //     $salDetails->payable_gross_salary = $request->payable_gross_salary;
+    //     $salDetails->pf = $request->pf;
+    //     $salDetails->tds = $request->tds;
+    //     $salDetails->pt = $request->pt;
+    //     $salDetails->net_salary = $request->net_salary;
+    //     $salDetails->ctc = $request->ctc;
+    //     $salDetails->add_by = $userdetails->tbl_user_id;
+    //     $salDetails->add_date = Date::now()->toDateString();
+    //     $salDetails->add_time = Date::now()->toTimeString();
+    //     $salDetails->save();
+
+    //     return redirect('/hr/employees');
+
+    // }
 }
