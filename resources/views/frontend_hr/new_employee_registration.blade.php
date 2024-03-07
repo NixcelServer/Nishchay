@@ -29,7 +29,7 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Contact No</th>
-                                            <th>Status</th>
+                                            {{-- <th>Role</th> --}}
                                             <th>Designation</th>
                                             <th>Action</th>
                                         </tr>
@@ -42,10 +42,12 @@
                                             <td>{{ $emp->first_name }} {{ $emp->middle_name }} {{ $emp->last_name }}</td>
                                             <td>{{ $emp->email }}</td>
                                             <td>{{ $emp->contact_no }}</td>
-                                            <td>{{ $emp->status }}</td>
+                                            {{-- <td>{{ $emp->role_name }}</td> --}}
+                                            <td>{{ $emp->desg_name }}</td>
+                                            
 
                                             
-                                            <td>
+                                            {{-- <td>
                                                 @if($emp->role_id == 2)
                                                     HR
                                                 @elseif($emp->role_id == 3)
@@ -53,7 +55,7 @@
                                                 @elseif($emp->role_id == 4)
                                                     Manager    
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 @php
                                                 $moduleData = Session::get('moduleData');

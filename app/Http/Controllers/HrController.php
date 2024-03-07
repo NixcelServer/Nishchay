@@ -17,6 +17,9 @@ use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Role;
 use App\Models\KycDetail;
+use App\Models\Module;
+use App\Models\RoleModule;
+
 
 
 class HrController extends Controller
@@ -37,11 +40,34 @@ class HrController extends Controller
  
         
         
-        //encrypt the id of emp and pass to the view
-        foreach ($emps as $emp) {
-            // Encode the user's ID using the helper function
-            $emp->encrypted_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id, 'encrypt');
-        }
+                      foreach ($emps as $emp) {
+                        // Encode the user's ID using the helper function
+                        $emp->encrypted_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id, 'encrypt');
+                        $desg_id = $emp->tbl_designation_id;
+                        $designation = Designation::where('tbl_designation_id',$desg_id)->first();
+                        if ($designation) {
+                            $emp->desg_name = $designation->designation_name;
+                        } else {
+                            $emp->desg_name = 'Unknown'; // or any default value you prefer
+                        }
+                        
+                        $dept_id = $emp->tbl_dept_id;
+                        $department = Department::where('tbl_dept_id',$dept_id)->first();
+                        if ($department) {
+                            $emp->dept_name = $department->dept_name;
+                        } else {
+                            $emp->dept_name = 'Unknown'; // or any default value you prefer
+                        }
+            
+                        $role_id = $emp->tbl_role_id;
+                        $role = Role::where('tbl_role_id',$role_id)->first();
+                        if ($role) {
+                            $emp->role_name = $role->role_name;
+                        } else {
+                            $emp->role_name = 'Unknown'; // or any default value you prefer
+                        }
+            
+                    }
 
     
         return view('frontend_hr.new_employee_registration', compact('emps'));
@@ -77,10 +103,45 @@ class HrController extends Controller
         }
 
 
+        //passing data of previous employment details
+        $prev_details = PreviousEmploymentDetail::where('tbl_user_id',$dec_id)->get();
+        foreach($prev_details as $prev_detail)
+        {
+            $prev_detail->enc_prev_detail_id = EncryptionDecryptionHelper::encdecId($prev_detail->tbl_prev_emp_detail_id,'encrypt');
+        }
+
+        //passing manager data to display in drop down
+        $managers = [];
+        $modules = Module::where('module_name', 'Create New Task')->first();
         
+        if ($modules) {
+            $roleModules = RoleModule::where('tbl_module_id', $modules->tbl_module_id)->pluck('tbl_role_id');
+        
+            foreach ($roleModules as $roleModule) {
+                $user_details = User::where('tbl_role_id', $roleModule)->get();
+        
+                foreach ($user_details as $user_detail) {
+                    $user_enc_id = EncryptionDecryptionHelper::encdecId($user_detail->tbl_user_id, 'encrypt');
+                    $user_name = $user_detail->first_name . " " . $user_detail->last_name;
+        
+                    $managers[] = [
+                        'user_enc_id' => $user_enc_id,
+                        'user_name' => $user_name,
+                    ];
+                }
+            }
+        }
+
+        $ofc_details = OfficialDetail::where('tbl_user_id',$dec_id)->first();
+        $stat_details = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
+        $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
+        $bank_details = BankDetail::where('tbl_user_id',$dec_id)->first();
+        $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details]);
+    
+        
     }
 
 
@@ -99,9 +160,20 @@ class HrController extends Controller
          $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
          
+         $dec_role_id = EncryptionDecryptionHelper::encdecId($request->role,'decrypt');
+         $dec_dept_id = EncryptionDecryptionHelper::encdecId($request->department,'decrypt');
+         $dec_desg_id = EncryptionDecryptionHelper::encdecId($request->designation,'decrypt');
+
+         $user = User::where('tbl_user_id',$dec_id)->first();
+         $user->tbl_role_id = $dec_role_id;
+         $user->save();
+
+         
          //store details into emp table
          $emp = EmployeeDetail::where('tbl_user_id',$dec_id)->first();
-    
+
+         
+
          $emp->emp_code = $request->empcode;
          $emp->title = $request->title;
          $emp->contact_no = $request->contact_no;
@@ -113,13 +185,14 @@ class HrController extends Controller
          $emp->city = $request->city;
          $emp->pincode = $request->pincode;
          $emp->permanent_address = $request->address;
-         $emp->tbl_dept_id = $request->tbl_dept_id;
-         $emp->tbl_designation_id = $request->tbl_designation_id;
-         $emp->tbl_role_id = $request->tbl_role_id;
+         $emp->tbl_dept_id = $dec_dept_id;
+         $emp->tbl_designation_id = $dec_desg_id;
+         $emp->tbl_role_id = $dec_role_id;
          $emp->add_by = $userdetails->tbl_user_id;
          $emp->add_date = Date::now()->toDateString();
          $emp->add_time = Date::now()->toTimeString();
          $emp->save();
+ 
         
         
 
@@ -133,10 +206,11 @@ class HrController extends Controller
          $additionalDetails->join_date = Date::now()->toDateString(); 
 
          //store details in official details form
+         $dec_mng_id = EncryptionDecryptionHelper::encdecId($request->selectreportingmanager,'decrypt');
          $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->first();
          $officialDetails->official_email_id = $request->email;
          $officialDetails->work_location = $request->worklocation;
-         $officialDetails->reporting_manager_id = $request->selectreportingmanager;
+         $officialDetails->reporting_manager_id = $dec_mng_id;
          $officialDetails->add_by = $userdetails->tbl_user_id;
          $officialDetails->add_date = Date::now()->toDateString();
          $officialDetails->add_time = Date::now()->toTimeString();
@@ -231,7 +305,9 @@ class HrController extends Controller
     public function basicInfo(Request $request)
     {
 
-        dd($request);
+        
+
+        //dd($request);
            //get session details
 
           $userdetails = session('user');
@@ -242,7 +318,7 @@ class HrController extends Controller
           $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
           $emp = EmployeeDetail::findOrFail($dec_id);
-          dd($emp);
+          //dd($emp);
 
           $emp->emp_code = $request->emp_code;
           $emp->title = $request->title;
@@ -270,6 +346,10 @@ class HrController extends Controller
           foreach ($prev_emps as $prev_emp) {
             // Encode the ID using the helper function
             $prev_emp->encrypted_id = EncryptionDecryptionHelper::encdecId($prev_emp->tbl_prev_emp_detail_id, 'encrypt');
+
+
+
+           
         }
 
           return view('hr.next',compact('enc_id','prev_emps'));
@@ -301,6 +381,17 @@ class HrController extends Controller
         $prev_emp->save();
 
         return redirect()->back();
+    }
+
+    public function deletePrevEmploymentDetails($enc_prev_detail_id)
+    {
+        $dec_prev_detail_id = EncryptionDecryptionHelper::encdecId($enc_prev_detail_id,'decrypt');
+
+        $prev_emp_detail = PreviousEmploymentDetail::findOrFail($dec_prev_detail_id);
+
+        $prev_emp_detail->delete();
+        return redirect()->back();
+
     }
 
     //show official details form

@@ -129,6 +129,8 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
     //Route::get('/editemp/prevempdetailsform/{id}',[HrController::class,'prevEmpDetailsForm']);
     //store prevemp details upon clicking on save
     Route::post('/editemp/storeprevempdetails',[HrController::class,'storePrevEmpDetails']);
+    Route::get('/deleteprevemploymentdetails/{id}',[HrController::class,'deletePrevEmploymentDetails']);
+
     //on clicking on next in prev emp form display store official details form
     Route::get('/editemp/officialdetailsform/{id}',[HrController::class,'officialDetailsForm']);
 
