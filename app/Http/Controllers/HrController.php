@@ -69,7 +69,7 @@ class HrController extends Controller
             $designation->desg_enc_id = EncryptionDecryptionHelper::encdecId($designation->tbl_designation_id, 'encrypt');
         }
 
-        $roles = Designation::where('flag','show')->get();
+        $roles = Role::where('flag','show')->get();
         foreach($roles as $role){
             $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
@@ -78,7 +78,7 @@ class HrController extends Controller
         
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designation'=>$designations,'roles'=> $roles]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles]);
     }
 
 

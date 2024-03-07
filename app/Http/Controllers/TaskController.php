@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\EmployeeDetail;
+use App\Models\OfficialDetail;
 use App\Models\TaskDetail;
 use App\Models\Role;
 use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use App\Models\AuditLogDetail;
 use App\Models\Module;
+use App\Models\TaskActionDetail;
 use App\Models\RoleModule;
 use Illuminate\Support\Facades\Date;
 
@@ -27,6 +29,7 @@ class TaskController extends Controller
          $moduleData = session('moduleData');
             $myTasksExist = false;
             $showTasksExist = false;
+            $createNewTask = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -36,8 +39,11 @@ class TaskController extends Controller
                     $showTasksExist = true;
                 }
 
+                if($data['module']->module_name === 'Create New Task'){
+                    $createNewTask = true;
+                }
                 // If both modules are found, exit the loop early
-                if ($myTasksExist && $showTasksExist) {
+                if ($myTasksExist && $showTasksExist && $createNewTask) {
                     break;
                 }
             }
@@ -78,7 +84,8 @@ class TaskController extends Controller
                     }
                     
                     $columnName = "Task Assigned To";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName]);
+                    $role = "Manager";
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask]);
              
             } else {
                 // Neither module exists
@@ -94,9 +101,20 @@ class TaskController extends Controller
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+        $assignedUser = User::find($task->selected_user_id);
+        if ($assignedUser) {
+            $task->assigned_name = $assignedUser->first_name . ' ' . $assignedUser->last_name;
+        }
         
-         
-        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id]);
+         $action_details = TaskActionDetail::where('tbl_task_detail_id',$dec_task_id)->get();
+         foreach($action_details as $action_detail){
+            $assignedUser = User::find($action_detail->action_by);
+            if($assignedUser){
+                $action_detail->user_name = $assignedUser->first_name . ' ' . $assignedUser->last_name;
+            }
+         }
+
+        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details]);
     }
 
     public function updateMyTaskStatus(Request $request)
@@ -111,6 +129,19 @@ class TaskController extends Controller
         $task->update_time = Date::now()->toTimeString();
         $task->save();
 
+        //store details into tbl_task_action_detials
+        $userdetails = session('user');
+         $user_id = $userdetails->tbl_user_id;
+
+        $action_details = new TaskActionDetail;
+        $action_details->tbl_task_detail_id = $dec_task_id;
+        $action_details->action_name = $request->action;
+        $action_details->action_by = $user_id;
+        $action_details->action_date = Date::now()->toDateString();
+        $action_details->action_time = Date::now()->toTimeString();
+        $action_details->save();
+        $task->save();
+
         return redirect('/Tasks');
     }
      
@@ -119,19 +150,21 @@ class TaskController extends Controller
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
 
-        return view('frontend_tasks.transferMyTask',['task'=>$task,'enc_task_id'=>$enc_task_id]);
+        return view('frontend_tasks.reassign_tasks',['task'=>$task,'enc_task_id'=>$enc_task_id]);
     }
      
     public function transferMyTask(Request $request)
     {
+        
         $dec_task_id = EncryptionDecryptionHelper::encdecId($request->input('enc_task_id'),'decrypt');
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
 
         $task->remark = $request->remark;
         $task->transferred_status = 'Pending';
-        $task->save;
+        
+        $task->save();
 
-        return redirect('/Tasks/mytasks');
+        return redirect('/Tasks');
     }
  
     
@@ -145,6 +178,7 @@ class TaskController extends Controller
          $moduleData = session('moduleData');
             $myTasksExist = false;
             $showTasksExist = false;
+            $createNewTask = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -154,8 +188,13 @@ class TaskController extends Controller
                     $showTasksExist = true;
                 }
 
+            
+
+                if($data['module']->module_name === 'Create New Task'){
+                    $createNewTask = true;
+                }
                 // If both modules are found, exit the loop early
-                if ($myTasksExist && $showTasksExist) {
+                if ($myTasksExist && $showTasksExist && $createNewTask) {
                     break;
                 }
             }
@@ -164,7 +203,16 @@ class TaskController extends Controller
                 // Both modules exist
                 // Do something...
             } elseif ($myTasksExist) {
-                $tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','In Progress')->get();
+                //$tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','In Progress')->where('transferred_status', '!=', 'Pending')->get();
+                $tasks = TaskDetail::where('selected_user_id', $user_id)
+                                    ->where('flag', 'show')
+                                    ->where('task_status', 'In Progress')
+                                    ->where(function ($query) {
+                                        $query->where('transferred_status', '!=', 'Pending')
+                                            ->orWhereNull('transferred_status');
+                                    })
+                                    ->get();
+
                 
                 foreach ($tasks as $task) 
                 {
@@ -179,7 +227,7 @@ class TaskController extends Controller
                 }
                     $columnName = "Task Assigned By";
                     $title = "In Progress Tasks";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'createNewTask'=>$createNewTask]);
                         
             } elseif ($showTasksExist) {
                  $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','In Progress')->where('flag', 'show')->get();
@@ -196,7 +244,8 @@ class TaskController extends Controller
                     }
                     $columnName = "Task Assigned To";
                     $title = "In Progress Tasks";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title]);
+                    $role = "Manager";
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask]);
              
             } else {
                 // Neither module exists
@@ -215,6 +264,7 @@ class TaskController extends Controller
         $moduleData = session('moduleData');
            $myTasksExist = false;
            $showTasksExist = false;
+           $createNewTask = false;
 
            foreach ($moduleData as $data) {
                if ($data['module']->module_name === 'My Tasks') {
@@ -224,10 +274,13 @@ class TaskController extends Controller
                    $showTasksExist = true;
                }
 
-               // If both modules are found, exit the loop early
-               if ($myTasksExist && $showTasksExist) {
-                   break;
-               }
+               if($data['module']->module_name === 'Create New Task'){
+                $createNewTask = true;
+                }
+                // If both modules are found, exit the loop early
+                if ($myTasksExist && $showTasksExist && $createNewTask) {
+                    break;
+                }
            }
 
            if ($myTasksExist && $showTasksExist) {
@@ -249,7 +302,7 @@ class TaskController extends Controller
                }
                    $columnName = "Task Assigned By";
                    $title = "Completed Tasks";
-               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title]);
+               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'createNewTask'=>$createNewTask]);
                        
            } elseif ($showTasksExist) {
                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','Completed')->where('flag', 'show')->get();
@@ -266,7 +319,8 @@ class TaskController extends Controller
                    }
                    $columnName = "Task Assigned To";
                    $title = "Completed Tasks";
-               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title]);
+                   $role = "Manager";
+               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask]);
             
            } else {
                // Neither module exists
@@ -317,21 +371,42 @@ class TaskController extends Controller
     //show create task form
     public function createTask()
     {
-        $module_ids = [20, 25, 29];
-        $roles = RoleModule::whereIn('tbl_module_id', $module_ids)->get();
-
-        $users = User::whereIn('tbl_role_id', $roles->pluck('tbl_role_id'))->get();
-
+        
         $user_details = session('user');
         $mng_id = $user_details->tbl_user_id;
 
-        $emps = EmployeeDetail::whereIn('tbl_user_id',$users->pluck('tbl_user_id'))->where('reporting_manger_id',$mng_id)->get();
+      
+        $emps = OfficialDetail::where('reporting_manager_id',$mng_id)->get();
 
-        foreach($emps as $emp)
-        {
-            $emp->enc_user_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id,'encrypt');
+        $empsWithModulesAndNames = [];
+
+        foreach ($emps as $emp) {
+            // Retrieve the user associated with the employee
+            $user = User::find($emp->tbl_user_id);
+        
+            if ($user) {
+                $enc_user_id = EncryptionDecryptionHelper::encdecId($user->tbl_user_id, 'encrypt');
+                // Retrieve the role ID directly from the user object
+                $roleId = $user->tbl_role_id;
+        
+                // Check if either of the module IDs exists for the role
+                $roleModules = RoleModule::where('tbl_role_id', $roleId)
+                    ->whereIn('tbl_module_id', [20, 25])
+                    ->pluck('tbl_module_id')
+                    ->toArray();
+        
+                // If either module ID exists for the role, include the employee and user's name in the result
+                if (!empty($roleModules)) {
+                    $empsWithModulesAndNames[] = [
+                        'employee' => $emp,
+                        'user_name' => $user->first_name . ' ' . $user->last_name,
+                        'enc_user_id' => $enc_user_id,
+                    ];
+                }
+            }
         }
-        return view('frontend_tasks.createTask',['emps'=>$emps]);
+
+        return view('frontend_tasks.create_task',['empsWithModulesAndNames'=>$empsWithModulesAndNames]);
 
     }
 
@@ -341,20 +416,22 @@ class TaskController extends Controller
         $user_details = session('user');
         $mng_id = $user_details->tbl_user_id;
 
-        $dec_selected_user_id = EncryptionDecryptionHelper::encdecId($request->selected_user_id,'decrypt');
+        $dec_selected_user_id = EncryptionDecryptionHelper::encdecId($request->assigned_to,'decrypt');
 
 
         $task = new TaskDetail;
         $task->task_description = $request->task_description;
         $task->selected_user_id = $dec_selected_user_id;
-        $task->task_delivery_date = $request->delivery_date;
+        $task->task_delivery_date = $request->expected_delivery_date;
         $task->add_by = $mng_id;
+        $task->task_status ="Pending";
         $task->add_date = Date::now()->toDateString();
         $task->add_time = Date::now()->toTimeString();
         $task->flag = 'show';
+        
         $task->save();
-
-        return redirect('/Tasks/showtasks');
+        
+        return redirect('/Tasks');
      }
 
      //completed task
@@ -384,6 +461,7 @@ class TaskController extends Controller
 
     public function showReassignedTasks()
     {
+        
         $user_details = session('user');
         $mng_id = $user_details->tbl_user_id;
 
@@ -391,83 +469,111 @@ class TaskController extends Controller
         foreach($tasks as $task)
         {
             // Encode the task ID using the helper function
-            $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_details_id, 'encrypt');
+            $task->enc_task_id = EncryptionDecryptionHelper::encdecId($task->tbl_task_detail_id, 'encrypt');
+
+            $assignedUser = User::find($task->selected_user_id);
+                   if ($assignedUser) {
+                       $task->assigned_name = $assignedUser->first_name . ' ' . $assignedUser->last_name;
+                   }
         }
-        return view('frontend_tasks.showReassignedTasks',['tasks'=>$tasks]);
+        
+        $role = "Manager";
+        $columnName = "Task Assigned To";
+        $reassign = "apply";
+        $view = "reassign";
+    
+        return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'reassign'=>$reassign]);
     }
 
 
     public function viewReassignTask($enc_task_id)
     {
-        $module_ids = [20, 25, 29];
-        $roles = RoleModule::whereIn('tbl_module_id', $module_ids)->get();
+        //  $module_ids = [20, 25];
+        //  $roles = RoleModule::whereIn('tbl_module_id', $module_ids)->get();
 
-        $users = User::whereIn('tbl_role_id', $roles->pluck('tbl_role_id'))->get();
+         
+        //  $users = User::whereIn('tbl_role_id', $roles->pluck('tbl_role_id'))->get();
+        //  dd($users);
 
         $user_details = session('user');
         $mng_id = $user_details->tbl_user_id;
 
-        $emps = EmployeeDetail::whereIn('tbl_user_id',$users->pluck('tbl_user_id'))->where('reporting_manger_id',$mng_id)->get();
+      
+        $emps = OfficialDetail::where('reporting_manager_id',$mng_id)->get();
 
-        foreach($emps as $emp)
-        {
-            $emp->enc_user_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id,'encrypt');
+        $empsWithModulesAndNames = [];
+
+        foreach ($emps as $emp) {
+            // Retrieve the user associated with the employee
+            $user = User::find($emp->tbl_user_id);
+        
+            if ($user) {
+                $enc_user_id = EncryptionDecryptionHelper::encdecId($user->tbl_user_id, 'encrypt');
+                // Retrieve the role ID directly from the user object
+                $roleId = $user->tbl_role_id;
+        
+                // Check if either of the module IDs exists for the role
+                $roleModules = RoleModule::where('tbl_role_id', $roleId)
+                    ->whereIn('tbl_module_id', [20, 25])
+                    ->pluck('tbl_module_id')
+                    ->toArray();
+        
+                // If either module ID exists for the role, include the employee and user's name in the result
+                if (!empty($roleModules)) {
+                    $empsWithModulesAndNames[] = [
+                        'employee' => $emp,
+                        'user_name' => $user->first_name . ' ' . $user->last_name,
+                        'enc_user_id' => $enc_user_id,
+                    ];
+                }
+            }
         }
+        
+       // dd($empsWithModulesAndNames);
+        // Pass $empsWithModulesAndNames to the view or perform further actions
+        
+        //get data of users and check the role of users
+        
+
+
+        
 
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
-        $task = TaskDetail::where('tbl_task_details_id',$dec_task_id)->first();
+        $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+        $assignedUser = User::find($task->selected_user_id);
+        if ($assignedUser) {
+            $task->assigned_name = $assignedUser->first_name . ' ' . $assignedUser->last_name;
+        }
 
-        return view('frontend_tasks.viewReassignTask',['task'=>$task,'enc_task_id'=>$enc_task_id,'emps'=>$emps]);
+        return view('frontend_tasks.view_reassign_task',['task'=>$task,'enc_task_id'=>$enc_task_id,'empsWithModulesAndNames'=>$empsWithModulesAndNames]);
 
     }
 
     public function reassignTask(Request $request)
     {
+        
         $user_details = session('user');
         $mng_id = $user_details->tbl_user_id;
 
-        $dec_selected_user_id = EncryptionDecryptionHelper::encdecId($request->selected_user_id,'decrypt');
+        $dec_selected_user_id = EncryptionDecryptionHelper::encdecId($request->assigned_to,'decrypt');
 
         $dec_task_id = EncryptionDecryptionHelper::encdecId($request->input('enc_task_id'),'decrypt');
         
-        $task = TaskDetail::where('tbl_task_details_id',$dec_task_id)->first();
+        $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
 
         $task->selected_user_id = $dec_selected_user_id;
-        $task->task_delivery_date = $request->task_delivery_date;
-        $task->task_completion_date = $request->task_completion_date;
+        $task->task_delivery_date = $request->expected_delivery_date;
+        $task->add_date = Date::now()->toDateString();
+        $task->add_time = Date::now()->toTimeString();
+        $task->transferred_status = "success";
+        $task->remark=null;
 
-         
+        
+        $task->save();
 
-    }
-
-
-
-    public function PendingTasks()
-    {
-        return view('frontend_tasks.pending_tasks');
+        return redirect('/Tasks/showreassignedtask');
 
     }
+
    
-    
-    
-    public function InprogessTasks()
-    {
-        return view('frontend_tasks.inprogress_tasks');
-
-    }
-    public function ReassignedTasks()
-    {
-        return view('frontend_tasks.reassigned_tasks');
-
-    }
-    public function ViewTasks()
-    {
-        return view('frontend_tasks.view_task_page');
-
-    }
-
-    
-    
-    
-
 }

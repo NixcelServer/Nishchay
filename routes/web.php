@@ -161,7 +161,7 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     Route::get('/transfermytask/{id}',[TaskController::class,'transferMyTaskForm']);
     //Route::get('/showreassignedtasks',[TaskController::class,'showReassignedTasks']);
-    Route::post('transfermytask',[TaskController::class,'transferMyTask']);
+    Route::post('/transfermytask',[TaskController::class,'transferMyTask']);
 
     Route::get('/myinprogresstasks',[TaskController::class,'showInProgressTasks']);
 
@@ -172,19 +172,19 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     // Route::get('/viewtask',[TaskController::class,'viewTask']);
 
-    // Route::get('/createtask',[TaskController::class,'createTask']);
+     Route::get('/createtask',[TaskController::class,'createTask']);
 
-    // Route::post('/assigntask',[TaskController::class,'assignTask']);
+    Route::post('/assigntask',[TaskController::class,'assignTask']);
 
     // Route::get('/completedtask',[TaskController::class,'completedTask']);
 
     // Route::get('/inprogresstask',[TaskController::class,'inProgressTask']);
 
-    // Route::get('/showreassignedtask',[TaskController::class,'showReassignedTask']);
+     Route::get('/showreassignedtask',[TaskController::class,'showReassignedTasks']);
 
-    // Route::get('/viewreassigntask/{id}',[TaskController::class,'viewReassignTask']);
+     Route::get('/viewreassigntask/{id}',[TaskController::class,'viewReassignTask']);
 
-    // Route::post('/reassigntask',[TaskController::class,'reassignTask']);
+     Route::post('/reassigntask',[TaskController::class,'reassignTask']);
 
 
 });

@@ -19,7 +19,7 @@
             <h4>View Task</h4>
           </div>
           <div class="card-body">
-            <form id="task_form"  action="/Tasks/updatemytaskstatus" method="POST" >
+            <form id="task_form"  action="/Tasks/reassigntask" method="POST" >
               @csrf
               <div class="form-group">
                 
@@ -38,57 +38,36 @@
               </div>
               <div class="form-group">
                 <label for="completed_date">Expected Delivery Date</label>
-                <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_delivery_date }}" readonly>
+                <input type="date" class="form-control" id="expected_delivery_date" name="expected_delivery_date" value="{{ $task->task_delivery_date }}" >
               </div>
               <div class="form-group">
                 <label for="status">Status</label>
                 <input type="text" class="form-control" id="status" name="status" value="{{ $task->task_status}}">
               </div>
               <div class="form-group">
-                <label for="action">Action</label>
-                <textarea class="form-control" id="action" name="action" rows="3"></textarea>
+                
+                <label for="remark">Remark</label>
+                <input type="text" class="form-control" id="remark" name="remark" value="{{ $task->remark }}" readonly>
+
               </div>
               <div class="form-group">
-                <label for="solution">Solution</label>
-                <textarea class="form-control" id="solution" name="solution" rows="3">{{ $task->task_solution}}</textarea>
-              </div>
-              @if ($task->task_status !== 'Complete')
-                  <!-- Reassign Task Button -->
-                  <a href="/Tasks/transfermytask/{{ $enc_task_id }}" class="btn btn-warning" id="reassign_task_btn">Reassign Task</a>
-              @endif
+                    <label for="assigned_to">Assign To</label>
+                    <select class="form-control" id="assigned_to" name="assigned_to">
+                        <option value="">Select Employee</option> <!-- Blank option -->
+                        @foreach($empsWithModulesAndNames as $item)
+                            <option value="{{ $item['enc_user_id'] }}">{{ $item['user_name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Reassign</button>
             </form>
           </div>
         </div>
       </div>
     </div>
-  
+  </div>
   <!-- Add your script files here -->
-
-  <table class="table">
-            <thead>
-                <tr>
-                    <th>Sr. No</th>
-                    <th>Action</th>
-                    <th>Action Taken By</th>
-                    <th>Date</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($action_details as $index => $action)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $action->action_name }}</td>
-                <td>{{ $action->user_name }}</td>
-                <td>{{ $action->action_date }}</td>
-            </tr>
-        @endforeach
-            </tbody>
-        </table>
-        </div>
 </body>
 
 </html>
- 
