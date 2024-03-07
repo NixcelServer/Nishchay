@@ -100,7 +100,7 @@
                         <button type="submit" class="btn btn-primary submit-button" >Submit</button>
                    
 
-                        <table class="table">
+                        <!-- <table class="table">
                             <thead>
                                 <tr>
                                     <th>Task ID</th>
@@ -112,9 +112,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Table rows will be dynamically added -->
+                                
                             </tbody>
-                        </table>
+                        </table> -->
                                         
                    
                    
