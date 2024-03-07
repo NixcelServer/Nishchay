@@ -329,10 +329,17 @@ class AdminController extends Controller
  
      public function auditlogDetails()
      {
-     //   $auditlogdetails = AuditLogDetail::all();
-        $auditlogdetails = AuditLogDetail::select('activity_name')->get();
+       $auditlogs = AuditLogDetail::all();
 
-        return view('frontend_admin.auditlog_details');
+       foreach($auditlogs as $auditlog){
+        $user = User::where('tbl_user_id',$auditlog->tbl_user_id)->first();
+        if($user){
+            $auditlog->username = $user->first_name . " " . $user->last_name;
+        }
+       }
+        
+
+        return view('frontend_admin.auditlog_details',['auditlogs'=>$auditlogs]);
      }
 
     
