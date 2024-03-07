@@ -180,6 +180,8 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     Route::post('/assigntask',[TaskController::class,'assignTask']);
 
+    Route::get('/deletetask/{id}',[TaskController::class,'deleteTask']);
+
     // Route::get('/completedtask',[TaskController::class,'completedTask']);
 
     // Route::get('/inprogresstask',[TaskController::class,'inProgressTask']);

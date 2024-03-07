@@ -41,9 +41,15 @@
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_delivery_date }}" readonly>
               </div>
               <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" class="form-control" id="status" name="status" value="{{ $task->task_status}}">
+                  <label for="status">Status</label>
+                  <select class="form-control" id="status" name="status">
+                      <option value="">Select Status</option> <!-- Default option -->
+                      <option value="Pending" {{ $task->task_status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                      <option value="Completed" {{ $task->task_status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                      <option value="In Progress" {{ $task->task_status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                  </select>
               </div>
+
               <div class="form-group">
                 <label for="action">Action</label>
                 <textarea class="form-control" id="action" name="action" rows="3"></textarea>
@@ -52,10 +58,20 @@
                 <label for="solution">Solution</label>
                 <textarea class="form-control" id="solution" name="solution" rows="3">{{ $task->task_solution}}</textarea>
               </div>
-              @if ($task->task_status !== 'Complete')
-                  <!-- Reassign Task Button -->
-                  <a href="/Tasks/transfermytask/{{ $enc_task_id }}" class="btn btn-warning" id="reassign_task_btn">Reassign Task</a>
+              @if ($task->task_status == 'Pending')
+                  @if (isset($reassignTask) && $reassignTask)
+                      <!-- Reassign Task Button -->
+                      <a href="/Tasks/transfermytask/{{ $enc_task_id }}" class="btn btn-warning" id="reassign_task_btn">Reassign Task</a>
+                  @endif
               @endif
+
+              @if ($task->task_status == 'Pending')
+                  @if (isset($deleteTask) && $deleteTask)
+                      <!-- Delete Task Button -->
+                      <a href="/Tasks/deletetask/{{ $enc_task_id }}" class="btn btn-danger" id="delete_task_btn">Delete Task</a>
+                  @endif
+              @endif
+
 
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -84,7 +100,7 @@
                 <td>{{ $action->user_name }}</td>
                 <td>{{ $action->action_date }}</td>
             </tr>
-        @endforeach
+           @endforeach
             </tbody>
         </table>
         </div>

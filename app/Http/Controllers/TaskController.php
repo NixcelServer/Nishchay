@@ -30,6 +30,7 @@ class TaskController extends Controller
             $myTasksExist = false;
             $showTasksExist = false;
             $createNewTask = false;
+            $deleteTask = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -42,8 +43,13 @@ class TaskController extends Controller
                 if($data['module']->module_name === 'Create New Task'){
                     $createNewTask = true;
                 }
+
+                if($data['module']->module_name === 'Delete Task'){
+                    $deleteTask = true;
+                }
+
                 // If both modules are found, exit the loop early
-                if ($myTasksExist && $showTasksExist && $createNewTask) {
+                if ($myTasksExist && $showTasksExist && $createNewTask && $deleteTask) {
                     break;
                 }
             }
@@ -85,7 +91,7 @@ class TaskController extends Controller
                     
                     $columnName = "Task Assigned To";
                     $role = "Manager";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask,'deleteTask'=>$deleteTask]);
              
             } else {
                 // Neither module exists
@@ -97,10 +103,28 @@ class TaskController extends Controller
 
     public function viewTask($enc_task_id)
     {
-      
+        $moduleData = session('moduleData');
+        $reassignTask = false;
+        $deleteTask = false;
+
+        foreach ($moduleData as $data) {
+            if ($data['module']->module_name === 'Reassign Task') {
+                $reassignTask = true;
+            }
+            if ($data['module']->module_name === 'Delete Task') {
+                $deleteTask = true;
+            }
+        }    
+        
+
+
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
         
+        
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+
+        
+        
         $assignedUser = User::find($task->selected_user_id);
         if ($assignedUser) {
             $task->assigned_name = $assignedUser->first_name . ' ' . $assignedUser->last_name;
@@ -112,9 +136,9 @@ class TaskController extends Controller
             if($assignedUser){
                 $action_detail->user_name = $assignedUser->first_name . ' ' . $assignedUser->last_name;
             }
-         }
-
-        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details]);
+         
+        }
+        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask]);
     }
 
     public function updateMyTaskStatus(Request $request)
@@ -142,6 +166,10 @@ class TaskController extends Controller
         $action_details->save();
         $task->save();
 
+        //auditlog entry
+        $user_details = session('user');
+        AuditLogHelper::logDetails('update task status', $user_details->tbl_user_id);
+
         return redirect('/Tasks');
     }
      
@@ -163,6 +191,9 @@ class TaskController extends Controller
         $task->transferred_status = 'Pending';
         
         $task->save();
+
+        $user_details = session('user');
+        AuditLogHelper::logDetails('reassign task', $user_details->tbl_user_id);
 
         return redirect('/Tasks');
     }
@@ -336,11 +367,7 @@ class TaskController extends Controller
 
 
     //mng show task
-    public function showTask()
-    {
-       
-
-    }
+    
 
     //view particular task
     // public function viewTask($enc_task_id)
@@ -354,18 +381,28 @@ class TaskController extends Controller
 
     //delete a particular task
     public function deleteTask($enc_task_id)
-    {
+    {   
+        $user_details = session('user');
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
-        $task = TaskDetail::where('tbl_task_details_id',$dec_task_id)->first();
+        $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
 
         if($task->task_status == 'Completed' || $task->task_status == 'In Progress'){
             return redirect()->back()->withError('task cannot be deleted');
         }
         else{
             $task->flag = 'deleted';
+            $task->update_by = $user_details->tbl_user_id;
+            $task->update_date = Date::now()->toDateString();
+            $task->update_time = Date::now()->toTimeString();
+            
             $task->save();
         }
-        return redirect('/Tasks/showtasks');
+
+
+        $user_details = session('user');
+        AuditLogHelper::logDetails('delete task', $user_details->tbl_user_id);
+
+        return redirect('/Tasks');
 
     }
     //show create task form
@@ -406,6 +443,9 @@ class TaskController extends Controller
             }
         }
 
+        $user_details = session('user');
+        AuditLogHelper::logDetails('create new task', $user_details->tbl_user_id);
+
         return view('frontend_tasks.create_task',['empsWithModulesAndNames'=>$empsWithModulesAndNames]);
 
     }
@@ -430,6 +470,9 @@ class TaskController extends Controller
         $task->flag = 'show';
         
         $task->save();
+
+        $user_details = session('user');
+        AuditLogHelper::logDetails('assign task', $user_details->tbl_user_id);
         
         return redirect('/Tasks');
      }
@@ -570,6 +613,9 @@ class TaskController extends Controller
 
         
         $task->save();
+
+        $user_details = session('user');
+        AuditLogHelper::logDetails('reassign task', $user_details->tbl_user_id);
 
         return redirect('/Tasks/showreassignedtask');
 

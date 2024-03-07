@@ -131,9 +131,14 @@ class HrController extends Controller
             }
         }
         
-         dd($managers);
+        $ofc_details = OfficialDetail::where('tbl_user_id',$dec_id)->first();
+        $stat_details = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
+        $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
+        $bank_details = BankDetail::where('tbl_user_id',$dec_id)->first();
+        $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
+         
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details]);
     }
 
  
