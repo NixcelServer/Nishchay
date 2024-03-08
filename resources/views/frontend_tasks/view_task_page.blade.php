@@ -7,7 +7,15 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Task Form</title>
-  <!-- Add your CSS files here -->
+  <style>
+    .small-dropdown {
+        width: 150px; /* Adjust the width value as needed */
+    }
+
+    .small-textarea {
+    height: 50px; /* Adjust the height value as needed */
+}
+</style>
 </head>
 
 <body>
