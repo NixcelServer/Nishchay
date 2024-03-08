@@ -112,12 +112,12 @@
             document.getElementById("lastNameError").innerHTML = "";
         }
 
-        if (!/[a-z0-9._%+-]+@gmail\.com$/.test(email)) {
-            document.getElementById("emailError").innerHTML = "Please enter a valid Gmail address";
-            isValid = false;
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+           document.getElementById("emailError").innerHTML = "Please enter a valid email address";
+           isValid = false;
         } else {
             document.getElementById("emailError").innerHTML = "";
-        }
+}
 
         return isValid;
     }

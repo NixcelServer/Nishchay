@@ -68,6 +68,13 @@
                                         <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" required>
 
                                     </div>
+                                    {{-- <div class="col-md-4">
+
+                                        <input type="hidden" name="enc_id" value=" ">
+                                            <label class="form-label">Offer Letter No</label>
+                                            <input type="text" class="form-control" name="empcode" value=" " required>
+    
+                                        </div> --}}
                                     <div class="col-md-4">
                                         <label class="form-label">Title</label><br>
                                         <input type="radio" id="mr" name="title" value="Mr">
@@ -183,20 +190,22 @@
                                             <option value="">Select Department</option> <!-- Blank option -->
                                             <!-- Add department options here -->
                                             @foreach($depts as $dept)
-                                            <option value="{{ $dept->enc_dept_id }}"{{ $dept->dept_name ? ' selected' : '' }}>{{ $dept->dept_name }}</option>
-                                        @endforeach                                        
+                                                <option value="{{ $dept->enc_dept_id }}"{{ $emp->tbl_dept_id == $dept->tbl_dept_id ? 'selected' : '' }}>{{ $dept->dept_name }}</option>
+                                            @endforeach                                        
                                         </select>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Select Designation</label>
                                         <select class="form-control" name="designation">
-                                            <option value="">Select Designation</option> <!-- Blank option -->
-                                            <!-- Add designation options here -->
+                                            {{-- Add designation options here --}}
                                             @foreach($designations as $designation)
-                                            <option value="{{ $designation->desg_enc_id }}"{{ $designation->designation_name ? ' selected' : '' }}>{{ $designation->designation_name }}</option>
-                                        @endforeach                                            
+                                                <option value="{{ $designation->desg_enc_id }}" {{ $emp->tbl_designation_id == $designation->tbl_designation_id ? 'selected' : '' }}>
+                                                    {{ $designation->designation_name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
+                                    
                                   </div>
                               </div>
                           </div>
@@ -206,15 +215,18 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Select Role</label>
                                         <select class="form-control" name="role">
-                                            <option value="">Select Role</option>
+                                            {{-- <option value="">Select Role</option> --}}
                                             <!-- Add role options here -->
                                             @foreach($roles as $role)
-                                            @if($role->role_name !== 'Admin')
-                                            <option value="{{ $role->enc_role_id }}"{{ $role->role_name ? ' selected' : '' }}>{{ $role->role_name }}</option>
-                                             @endif
-                                           @endforeach
+                                                @if($role->role_name !== 'Admin')
+                                                    <option value="{{ $role->enc_role_id }}"{{ $emp->tbl_role_id == $role->tbl_role_id ? ' selected' : '' }}>
+                                                        {{ $role->role_name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach                                           
                                         </select>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -534,7 +546,7 @@
                                             <!-- Example: Edit and Delete buttons -->
                                             {{-- <button class="btn btn-warning btn-sm toggle-edit-form"
                                                 data-employee-id="{{ $employee->id }}">Edit</button> --}}
-                                                <a href="/Employees/deleteprevemploymentdetails/{{ $employee->enc_prev_detail_id }}" class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
+                                                <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -667,6 +679,9 @@
         button.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent default behavior of the click event
             const employeeId = button.getAttribute('data-employee-id');
+            const encryptedId = button.getAttribute('data-encrypted-id');
+            const url = "/Employees/deleteprevemploymentdetails/" + encryptedId;
+
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -680,8 +695,7 @@
                 if (result.isConfirmed) {
                     // Here you need to get the encrypted ID for deletion
                     // You can use a data attribute on the button or any other method to get it
-                    const encryptedId = button.getAttribute('data-encrypted-id');
-                    window.location.href = "/Employees/deleteprevemploymentdetails/{{ $employee->enc_prev_detail_id }}" + encryptedId;
+                    window.location.href = url;
                 }
             });
         });

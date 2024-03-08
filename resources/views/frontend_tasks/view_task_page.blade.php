@@ -62,10 +62,7 @@
                 <label for="action">Action</label>
                 <textarea class="form-control" id="action" name="action" rows="3"></textarea>
               </div>
-              <div class="form-group">
-                <label for="solution">Solution</label>
-                <textarea class="form-control" id="solution" name="solution" rows="3">{{ $task->task_solution}}</textarea>
-              </div>
+              
               @if ($task->task_status == 'Pending')
                   @if (isset($reassignTask) && $reassignTask)
                       <!-- Reassign Task Button -->
