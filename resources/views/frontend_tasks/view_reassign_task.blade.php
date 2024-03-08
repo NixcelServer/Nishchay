@@ -42,7 +42,7 @@
               </div>
               <div class="form-group">
                 <label for="status">Status</label>
-                <input type="text" class="form-control" id="status" name="status" value="{{ $task->task_status}}">
+                <input type="text" class="form-control" id="status" name="status" value="{{ $task->task_status}}" readonly>
               </div>
               <div class="form-group">
                 
@@ -52,7 +52,7 @@
               </div>
               <div class="form-group">
                     <label for="assigned_to">Assign To</label>
-                    <select class="form-control" id="assigned_to" name="assigned_to">
+                    <select class="form-control" id="assigned_to" name="assigned_to" required>
                         <option value="">Select Employee</option> <!-- Blank option -->
                         @foreach($empsWithModulesAndNames as $item)
                             <option value="{{ $item['enc_user_id'] }}">{{ $item['user_name'] }}</option>

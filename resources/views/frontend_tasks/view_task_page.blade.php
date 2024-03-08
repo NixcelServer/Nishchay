@@ -49,23 +49,24 @@
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_delivery_date }}" readonly>
               </div>
               <div class="form-group">
-                  <label for="status">Status</label>
-                  <select class="form-control" id="status" name="status">
-                      <option value="">Select Status</option> <!-- Default option -->
-                      <option value="Pending" {{ $task->task_status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                      <option value="Completed" {{ $task->task_status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                      <option value="In Progress" {{ $task->task_status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
-                  </select>
-              </div>
+    <label for="status">Status</label>
+    <select class="form-control" id="status" name="status"{{ $createNewTask ? ($task->task_status == 'Completed' ? '' : ' disabled') : '' }}>
+        <option value="">Select Status</option> <!-- Default option -->
+        <option value="Pending" {{ $task->task_status == 'Pending' ? 'selected' : '' }}>Pending</option>
+        <option value="In Progress" {{ $task->task_status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+        <option value="Completed" {{ $task->task_status == 'Completed' ? 'selected' : '' }}>Completed</option>
+    </select>
+</div>            
 
+              @if ($task->task_status !== 'Completed')
+                @if(isset($actionOnTask) && $actionOnTask)
               <div class="form-group">
                 <label for="action">Action</label>
                 <textarea class="form-control" id="action" name="action" rows="3"></textarea>
               </div>
-              <div class="form-group">
-                <label for="solution">Solution</label>
-                <textarea class="form-control" id="solution" name="solution" rows="3">{{ $task->task_solution}}</textarea>
-              </div>
+                @endif
+              @endif  
+
               @if ($task->task_status == 'Pending')
                   @if (isset($reassignTask) && $reassignTask)
                       <!-- Reassign Task Button -->

@@ -31,6 +31,8 @@ class TaskController extends Controller
             $showTasksExist = false;
             $createNewTask = false;
             $deleteTask = false;
+            $actionOnTask = false;
+            $reassignTask = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -48,8 +50,15 @@ class TaskController extends Controller
                     $deleteTask = true;
                 }
 
+                if($data['module']->module_name === 'Reassign Task'){
+                    $reassignTask = true;
+                }
+
+                if($data['module']->module_name === 'Action On Task'){
+                    $actionOnTask = true;
+                }
                 // If both modules are found, exit the loop early
-                if ($myTasksExist && $showTasksExist && $createNewTask && $deleteTask) {
+                if ($myTasksExist && $showTasksExist && $createNewTask && $deleteTask && $actionOnTask && $reassignTask) {
                     break;
                 }
             }
@@ -91,7 +100,7 @@ class TaskController extends Controller
                     
                     $columnName = "Task Assigned To";
                     $role = "Manager";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask,'deleteTask'=>$deleteTask]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask,'deleteTask'=>$deleteTask,'reassignTask'=>$reassignTask]);
              
             } else {
                 // Neither module exists
@@ -106,6 +115,8 @@ class TaskController extends Controller
         $moduleData = session('moduleData');
         $reassignTask = false;
         $deleteTask = false;
+        $actionOnTask = false;
+        $createNewTask = false;
 
         foreach ($moduleData as $data) {
             if ($data['module']->module_name === 'Reassign Task') {
@@ -114,6 +125,19 @@ class TaskController extends Controller
             if ($data['module']->module_name === 'Delete Task') {
                 $deleteTask = true;
             }
+
+            if($data['module']->module_name === 'Action on Tasks'){
+                $actionOnTask = true;
+            }
+
+            if($data['module']->module_name === 'Create New Task'){
+                $createNewTask = true;
+            }
+
+            if ($reassignTask && $deleteTask && $actionOnTask) {
+                break;
+            }
+
         }    
         
 
@@ -138,7 +162,7 @@ class TaskController extends Controller
             }
          
         }
-        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask]);
+        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask,'actionOnTask'=>$actionOnTask,'createNewTask'=>$createNewTask]);
     }
 
     public function updateMyTaskStatus(Request $request)
@@ -148,7 +172,7 @@ class TaskController extends Controller
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
         
         $task->task_status = $request->status;
-        $task->task_solution = $request->solution;
+        
         $task->update_date = Date::now()->toDateString();
         $task->update_time = Date::now()->toTimeString();
         $task->save();
@@ -159,7 +183,7 @@ class TaskController extends Controller
 
         $action_details = new TaskActionDetail;
         $action_details->tbl_task_detail_id = $dec_task_id;
-        $action_details->action_name = $request->action;
+        $action_details->action_name = $request->action ?: 'task not approved';;
         $action_details->action_by = $user_id;
         $action_details->action_date = Date::now()->toDateString();
         $action_details->action_time = Date::now()->toTimeString();
@@ -167,8 +191,8 @@ class TaskController extends Controller
         $task->save();
 
         //auditlog entry
-        $user_details = session('user');
-        AuditLogHelper::logDetails('update task status', $user_details->tbl_user_id);
+      
+        AuditLogHelper::logDetails('update task status', $userdetails->tbl_user_id);
 
         return redirect('/Tasks');
     }
@@ -192,8 +216,22 @@ class TaskController extends Controller
         
         $task->save();
 
-        $user_details = session('user');
-        AuditLogHelper::logDetails('reassign task', $user_details->tbl_user_id);
+         //store details into tbl_task_action_detials
+         $userdetails = session('user');
+         $user_id = $userdetails->tbl_user_id;
+
+        $action_details = new TaskActionDetail;
+        $action_details->tbl_task_detail_id = $dec_task_id;
+        $action_details->action_name = $request->action ?: 'reassign Task';;
+        $action_details->action_by = $user_id;
+        $action_details->action_date = Date::now()->toDateString();
+        $action_details->action_time = Date::now()->toTimeString();
+        $action_details->save();
+        
+
+
+    
+        AuditLogHelper::logDetails('reassign task', $userdetails->tbl_user_id);
 
         return redirect('/Tasks');
     }
@@ -210,6 +248,7 @@ class TaskController extends Controller
             $myTasksExist = false;
             $showTasksExist = false;
             $createNewTask = false;
+            $reassignTask = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -218,6 +257,9 @@ class TaskController extends Controller
                 if ($data['module']->module_name === 'Show Tasks') {
                     $showTasksExist = true;
                 }
+                if ($data['module']->module_name === 'Reassign Task') {
+                    $reassignTask = true;
+                }
 
             
 
@@ -225,7 +267,7 @@ class TaskController extends Controller
                     $createNewTask = true;
                 }
                 // If both modules are found, exit the loop early
-                if ($myTasksExist && $showTasksExist && $createNewTask) {
+                if ($myTasksExist && $showTasksExist && $createNewTask && $reassignTask) {
                     break;
                 }
             }
@@ -276,7 +318,7 @@ class TaskController extends Controller
                     $columnName = "Task Assigned To";
                     $title = "In Progress Tasks";
                     $role = "Manager";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask,'reassignTask'=>$reassignTask]);
              
             } else {
                 // Neither module exists
@@ -296,6 +338,7 @@ class TaskController extends Controller
            $myTasksExist = false;
            $showTasksExist = false;
            $createNewTask = false;
+           $reassignTask = false;
 
            foreach ($moduleData as $data) {
                if ($data['module']->module_name === 'My Tasks') {
@@ -308,8 +351,11 @@ class TaskController extends Controller
                if($data['module']->module_name === 'Create New Task'){
                 $createNewTask = true;
                 }
+                if($data['module']->module_name === 'Reassign Task'){
+                    $reassignTask = true;
+                    }
                 // If both modules are found, exit the loop early
-                if ($myTasksExist && $showTasksExist && $createNewTask) {
+                if ($myTasksExist && $showTasksExist && $createNewTask && $reassignTask) {
                     break;
                 }
            }
@@ -351,7 +397,7 @@ class TaskController extends Controller
                    $columnName = "Task Assigned To";
                    $title = "Completed Tasks";
                    $role = "Manager";
-               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask]);
+               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask,'reassignTask'=>$reassignTask]);
             
            } else {
                // Neither module exists
@@ -471,7 +517,14 @@ class TaskController extends Controller
         
         $task->save();
 
-        $user_details = session('user');
+        // $action_details = new TaskActionDetail;
+        // $action_details->tbl_task_detail_id = $dec_task_id;
+        // $action_details->action_name = $request->action ?: 'reassign Task';;
+        // $action_details->action_by = $user_id;
+        // $action_details->action_date = Date::now()->toDateString();
+        // $action_details->action_time = Date::now()->toTimeString();
+        // $action_details->save();
+
         AuditLogHelper::logDetails('assign task', $user_details->tbl_user_id);
         
         return redirect('/Tasks');
@@ -524,8 +577,9 @@ class TaskController extends Controller
         $columnName = "Task Assigned To";
         $reassign = "apply";
         $view = "reassign";
-    
-        return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'reassign'=>$reassign]);
+        $title ="Reassign Tasks";
+        $reassignTask = true;
+        return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'reassign'=>$reassign,'title'=>$title,'reassignTask'=>$reassignTask]);
     }
 
 

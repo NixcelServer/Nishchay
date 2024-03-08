@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('branch')->nullable();
             $table->string('city')->nullable();
             $table->string('ifsc')->nullable();
-            $table->string('account_no')->unique();
+            $table->string('account_no',18)->unique();
             $table->integer('add_by')->nullable();
             $table->date('add_date')->nullable();
             $table->time('add_time')->nullable();

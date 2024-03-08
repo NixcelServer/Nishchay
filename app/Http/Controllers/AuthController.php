@@ -33,12 +33,38 @@ class AuthController extends Controller
         //check if user exists 
         
         $user = User::where('email',$request->email)->first();
+
+         //check if user is found
+         if(!$user){
+            return redirect()->back()->with('error', 'Invalid email. Please enter a valid email.');
+        }
+
+        //get the password from request
+        $password =$request->password;
+       
+       //encrypt the password
+        $encrypted_pass = EncryptionDecryptionHelper::encryptData($password);
+     
+       
+        //if user exists validate password and redirect to respective page
+        if (strcmp($user->password, $encrypted_pass) === 0) {
+
+             //enter the user activity into auditlog
+             $activity_name = "login";
+             $activity_by = $user->tbl_user_id;
+             AuditLogHelper::logDetails($activity_name, $activity_by);
+
+            auth()->login($user);
+            
+            Session::put('user', $user);
+
+            //get the user id and iterate over rolemodules to get the data of modules assigned to him
         $role_id = $user->tbl_role_id;
         $roleModules = RoleModule::where('tbl_role_id',$role_id)->get();
 
         $moduleData = [];
         foreach($roleModules as $roleModule){
-            
+            //get the names of modules which are assigned to the user and store them in session
             $module = Module::find($roleModule->tbl_module_id);
             
             if ($module) {
@@ -49,7 +75,7 @@ class AuthController extends Controller
             }
         }
         Session::put('moduleData',$moduleData);
-        
+
 
         $uniqueParentNames = [];
 
@@ -64,59 +90,13 @@ class AuthController extends Controller
                 }
                 
             }
-
-            // // Iterate over $moduleData to extract unique parent names
-            // foreach ($moduleData as $data) {
-            //     $parentName = $data['module']->parent;
-                
-            //     // Check if the parent name is not empty and has not been processed yet
-            //     if ($parentName !== null && $parentName !== "" && !in_array($parentName, array_column($uniqueParentNames, 'parent_name'))) {
-            //         // Fetch the parent modules if they exist
-            //         $parentModules = Module::where('parent', $parentName)->get();
-                    
-            //         // Loop through each parent module
-            //         foreach ($parentModules as $parentModule) {
-            //             // Add the parent name and module name to the unique parent names array
-            //             $uniqueParentNames[] = [
-            //                 'parent_name' => $parentModule->parent,
-            //                 'module_name' => $parentModule->module_name,
-            //             ];
-            //         }
-            //     }
-            // }
-            
-            //dd($uniqueParentNames);
             Session::put('uniqueParentNames',$uniqueParentNames);
             
-
-
-        //get the password from request
-        $password =$request->password;
-       
-       //encrypt the password
-        $encrypted_pass = EncryptionDecryptionHelper::encryptData($password);
-     
-        //check if user is found
-        if(!$user){
-            return redirect()->back()->with('error', 'Invalid email or password');
-        }
-        //if user exists validate password and redirect to respective page
-        if (strcmp($user->password, $encrypted_pass) === 0) {
-
-             $activity_name = "login";
-             $activity_by = $user->tbl_user_id;
-        
-             AuditLogHelper::logDetails($activity_name, $activity_by);
-
-            auth()->login($user);
-            
-            Session::put('user', $user);
-
             return redirect('/dashboard');
  
         } else {
             // if passwords are not same display following msg
-            return redirect()->back()->withInput()->with('error', 'Invalid email or password.Please enter valid credentials.');
+            return redirect()->back()->withInput()->with('error', 'Invalid password. Please enter a valid password.');
 
         }
     }
