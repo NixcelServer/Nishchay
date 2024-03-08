@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class TaskActionDetail extends Model
 {
     use HasFactory;
-    protected $table = 'tbl_task_action_details';
+    protected $table = 'tbl_task_details';
     public $timestamps = false;
 }

@@ -29,7 +29,7 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Contact No</th>
-                                            <th>Status</th>
+                                            {{-- <th>Role</th> --}}
                                             <th>Designation</th>
                                             <th>Action</th>
                                         </tr>
@@ -42,10 +42,12 @@
                                             <td>{{ $emp->first_name }} {{ $emp->middle_name }} {{ $emp->last_name }}</td>
                                             <td>{{ $emp->email }}</td>
                                             <td>{{ $emp->contact_no }}</td>
-                                            <td>{{ $emp->status }}</td>
+                                            {{-- <td>{{ $emp->role_name }}</td> --}}
+                                            <td>{{ $emp->desg_name }}</td>
+                                            
 
                                             
-                                            <td>
+                                            {{-- <td>
                                                 @if($emp->role_id == 2)
                                                     HR
                                                 @elseif($emp->role_id == 3)
@@ -53,7 +55,7 @@
                                                 @elseif($emp->role_id == 4)
                                                     Manager    
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 @php
                                                 $moduleData = Session::get('moduleData');
@@ -80,13 +82,13 @@
                                                 <!-- Edit action link with encrypted ID -->
                                                 <a href="/Employees/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm">Edit</a>
                                                @endif
-                                               @if($containsDeleteEmployeeModule)
+                                               {{-- @if($containsDeleteEmployeeModule)
                                                 <!-- Delete action form with encrypted ID -->
                                                 <form action="" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                                               @endif     
+                                               @endif      --}}
                                                 </form>
                                             </td>
                                         </tr>

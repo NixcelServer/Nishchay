@@ -22,6 +22,8 @@ use App\Models\RoleModule;
 
 
 
+
+
 class HrController extends Controller
 {
     //When HR logs in show HR Dashboard
@@ -32,42 +34,42 @@ class HrController extends Controller
 
     public function showEmployees()
     {
-        $emps=EmployeeDetail::all();
+       // $emps=EmployeeDetail::all();
         //dd($emps);
-        // $emps = EmployeeDetail::where('flag', 'show')
-        // ->whereNotIn('tbl_role_id', [1])
-        // ->get(); 
+        $emps = EmployeeDetail::where('flag', 'show')
+                      ->where('tbl_role_id', '<>', 1)
+                      ->get();
+ 
         
         
-        //encrypt the id of emp and pass to the view
-        foreach ($emps as $emp) {
-            // Encode the user's ID using the helper function
-            $emp->encrypted_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id, 'encrypt');
-            $desg_id = $emp->tbl_designation_id;
-            $designation = Designation::where('tbl_designation_id',$desg_id)->first();
-            if ($designation) {
-                $emp->desg_name = $designation->designation_name;
-            } else {
-                $emp->desg_name = 'Unknown'; // or any default value you prefer
-            }
+                      foreach ($emps as $emp) {
+                        // Encode the user's ID using the helper function
+                        $emp->encrypted_id = EncryptionDecryptionHelper::encdecId($emp->tbl_user_id, 'encrypt');
+                        $desg_id = $emp->tbl_designation_id;
+                        $designation = Designation::where('tbl_designation_id',$desg_id)->first();
+                        if ($designation) {
+                            $emp->desg_name = $designation->designation_name;
+                        } else {
+                            $emp->desg_name = 'Unknown'; // or any default value you prefer
+                        }
+                        
+                        $dept_id = $emp->tbl_dept_id;
+                        $department = Department::where('tbl_dept_id',$dept_id)->first();
+                        if ($department) {
+                            $emp->dept_name = $department->dept_name;
+                        } else {
+                            $emp->dept_name = 'Unknown'; // or any default value you prefer
+                        }
             
-            $dept_id = $emp->tbl_dept_id;
-            $department = Department::where('tbl_dept_id',$dept_id)->first();
-            if ($department) {
-                $emp->dept_name = $department->dept_name;
-            } else {
-                $emp->dept_name = 'Unknown'; // or any default value you prefer
-            }
-
-            $role_id = $emp->tbl_role_id;
-            $role = Role::where('tbl_role_id',$role_id)->first();
-            if ($role) {
-                $emp->role_name = $role->role_name;
-            } else {
-                $emp->role_name = 'Unknown'; // or any default value you prefer
-            }
-
-        }
+                        $role_id = $emp->tbl_role_id;
+                        $role = Role::where('tbl_role_id',$role_id)->first();
+                        if ($role) {
+                            $emp->role_name = $role->role_name;
+                        } else {
+                            $emp->role_name = 'Unknown'; // or any default value you prefer
+                        }
+            
+                    }
 
     
         return view('frontend_hr.new_employee_registration', compact('emps'));
@@ -95,15 +97,16 @@ class HrController extends Controller
         foreach($designations as $designation){
             $designation->desg_enc_id = EncryptionDecryptionHelper::encdecId($designation->tbl_designation_id, 'encrypt');
         }
+       
 
         $roles = Role::where('flag','show')->get();
         foreach($roles as $role){
             $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
 
+
         //passing data of previous employment details
         $prev_details = PreviousEmploymentDetail::where('tbl_user_id',$dec_id)->get();
-
         foreach($prev_details as $prev_detail)
         {
             $prev_detail->enc_prev_detail_id = EncryptionDecryptionHelper::encdecId($prev_detail->tbl_prev_emp_detail_id,'encrypt');
@@ -130,7 +133,7 @@ class HrController extends Controller
                 }
             }
         }
-        
+
         $ofc_details = OfficialDetail::where('tbl_user_id',$dec_id)->first();
         $stat_details = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
         $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
@@ -139,13 +142,15 @@ class HrController extends Controller
          
         
         return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details]);
+    
+        
     }
 
  
 
     public function storeDetails(Request $request)
     {   
-        dd($request);
+        //dd($request);
     
         
          //get session details
@@ -156,17 +161,21 @@ class HrController extends Controller
          $action = 'decrypt';
          $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
-         $dec_role_id = EncryptionDecryptionHelper::encdecId($request->tbl_role_id,'decrypt');
-         $dec_dept_id = EncryptionDecryptionHelper::encdecId($request->tbl_dept_id,'decrypt');
-         $dec_desg_id = EncryptionDecryptionHelper::encdecId($request->tbl_desg_id,'decrypt');
+         
+         $dec_role_id = EncryptionDecryptionHelper::encdecId($request->role,'decrypt');
+         $dec_dept_id = EncryptionDecryptionHelper::encdecId($request->department,'decrypt');
+         $dec_desg_id = EncryptionDecryptionHelper::encdecId($request->designation,'decrypt');
 
          $user = User::where('tbl_user_id',$dec_id)->first();
          $user->tbl_role_id = $dec_role_id;
          $user->save();
 
-
+         
          //store details into emp table
          $emp = EmployeeDetail::where('tbl_user_id',$dec_id)->first();
+
+         
+
 
          
 
@@ -184,24 +193,32 @@ class HrController extends Controller
          $emp->tbl_dept_id = $dec_dept_id;
          $emp->tbl_designation_id = $dec_desg_id;
          $emp->tbl_role_id = $dec_role_id;
+         $emp->tbl_dept_id = $dec_dept_id;
+         $emp->tbl_designation_id = $dec_desg_id;
+         $emp->tbl_role_id = $dec_role_id;
          $emp->add_by = $userdetails->tbl_user_id;
          $emp->add_date = Date::now()->toDateString();
          $emp->add_time = Date::now()->toTimeString();
          $emp->save();
+ 
         
         
 
          $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
+
+       
+
          $additionalDetails->employment_status = $request->employmentstatus;
          $additionalDetails->technology = $request->technology;
          $additionalDetails->module = $request->module;
-         $additonalDetails->join_date = Date::now()->toDateString(); 
+         $additionalDetails->join_date = Date::now()->toDateString(); 
 
          //store details in official details form
+         $dec_mng_id = EncryptionDecryptionHelper::encdecId($request->selectreportingmanager,'decrypt');
          $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->first();
          $officialDetails->official_email_id = $request->email;
          $officialDetails->work_location = $request->worklocation;
-         $officialDetails->reporting_manager_id = $request->selectreportingmanager;
+         $officialDetails->reporting_manager_id = $dec_mng_id;
          $officialDetails->add_by = $userdetails->tbl_user_id;
          $officialDetails->add_date = Date::now()->toDateString();
          $officialDetails->add_time = Date::now()->toTimeString();
@@ -293,7 +310,9 @@ class HrController extends Controller
     public function basicInfo(Request $request)
     {
 
-        dd($request);
+        
+
+        //dd($request);
            //get session details
 
           $userdetails = session('user');
@@ -304,7 +323,7 @@ class HrController extends Controller
           $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
           $emp = EmployeeDetail::findOrFail($dec_id);
-          dd($emp);
+          //dd($emp);
 
           $emp->emp_code = $request->emp_code;
           $emp->title = $request->title;
@@ -332,6 +351,10 @@ class HrController extends Controller
           foreach ($prev_emps as $prev_emp) {
             // Encode the ID using the helper function
             $prev_emp->encrypted_id = EncryptionDecryptionHelper::encdecId($prev_emp->tbl_prev_emp_detail_id, 'encrypt');
+
+
+
+           
         }
 
           return view('hr.next',compact('enc_id','prev_emps'));
@@ -341,7 +364,7 @@ class HrController extends Controller
     //store prev employment details in the db
     public function storePrevEmpDetails(Request $request)
     {
-        dd($request);
+        //dd($request);
         //get session details
         $userdetails = session('user');
 
@@ -372,14 +395,15 @@ class HrController extends Controller
         $prev_emp_detail = PreviousEmploymentDetail::findOrFail($dec_prev_detail_id);
 
         $prev_emp_detail->delete();
+        return redirect()->back();
 
     }
 
-    // //show official details form
-    // public function officialDetailsForm($enc_id)
-    // {
-    //     return view('hr.official_details_form',['enc_id'=>$enc_id]);
-    // }
+    //show official details form
+    public function officialDetailsForm($enc_id)
+    {
+        return view('hr.official_details_form',['enc_id'=>$enc_id]);
+    }
 
     // public function storeOfficialDetails(Request $request)
     // {
