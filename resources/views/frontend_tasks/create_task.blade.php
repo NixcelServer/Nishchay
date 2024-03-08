@@ -67,11 +67,11 @@
                                     <div class="col-md-6">
                                         
                                         <label class="form-label">Task Description</label>
-                                        <input type="text" class="form-control custom-height" name="task_description" value="">
+                                        <input type="text" class="form-control custom-height" name="task_description" value="" required>
                                     </div>
                                     <div class="form-group">
                     <label for="assigned_to">Assign To</label>
-                    <select class="form-control" id="assigned_to" name="assigned_to">
+                    <select class="form-control" id="assigned_to" name="assigned_to" required>
                         <option value="">Select Employee</option> <!-- Blank option -->
                         @foreach($empsWithModulesAndNames as $item)
                             <option value="{{ $item['enc_user_id'] }}">{{ $item['user_name'] }}</option>
@@ -88,7 +88,7 @@
                                 <div class="row">
                                   <div class="col-md-6">
                                       <label class="form-label">Expected Delivery Date</label>
-                                      <input type="date" class="form-control" name="expected_delivery_date" value="">
+                                      <input type="date" class="form-control" name="expected_delivery_date" value="" required>
                                   </div>
                                   
 

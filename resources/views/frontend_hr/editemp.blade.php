@@ -66,7 +66,9 @@
                                     <input type="hidden" name="enc_id" value="{{ $enc_id }}">
                                         <label class="form-label">EMP Code</label>
                                         <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" required>
-
+                                        @error('empcode')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     {{-- <div class="col-md-4">
 
@@ -304,6 +306,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">UAN No</label>
                                         <input type="text" class="form-control" name="uan_no" value=" {{ $stat_details->uan }} "required>
+                                        @error('uan_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Old EPF No</label>
@@ -534,6 +539,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if($prev_details->isNotEmpty())
                                     @foreach($prev_details as $key => $employee)
                                     <tr style="font-size: 15px;">
                                         <td>{{ $key + 1 }}</td>
@@ -550,6 +556,7 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -670,10 +677,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
-    const deleteButtons = document.querySelectorAll('.toggle-delete-form');
+        const deleteButtons = document.querySelectorAll('.toggle-delete-form');
 
     deleteButtons.forEach(button => {
         button.addEventListener('click', function (event) {
