@@ -104,10 +104,7 @@
               </div>
             </div>
             <div class="col-12 text-left mt-n1">
-              <div class="buttons">
-                  <!-- Button with href link to show Add Task Modal -->
-                  <a href="/Tasks/create_task" class="btn btn-primary">Add New Task</a>
-              </div>
+              
           </div>
             {{-- <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="card">
@@ -138,14 +135,23 @@
             <thead>
                 <tr>
                     <th>Sr. No</th>
-                    <th>Description</th>
-                    <th></th>
-                    <th>Date</th>
-                    <th>View</th>
+                    <th>Activity Name</th>
+                    <th>Activity By</th>
+                    <th>Activity Date</th>
+                    <th>Activity Time</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Table rows will be dynamically added -->
+              @foreach ($auditlogs as $index => $log)
+              <tr>
+                <td>{{ $index+1 }}</td>
+                
+                <td>{{ $log->activity_name}}</td>
+                <td>{{ $log->username}}</td>
+                <td>{{ $log->activity_date}}</td>
+                <td>{{ $log->activity_time}}</td>
+            </tr>  
+            @endforeach
             </tbody>
         </table>
       </div>

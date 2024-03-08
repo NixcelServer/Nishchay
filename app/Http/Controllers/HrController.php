@@ -19,6 +19,7 @@ use App\Models\Role;
 use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
+use Illuminate\Validation\Rule;
 
 
 
@@ -150,7 +151,44 @@ class HrController extends Controller
 
     public function storeDetails(Request $request)
     {   
-        //dd($request);
+
+        $enc_id = $request->input('enc_id');
+        
+        $action = 'decrypt';
+        $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+
+        
+        $rules = [
+            'empcode' => ['required','string',Rule::unique('tbl_emp_details','emp_code')->ignore($dec_id,'tbl_user_id')],
+            'contact_no' => 'required|numeric|digits:10',
+            'gender' => 'required|string',
+            'age' => 'required|numeric',
+            'pincode' => 'required|numeric',
+            'uan_no' => ['required','string',Rule::unique('tbl_epf_essi_details','uan')->ignore($dec_id,'tbl_user_id')],
+            'old_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','old_epf_no')->ignore($dec_id,'tbl_user_id')],
+            'nixcel_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_epf_no')->ignore($dec_id,'tbl_user_id')],
+            'nixcel_essi_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_essi_no')->ignore($dec_id,'tbl_user_id')],
+            'nominee_name' => 'required|string',
+            'relation_with_nominee' => 'required|string',
+            'aadharno' => ['required','numeric','digits:12',Rule::unique('tbl_kyc_details','aadharcard_no')->ignore($dec_id,'tbl_user_id')],
+            'pancardno' => ['required','string','size:10',Rule::unique('tbl_kyc_details','pancard_no')->ignore($dec_id,'tbl_user_id')],
+            'accountno' => ['required','numeric','digits:18',Rule::unique('tbl_bank_details','account_no')->ignore($dec_id,'tbl_user_id')],
+            'actual_gross' => 'required|numeric',
+            'basic' => 'required|numeric',
+            'hra' => 'required|numeric',
+            'medical' => 'required|numeric',
+            'special_allowance' => 'required|numeric',
+            'statutory_bonus' => 'required|numeric',
+            'payable_gross' => 'required|numeric',
+            'pf' => 'required|numeric',
+            'tds' => 'required|numeric',
+            'pt' => 'required|numeric',
+            'net_salary' => 'required|numeric',
+            'ctc' => 'required|numeric'
+        ];
+        
+        $validatedData = $request->validate($rules);
+        
     
         
          //get session details
@@ -297,7 +335,7 @@ class HrController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
         
-        
+        AuditLogHelper::logDetails('Employee Edited',$userdetails->tbl_user_id);
         return redirect('/Employees');
     }
 
@@ -385,6 +423,8 @@ class HrController extends Controller
         $prev_emp->flag ="show";
         $prev_emp->save();
 
+        AuditLogHelper::logDetails('Previous Employment Detail Updated',$userdetails->tbl_user_id);
+
         return redirect()->back();
     }
 
@@ -395,6 +435,9 @@ class HrController extends Controller
         $prev_emp_detail = PreviousEmploymentDetail::findOrFail($dec_prev_detail_id);
 
         $prev_emp_detail->delete();
+
+        AuditLogHelper::logDetails('Previous Employment Detail Deleted',$userdetails->tbl_user_id);
+
         return redirect()->back();
 
     }

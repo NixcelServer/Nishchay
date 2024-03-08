@@ -66,7 +66,9 @@
                                     <input type="hidden" name="enc_id" value="{{ $enc_id }}">
                                         <label class="form-label">EMP Code</label>
                                         <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" required>
-
+                                        @error('empcode')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Title</label><br>
@@ -183,7 +185,7 @@
                                             <option value="">Select Department</option> <!-- Blank option -->
                                             <!-- Add department options here -->
                                             @foreach($depts as $dept)
-                                            <option value="{{ $dept->enc_dept_id }}"{{ $dept->dept_name ? ' selected' : '' }}>{{ $dept->dept_name }}</option>
+                                            <option value="{{ $dept->enc_dept_id }}"{{ $emp->tbl_dept_id == $dept->tbl_dept_id ? ' selected' : '' }}>{{ $dept->dept_name }}</option>
                                         @endforeach                                        
                                         </select>
                                     </div>
@@ -193,7 +195,7 @@
                                             <option value="">Select Designation</option> <!-- Blank option -->
                                             <!-- Add designation options here -->
                                             @foreach($designations as $designation)
-                                            <option value="{{ $designation->desg_enc_id }}"{{ $designation->designation_name ? ' selected' : '' }}>{{ $designation->designation_name }}</option>
+                                            <option value="{{ $designation->desg_enc_id }}"{{ $emp->tbl_designation_id == $designation->tbl_designation_id ? ' selected' : '' }}>{{ $designation->designation_name }}</option>
                                         @endforeach                                            
                                         </select>
                                     </div>
@@ -209,10 +211,13 @@
                                             <option value="">Select Role</option>
                                             <!-- Add role options here -->
                                             @foreach($roles as $role)
-                                            @if($role->role_name !== 'Admin')
-                                            <option value="{{ $role->enc_role_id }}"{{ $role->role_name ? ' selected' : '' }}>{{ $role->role_name }}</option>
-                                             @endif
-                                           @endforeach
+                                                @if($role->role_name !== 'Admin')
+                                                    <option value="{{ $role->enc_role_id }}"{{ $user->tbl_role_id == $role->tbl_role_id ? ' selected' : '' }}>
+                                                        {{ $role->role_name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+
                                         </select>
                                     </div>
                                 </div>
@@ -292,6 +297,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">UAN No</label>
                                         <input type="text" class="form-control" name="uan_no" value=" {{ $stat_details->uan }} "required>
+                                        @error('uan_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Old EPF No</label>
@@ -522,6 +530,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if($prev_details->isNotEmpty())
                                     @foreach($prev_details as $key => $employee)
                                     <tr style="font-size: 15px;">
                                         <td>{{ $key + 1 }}</td>
@@ -530,14 +539,13 @@
                                         <td>{{ $employee->start_date }}</td>
                                         <td>{{ $employee->end_date }}</td>
                                         <td>
-                                            <!-- Add action buttons if needed -->
-                                            <!-- Example: Edit and Delete buttons -->
-                                            {{-- <button class="btn btn-warning btn-sm toggle-edit-form"
-                                                data-employee-id="{{ $employee->id }}">Edit</button> --}}
-                                                <a href="/Employees/deleteprevemploymentdetails/{{ $employee->enc_prev_detail_id }}" class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
-                                        </td>
+                    <!-- Delete button with confirmation -->
+                    <button class="btn btn-danger btn-sm toggle-delete-form" 
+                            data-encrypted-id="{{ $employee->enc_prev_detail_id }}">Delete</button>
+                </td>
                                     </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -658,37 +666,36 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-
     document.addEventListener('DOMContentLoaded', function () {
-    const deleteButtons = document.querySelectorAll('.toggle-delete-form');
+        const deleteButtons = document.querySelectorAll('.toggle-delete-form');
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent default behavior of the click event
-            const employeeId = button.getAttribute('data-employee-id');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default behavior of the click event
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You want to delete this Details?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Here you need to get the encrypted ID for deletion
-                    // You can use a data attribute on the button or any other method to get it
-                    const encryptedId = button.getAttribute('data-encrypted-id');
-                    window.location.href = "/Employees/deleteprevemploymentdetails/{{ $employee->enc_prev_detail_id }}" + encryptedId;
-                }
+                const encryptedId = button.getAttribute('data-encrypted-id');
+                const url = "/Employees/deleteprevemploymentdetails/" + encryptedId;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to delete this Details?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
             });
         });
     });
-});
-
-
 </script>
 </body>
 </html>
