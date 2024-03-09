@@ -62,7 +62,6 @@
                             <div class="form-line">
                                 <div class="row">
                                     <div class="col-md-4">
-
                                     <input type="hidden" name="enc_id" value="{{ $enc_id }}">
                                         <label class="form-label">EMP Code</label>
                                         <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" required>
@@ -70,13 +69,11 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    {{-- <div class="col-md-4">
-
-                                        <input type="hidden" name="enc_id" value=" ">
-                                            <label class="form-label">Offer Letter No</label>
-                                            <input type="text" class="form-control" name="empcode" value=" " required>
-    
-                                        </div> --}}
+                                    <div class="col-md-4">
+                                        <label class="form-label">Offer Letter No</label>
+                                        <input type="text" class="form-control" name="offer_letter_no" value=" {{ $emp->offer_letter_no }} " required>                                        
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <label class="form-label">Title</label><br>
                                         <input type="radio" id="mr" name="title" value="Mr">
@@ -120,6 +117,9 @@
                                         <label class="form-label">Contact No</label>
 
                                         <input type="text" class="form-control" name="contact_no" value="{{ $emp->contact_no }}"required>
+                                        @error('contact_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
 
                                     </div>
                                     <div class="col-md-4">
@@ -130,6 +130,9 @@
                                             <option value="Female">Female</option>
                                             <option value="Other">Other</option>
                                         </select>
+                                        @error('gender')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                   </div>
@@ -145,6 +148,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Current Age</label>
                                         <input type="text" class="form-control" name="age" value="{{ $emp->current_age }}"required>
+                                        @error('age')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Country</label>
@@ -173,6 +179,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Pincode</label>
                                         <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}"required>
+                                        @error('pincode')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                   </div>
@@ -199,12 +208,11 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Select Designation</label>
                                         <select class="form-control" name="designation">
-                                            {{-- Add designation options here --}}
+                                            <option value="">Select Designation</option> <!-- Blank option -->
+                                            <!-- Add designation options here -->
                                             @foreach($designations as $designation)
-                                                <option value="{{ $designation->desg_enc_id }}" {{ $emp->tbl_designation_id == $designation->tbl_designation_id ? 'selected' : '' }}>
-                                                    {{ $designation->designation_name }}
-                                                </option>
-                                            @endforeach
+                                            <option value="{{ $designation->desg_enc_id }}"{{ $emp->tbl_designation_id == $designation->tbl_designation_id ? ' selected' : '' }}>{{ $designation->designation_name }}</option>
+                                        @endforeach                                            
                                         </select>
                                     </div>
                                     
@@ -267,7 +275,9 @@
                                             <option value="{{ $ofc_details->reporting_manager_id }}">Select Reporting Manager</option> <!-- Blank option -->
                                             <!-- Add reporting manager options here -->
                                             @foreach($managers as $manager)
-                                                <option value="{{ $manager ['user_enc_id'] }}">{{ $manager ['user_name'] }}</option>
+                                            <option value="{{ $manager['user_enc_id'] }}" {{ $ofc_details->reporting_manager_id == $manager['reporting_manager_id'] ? 'selected' : '' }}>
+                                            {{ $manager['user_name'] }}
+                                             </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -313,10 +323,16 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Old EPF No</label>
                                         <input type="text" class="form-control" name="old_epf_no" value=" {{ $stat_details->old_epf_no }} "required>
+                                        @error('old_epf_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Nixcel EPF No</label>
                                         <input type="text" class="form-control" name="nixcel_epf_no" value=" {{ $stat_details->nixcel_epf_no }} "required>
+                                        @error('nixcel_epf_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -327,14 +343,23 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Nixcel ESSI No</label>
                                         <input type="text" class="form-control" name="nixcel_essi_no" value=" {{ $stat_details->nixcel_essi_no }} "required>
+                                        @error('nixcel_essi_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Nominee Name</label>
                                         <input type="text" class="form-control" name="nominee_name" value=" {{ $stat_details->nominee_name }} "required>
+                                        @error('nominee_name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Relation With Nominee</label>
                                         <input type="text" class="form-control" name="relation_with_nominee" value=" {{ $stat_details->relation_with_nominee }} "required>
+                                        @error('relation_with_nominee')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -350,11 +375,17 @@
                                         <label class="form-label">Adhaar No</label>
 
                                         <input type="text" class="form-control" name="aadharno" value=" {{ $kyc_details->aadharcard_no  }} "required>
+                                        @error('aadharno')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
 
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Pancard No</label>
                                         <input type="text" class="form-control" name="pancardno" value=" {{ $kyc_details->pancard_no  }} "required>
+                                        @error('pancardno')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Bank Name</label>
@@ -389,6 +420,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Account No</label>
                                         <input type="text" class="form-control" name="accountno" value=" {{ $bank_details->account_no  }} "required>
+                                        @error('accountno')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -403,56 +437,92 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Actual Gross</label>
                                         <input type="text" class="form-control" name="actual_gross" value=" {{ $sal_details->actual_gross  }} "required>
+                                        @error('actual_gross')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Basic</label>
                                         <input type="text" class="form-control" name="basic" value=" {{ $sal_details->basic  }} "required>
+                                        @error('basic')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">HRA</label>
                                         <input type="text" class="form-control" name="hra" value=" {{ $sal_details->hra  }} "required>
+                                        @error('hra')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">Medical</label>
                                         <input type="text" class="form-control" name="medical" value=" {{ $sal_details->medical_allowance  }} ">
+                                        @error('medical')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Special Allowance</label>
                                         <input type="text" class="form-control" name="special_allowance" value=" {{ $sal_details->special_allowance  }} ">
+                                        @error('special_allowance')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Statutory Bonus</label>
                                         <input type="text" class="form-control" name="statutory_bonus" value=" {{ $sal_details->statutory_bonus  }} ">
+                                        @error('statutory_bonus')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">Payable Gross</label>
                                         <input type="text" class="form-control" name="payable_gross" value=" {{ $sal_details->payable_gross_salary  }} ">
+                                        @error('payable_gross')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">PF</label>
                                         <input type="text" class="form-control" name="pf" value=" {{ $sal_details->pf  }} "required>
+                                        @error('pf')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">TDS</label>
                                         <input type="text" class="form-control" name="tds" value=" {{ $sal_details->tds  }} "required>
+                                        @error('tds')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">PT</label>
                                         <input type="text" class="form-control" name="pt" value=" {{ $sal_details->pt  }} "required>
+                                        @error('pt')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Net Salary</label>
                                         <input type="text" class="form-control" name="net_salary" value=" {{ $sal_details->net_salary  }} "required>
+                                        @error('net_salary')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">CTC</label>
                                         <input type="text" class="form-control" name="ctc" value=" {{ $sal_details->ctc  }} "required>
+                                        @error('ctc')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>

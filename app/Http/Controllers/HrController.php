@@ -20,6 +20,9 @@ use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
 use Illuminate\Validation\Rule;
+//use App\Models\AuditLogHelper;
+use App\Helpers\AuditLogHelper;
+
 
 
 
@@ -126,8 +129,10 @@ class HrController extends Controller
                 foreach ($user_details as $user_detail) {
                     $user_enc_id = EncryptionDecryptionHelper::encdecId($user_detail->tbl_user_id, 'encrypt');
                     $user_name = $user_detail->first_name . " " . $user_detail->last_name;
+                    $user_id = $user_detail->tbl_user_id;
         
                     $managers[] = [
+                        'reporting_manager_id' => $user_id,
                         'user_enc_id' => $user_enc_id,
                         'user_name' => $user_name,
                     ];
@@ -435,6 +440,8 @@ class HrController extends Controller
         $prev_emp_detail = PreviousEmploymentDetail::findOrFail($dec_prev_detail_id);
 
         $prev_emp_detail->delete();
+
+        $userdetails =session('user');
 
         AuditLogHelper::logDetails('Previous Employment Detail Deleted',$userdetails->tbl_user_id);
 
