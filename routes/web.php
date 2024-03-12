@@ -41,7 +41,7 @@ Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
     //if admin logs in show him admin dashboard
-     Route::get('/dashboard',[AdminController::class,'dashboard']);
+     //Route::get('/dashboard',[AdminController::class,'dashboard']);
      //if admin clicks on user in left menu
      Route::get('/users',[AdminController::class,'showUsers']);
      //admin clicks on create new user button

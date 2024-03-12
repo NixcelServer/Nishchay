@@ -157,6 +157,18 @@ class TaskController extends Controller
         
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+        $actionsOnTask = TaskActionDetail::where('tbl_task_detail_id',$dec_task_id)->get();
+        if($deleteTask){
+            if($actionsOnTask->isEmpty()){
+                $deleteTask = true;
+            }
+            else{
+                $deleteTask = false;
+            }
+
+        }
+        
+
 
         
         
