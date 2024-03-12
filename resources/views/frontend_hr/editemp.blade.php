@@ -40,6 +40,28 @@
         background-color: #bcdafd; /* Background color for the table */
     }
 </style>
+<style>
+    /* Rounded corners for input boxes */
+    .form-control {
+        border-radius: 15px; /* Adjust the value as needed */
+    }
+
+    /* Radio button styling */
+    input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    /* Error message styling */
+    .text-danger {
+        color: #ff0000; /* Red color for error messages */
+        font-size: 14px; /* Adjust the font size as needed */
+    }
+
+    /* Styling for select elements */
+    select.form-control {
+        border-radius: 15px; /* Rounded corners for select elements */
+    }
+</style>
 <body>
       <!-- Main Content -->
       <div class="main-content">
@@ -97,7 +119,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Middle Name</label>
-                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}"required>
+                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Last Name</label>
@@ -178,7 +200,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Pincode</label>
-                                        <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}"required>
+                                        <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}" required pattern="\d{6}">
+                                        
                                         @error('pincode')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -530,9 +553,6 @@
 
                         <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/storeempdetails">Submit</button>
                     </fieldset>
-                   
- 
-
                     </form>
                   </div>
                 </div>
@@ -547,114 +567,85 @@
 
        <section class="section">
         <div class="section-body">
-          <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Edit Employee Details</h4>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 style="color: white;">Edit Employee Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="wizard_with_validation" method="POST">
+                                @csrf
+                                <h5 style="color: black;">Previous Employee Details</h5>
+                                <fieldset>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="hidden" name="enc_id" value="{{ $enc_id }}">
+                                                    <label class="form-label">Company Name</label>
+                                                    <input type="text" class="form-control" name="company_name" value="{{ $emp->company_name }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Designation</label>
+                                                    <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Start Date</label>
+                                                    <input type="date" class="form-control" name="start_date" value="{{ $emp->start_date }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">End Date</label>
+                                                    <input type="date" class="form-control" name="end_date" value="{{ $emp->end_date }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover" id="previous-employees">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr. No</th>
+                                                    <th>Company Name</th>
+                                                    <th>Designation</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if($prev_details->isNotEmpty())
+                                                    @foreach($prev_details as $key => $employee)
+                                                        <tr style="font-size: 15px;">
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $employee->company_name }}</td>
+                                                            <td>{{ $employee->designation }}</td>
+                                                            <td>{{ $employee->start_date }}</td>
+                                                            <td>{{ $employee->end_date }}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                  <form id="wizard_with_validation" method="POST">
-                      @csrf
-
-                      <h5 style="color: black;">Previous Employee Details</h5>
-                    <fieldset>
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <input type="hidden" name="enc_id" value="{{ $enc_id }}">
-
-                                      <label class="form-label">Company Name</label>
-                                      <input type="text" class="form-control" name="company_name" value="{{ $emp->company_name }}">
-                                  </div>
-                                  <div class="col-md-6">
-                                      <label class="form-label">Designation</label>
-                                      <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
-                                  </div>
-
-                                </div>
-                            </div>
-                        </div>
-                   
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                      <label class="form-label">Start Date</label>
-                                      <input type="date" class="form-control" name="start_date" value="{{ $emp->start_date }}">
-                                  </div>
-                                  <div class="col-md-6">
-                                      <label class="form-label">End Date</label>
-                                      <input type="date" class="form-control" name="end_date" value="{{ $emp->end_date }}">
-                                  </div>
-
-                                 
-                                </div>
-                            </div>
-                        </div>
-                   
-                        <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
-                   
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="previous-employees" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No</th>
-                                        <th>Company Name</th>
-                                        <th>Designation</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Action</th> <!-- Add action column if needed -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if($prev_details->isNotEmpty())
-                                    @foreach($prev_details as $key => $employee)
-                                    <tr style="font-size: 15px;">
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $employee->company_name }}</td>
-                                        <td>{{ $employee->designation }}</td>
-                                        <td>{{ $employee->start_date }}</td>
-                                        <td>{{ $employee->end_date }}</td>
-                                        <td>
-                                            <!-- Add action buttons if needed -->
-                                            <!-- Example: Edit and Delete buttons -->
-                                            {{-- <button class="btn btn-warning btn-sm toggle-edit-form"
-                                                data-employee-id="{{ $employee->id }}">Edit</button> --}}
-                                                <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                    </fieldset>                    
-                   
-                   
-                    <!-- Include jQuery and jQuery UI libraries here -->
-                       
-                    <script>
-                      // jQuery Datepicker initialization
-                      $(document).ready(function(){
-                          $('.datepicker').datepicker({
-                              format: 'yyyy-mm-dd',
-                              autoclose: true
-                          });
-                      });
-                  </script>
-
-                  </form>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-        
-      </section>
- 
+        </div>  
+    </section>
       </div>
  
       <script>
