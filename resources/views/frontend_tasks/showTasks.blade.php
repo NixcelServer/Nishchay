@@ -32,8 +32,11 @@
 
 <body>
       <!-- Main Content -->
+      
       <div class="main-content">
           <div class="row ">
+          @if(isset($reassignTask))
+                        @if ($reassignTask)
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="card">
                 <div class="card-statistic-4">
@@ -41,12 +44,10 @@
                     <div class="row ">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                         <div class="card-content">
-                        @if(isset($reassignTask))
-                        @if ($reassignTask)
+                        
                             <!-- Display button for Manager -->
                             <h5 class="font-15"><a href="/Tasks/showreassignedtask" class="manager-button-link" style="color: black;">Task Approval</a></h5>
-                        @endif    
-                        @endif
+                        
                             <!-- Display button for non-Manager roles -->
                            
                         
@@ -64,7 +65,8 @@
                 </div>
               </div>
             </div>
-
+            @endif    
+                        @endif
 
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="card">
@@ -137,6 +139,67 @@
                 </div>
               </div>
             </div>
+
+            
+            @if(isset($showTasksButton))
+    @if ($showTasksButton)
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="card">
+                <div class="card-statistic-4">
+                    <div class="align-items-center justify-content-between">
+                        <div class="row ">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                                <div class="card-content">
+                                    <!-- Display button for Manager -->
+                                    <h5 class="font-15"><a href="/Tasks/created/tasks" class="manager-button-link" style="color: black;">Show Tasks</a></h5>
+                                    <!-- Display button for non-Manager roles -->
+                                    <h2 class="mb-3 font-18"></h2>
+                                    {{-- <p class="mb-0"><span class="col-green">10%</span> Increase</p> --}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                                <div class="banner-img">
+                                    <img src="/assets/img/banner/1.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+@endif
+
+@if(isset($myTasksButton))
+@if($myTasksButton)
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="card">
+                <div class="card-statistic-4">
+                    <div class="align-items-center justify-content-between">
+                        <div class="row ">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                                <div class="card-content">
+                                    <!-- Display button for Manager -->
+                                    <h5 class="font-15"><a href="/Tasks/storevalue" class="manager-button-link" style="color: black;">My Tasks</a></h5>
+                                    <!-- Display button for non-Manager roles -->
+                                    <h2 class="mb-3 font-18"></h2>
+                                    {{-- <p class="mb-0"><span class="col-green">10%</span> Increase</p> --}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                                <div class="banner-img">
+                                    <img src="/assets/img/banner/1.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    @endif
+
+
             @if(isset($createNewTask))
             @if($createNewTask)
             <div class="col-12 text-left mt-n1">

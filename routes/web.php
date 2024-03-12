@@ -194,6 +194,14 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
      Route::post('/reassigntask',[TaskController::class,'reassignTask']);
 
+     Route::get('/created/tasks',[TaskController::class,'showCreatedTasks']);
+
+     //Route::get('/created/tasks',[TaskController::class,'showPendingTasks']);
+
+     Route::get('/storevalue',[TaskController::class,'redirectToMyTask']);
+
+     Route::get('/redirecttoshowtask',[TaskController::class,'redirectToShowTask']);
+
 
 });
 

@@ -309,8 +309,10 @@ class AdminController extends Controller
          $official_detail->save();
  
          $prev_emp_detail = PreviousEmploymentDetail::find($dec_id);
+         if($prev_emp_detail !== null){
          $prev_emp_detail->flag = "deleted";
          $prev_emp_detail->save();
+         }
  
          $sal = SalaryStructureDetail::find($dec_id);
          $sal->flag = "deleted";
@@ -328,7 +330,7 @@ class AdminController extends Controller
  
      public function auditlogDetails()
      {
-       $auditlogs = AuditLogDetail::all();
+       $auditlogs = AuditLogDetail::orderBy();
 
        foreach($auditlogs as $auditlog){
         

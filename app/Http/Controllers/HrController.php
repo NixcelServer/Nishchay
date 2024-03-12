@@ -20,6 +20,7 @@ use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
 use Illuminate\Validation\Rule;
+use App\Helpers\AuditLogHelper;
 
 
 
@@ -126,8 +127,10 @@ class HrController extends Controller
                 foreach ($user_details as $user_detail) {
                     $user_enc_id = EncryptionDecryptionHelper::encdecId($user_detail->tbl_user_id, 'encrypt');
                     $user_name = $user_detail->first_name . " " . $user_detail->last_name;
+                    $user_id = $user_detail->tbl_user_id;
         
                     $managers[] = [
+                        'reporting_manager_id' => $user_id,
                         'user_enc_id' => $user_enc_id,
                         'user_name' => $user_name,
                     ];
@@ -135,6 +138,14 @@ class HrController extends Controller
             }
         }
 
+        $mng_id = officialDetail::where('tbl_user_id',$dec_id)->value('reporting_manager_id');
+        $userinfo = User::where('tbl_user_id',$mng_id)->first();
+
+        $mng_name = '';
+        if($userinfo){
+        $mng_name = $userinfo->first_name . " " . $userinfo->last_name;
+        }
+        
         $ofc_details = OfficialDetail::where('tbl_user_id',$dec_id)->first();
         $stat_details = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
         $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
@@ -142,7 +153,7 @@ class HrController extends Controller
         $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name]);
     
         
     }
@@ -158,36 +169,36 @@ class HrController extends Controller
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
         
-        $rules = [
-            'empcode' => ['required','string',Rule::unique('tbl_emp_details','emp_code')->ignore($dec_id,'tbl_user_id')],
-            'contact_no' => 'required|numeric|digits:10',
-            'gender' => 'required|string',
-            'age' => 'required|numeric',
-            'pincode' => 'required|numeric',
-            'uan_no' => ['required','string',Rule::unique('tbl_epf_essi_details','uan')->ignore($dec_id,'tbl_user_id')],
-            'old_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','old_epf_no')->ignore($dec_id,'tbl_user_id')],
-            'nixcel_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_epf_no')->ignore($dec_id,'tbl_user_id')],
-            'nixcel_essi_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_essi_no')->ignore($dec_id,'tbl_user_id')],
-            'nominee_name' => 'required|string',
-            'relation_with_nominee' => 'required|string',
-            'aadharno' => ['required','numeric','digits:12',Rule::unique('tbl_kyc_details','aadharcard_no')->ignore($dec_id,'tbl_user_id')],
-            'pancardno' => ['required','string','size:10',Rule::unique('tbl_kyc_details','pancard_no')->ignore($dec_id,'tbl_user_id')],
-            'accountno' => ['required','numeric','digits:18',Rule::unique('tbl_bank_details','account_no')->ignore($dec_id,'tbl_user_id')],
-            'actual_gross' => 'required|numeric',
-            'basic' => 'required|numeric',
-            'hra' => 'required|numeric',
-            'medical' => 'required|numeric',
-            'special_allowance' => 'required|numeric',
-            'statutory_bonus' => 'required|numeric',
-            'payable_gross' => 'required|numeric',
-            'pf' => 'required|numeric',
-            'tds' => 'required|numeric',
-            'pt' => 'required|numeric',
-            'net_salary' => 'required|numeric',
-            'ctc' => 'required|numeric'
-        ];
+        // $rules = [
+        //     'empcode' => ['required','string',Rule::unique('tbl_emp_details','emp_code')->ignore($dec_id,'tbl_user_id')],
+        //     'contact_no' => 'required|numeric|digits:10',
+        //     'gender' => 'required|string',
+        //     'age' => 'required|numeric',
+        //     'pincode' => 'required|numeric',
+        //     'uan_no' => ['required','string',Rule::unique('tbl_epf_essi_details','uan')->ignore($dec_id,'tbl_user_id')],
+        //     'old_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','old_epf_no')->ignore($dec_id,'tbl_user_id')],
+        //     'nixcel_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_epf_no')->ignore($dec_id,'tbl_user_id')],
+        //     'nixcel_essi_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_essi_no')->ignore($dec_id,'tbl_user_id')],
+        //     'nominee_name' => 'required|string',
+        //     'relation_with_nominee' => 'required|string',
+        //     'aadharno' => ['required','numeric','digits:12',Rule::unique('tbl_kyc_details','aadharcard_no')->ignore($dec_id,'tbl_user_id')],
+        //     'pancardno' => ['required','string','size:10',Rule::unique('tbl_kyc_details','pancard_no')->ignore($dec_id,'tbl_user_id')],
+        //     'accountno' => ['required','numeric','digits:18',Rule::unique('tbl_bank_details','account_no')->ignore($dec_id,'tbl_user_id')],
+        //     'actual_gross' => 'required|numeric',
+        //     'basic' => 'required|numeric',
+        //     'hra' => 'required|numeric',
+        //     'medical' => 'required|numeric',
+        //     'special_allowance' => 'required|numeric',
+        //     'statutory_bonus' => 'required|numeric',
+        //     'payable_gross' => 'required|numeric',
+        //     'pf' => 'required|numeric',
+        //     'tds' => 'required|numeric',
+        //     'pt' => 'required|numeric',
+        //     'net_salary' => 'required|numeric',
+        //     'ctc' => 'required|numeric'
+        // ];
         
-        $validatedData = $request->validate($rules);
+        // $validatedData = $request->validate($rules);
         
     
         
