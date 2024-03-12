@@ -20,6 +20,9 @@ use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
 use Illuminate\Validation\Rule;
+//use App\Models\AuditLogHelper;
+use App\Helpers\AuditLogHelper;
+
 
 
 
@@ -126,8 +129,10 @@ class HrController extends Controller
                 foreach ($user_details as $user_detail) {
                     $user_enc_id = EncryptionDecryptionHelper::encdecId($user_detail->tbl_user_id, 'encrypt');
                     $user_name = $user_detail->first_name . " " . $user_detail->last_name;
+                    $user_id = $user_detail->tbl_user_id;
         
                     $managers[] = [
+                        'reporting_manager_id' => $user_id,
                         'user_enc_id' => $user_enc_id,
                         'user_name' => $user_name,
                     ];
@@ -163,7 +168,7 @@ class HrController extends Controller
             'contact_no' => 'required|numeric|digits:10',
             'gender' => 'required|string',
             'age' => 'required|numeric',
-            'pincode' => 'required|numeric',
+            'pincode' => 'required|digits:6',
             'uan_no' => ['required','string',Rule::unique('tbl_epf_essi_details','uan')->ignore($dec_id,'tbl_user_id')],
             'old_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','old_epf_no')->ignore($dec_id,'tbl_user_id')],
             'nixcel_epf_no' => ['required','string',Rule::unique('tbl_epf_essi_details','nixcel_epf_no')->ignore($dec_id,'tbl_user_id')],
@@ -172,7 +177,7 @@ class HrController extends Controller
             'relation_with_nominee' => 'required|string',
             'aadharno' => ['required','numeric','digits:12',Rule::unique('tbl_kyc_details','aadharcard_no')->ignore($dec_id,'tbl_user_id')],
             'pancardno' => ['required','string','size:10',Rule::unique('tbl_kyc_details','pancard_no')->ignore($dec_id,'tbl_user_id')],
-            'accountno' => ['required','numeric','digits:18',Rule::unique('tbl_bank_details','account_no')->ignore($dec_id,'tbl_user_id')],
+            'accountno' => ['required','numeric','digits:12',Rule::unique('tbl_bank_details','account_no')->ignore($dec_id,'tbl_user_id')],
             'actual_gross' => 'required|numeric',
             'basic' => 'required|numeric',
             'hra' => 'required|numeric',
@@ -435,6 +440,8 @@ class HrController extends Controller
         $prev_emp_detail = PreviousEmploymentDetail::findOrFail($dec_prev_detail_id);
 
         $prev_emp_detail->delete();
+
+        $userdetails =session('user');
 
         AuditLogHelper::logDetails('Previous Employment Detail Deleted',$userdetails->tbl_user_id);
 

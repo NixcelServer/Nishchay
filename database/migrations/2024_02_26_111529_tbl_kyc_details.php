@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tbl_kyc_details', function (Blueprint $table) {
             $table->id('tbl_kyc_detail_id');
-            $table->string('aadharcard_no', 12)->unique()->required();
+            $table->bigInteger('aadharcard_no', 12)->unique()->required();
             $table->string('pancard_no', 10)->unique()->required();
             $table->integer('add_by')->nullable();
             $table->date('add_date')->nullable();

@@ -40,6 +40,28 @@
         background-color: #bcdafd; /* Background color for the table */
     }
 </style>
+<style>
+    /* Rounded corners for input boxes */
+    .form-control {
+        border-radius: 15px; /* Adjust the value as needed */
+    }
+
+    /* Radio button styling */
+    input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    /* Error message styling */
+    .text-danger {
+        color: #ff0000; /* Red color for error messages */
+        font-size: 14px; /* Adjust the font size as needed */
+    }
+
+    /* Styling for select elements */
+    select.form-control {
+        border-radius: 15px; /* Rounded corners for select elements */
+    }
+</style>
 <body>
       <!-- Main Content -->
       <div class="main-content">
@@ -62,7 +84,6 @@
                             <div class="form-line">
                                 <div class="row">
                                     <div class="col-md-4">
-
                                     <input type="hidden" name="enc_id" value="{{ $enc_id }}">
                                         <label class="form-label">EMP Code</label>
                                         <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" required>
@@ -70,6 +91,11 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Offer Letter No</label>
+                                        <input type="text" class="form-control" name="offer_letter_no" value=" {{ $emp->offer_letter_no }} " required>                                        
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <label class="form-label">Title</label><br>
                                         <input type="radio" id="mr" name="title" value="Mr">
@@ -93,7 +119,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Middle Name</label>
-                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}"required>
+                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Last Name</label>
@@ -113,6 +139,9 @@
                                         <label class="form-label">Contact No</label>
 
                                         <input type="text" class="form-control" name="contact_no" value="{{ $emp->contact_no }}"required>
+                                        @error('contact_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
 
                                     </div>
                                     <div class="col-md-4">
@@ -123,6 +152,9 @@
                                             <option value="Female">Female</option>
                                             <option value="Other">Other</option>
                                         </select>
+                                        @error('gender')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                   </div>
@@ -138,6 +170,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Current Age</label>
                                         <input type="text" class="form-control" name="age" value="{{ $emp->current_age }}"required>
+                                        @error('age')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Country</label>
@@ -165,7 +200,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Pincode</label>
-                                        <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}"required>
+                                        <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}" required pattern="\d{6}">
+                                        
+                                        @error('pincode')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                   </div>
@@ -185,8 +224,8 @@
                                             <option value="">Select Department</option> <!-- Blank option -->
                                             <!-- Add department options here -->
                                             @foreach($depts as $dept)
-                                            <option value="{{ $dept->enc_dept_id }}"{{ $emp->tbl_dept_id == $dept->tbl_dept_id ? ' selected' : '' }}>{{ $dept->dept_name }}</option>
-                                        @endforeach                                        
+                                                <option value="{{ $dept->enc_dept_id }}"{{ $emp->tbl_dept_id == $dept->tbl_dept_id ? 'selected' : '' }}>{{ $dept->dept_name }}</option>
+                                            @endforeach                                        
                                         </select>
                                     </div>
                                     <div class="col-md-4">
@@ -199,6 +238,7 @@
                                         @endforeach                                            
                                         </select>
                                     </div>
+                                    
                                   </div>
                               </div>
                           </div>
@@ -208,18 +248,18 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Select Role</label>
                                         <select class="form-control" name="role">
-                                            <option value="">Select Role</option>
+                                            {{-- <option value="">Select Role</option> --}}
                                             <!-- Add role options here -->
                                             @foreach($roles as $role)
                                                 @if($role->role_name !== 'Admin')
-                                                    <option value="{{ $role->enc_role_id }}"{{ $user->tbl_role_id == $role->tbl_role_id ? ' selected' : '' }}>
+                                                    <option value="{{ $role->enc_role_id }}"{{ $emp->tbl_role_id == $role->tbl_role_id ? ' selected' : '' }}>
                                                         {{ $role->role_name }}
                                                     </option>
                                                 @endif
-                                            @endforeach
-
+                                            @endforeach                                           
                                         </select>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -258,7 +298,9 @@
                                             <option value="{{ $ofc_details->reporting_manager_id }}">Select Reporting Manager</option> <!-- Blank option -->
                                             <!-- Add reporting manager options here -->
                                             @foreach($managers as $manager)
-                                                <option value="{{ $manager ['user_enc_id'] }}">{{ $manager ['user_name'] }}</option>
+                                            <option value="{{ $manager['user_enc_id'] }}" {{ $ofc_details->reporting_manager_id == $manager['reporting_manager_id'] ? 'selected' : '' }}>
+                                            {{ $manager['user_name'] }}
+                                             </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -304,10 +346,16 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Old EPF No</label>
                                         <input type="text" class="form-control" name="old_epf_no" value=" {{ $stat_details->old_epf_no }} "required>
+                                        @error('old_epf_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Nixcel EPF No</label>
                                         <input type="text" class="form-control" name="nixcel_epf_no" value=" {{ $stat_details->nixcel_epf_no }} "required>
+                                        @error('nixcel_epf_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -318,14 +366,23 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Nixcel ESSI No</label>
                                         <input type="text" class="form-control" name="nixcel_essi_no" value=" {{ $stat_details->nixcel_essi_no }} "required>
+                                        @error('nixcel_essi_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Nominee Name</label>
                                         <input type="text" class="form-control" name="nominee_name" value=" {{ $stat_details->nominee_name }} "required>
+                                        @error('nominee_name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Relation With Nominee</label>
                                         <input type="text" class="form-control" name="relation_with_nominee" value=" {{ $stat_details->relation_with_nominee }} "required>
+                                        @error('relation_with_nominee')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -341,11 +398,17 @@
                                         <label class="form-label">Adhaar No</label>
 
                                         <input type="text" class="form-control" name="aadharno" value=" {{ $kyc_details->aadharcard_no  }} "required>
+                                        @error('aadharno')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
 
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Pancard No</label>
                                         <input type="text" class="form-control" name="pancardno" value=" {{ $kyc_details->pancard_no  }} "required>
+                                        @error('pancardno')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Bank Name</label>
@@ -380,6 +443,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Account No</label>
                                         <input type="text" class="form-control" name="accountno" value=" {{ $bank_details->account_no  }} "required>
+                                        @error('accountno')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -394,56 +460,92 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Actual Gross</label>
                                         <input type="text" class="form-control" name="actual_gross" value=" {{ $sal_details->actual_gross  }} "required>
+                                        @error('actual_gross')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Basic</label>
                                         <input type="text" class="form-control" name="basic" value=" {{ $sal_details->basic  }} "required>
+                                        @error('basic')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">HRA</label>
                                         <input type="text" class="form-control" name="hra" value=" {{ $sal_details->hra  }} "required>
+                                        @error('hra')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">Medical</label>
                                         <input type="text" class="form-control" name="medical" value=" {{ $sal_details->medical_allowance  }} ">
+                                        @error('medical')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Special Allowance</label>
                                         <input type="text" class="form-control" name="special_allowance" value=" {{ $sal_details->special_allowance  }} ">
+                                        @error('special_allowance')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Statutory Bonus</label>
                                         <input type="text" class="form-control" name="statutory_bonus" value=" {{ $sal_details->statutory_bonus  }} ">
+                                        @error('statutory_bonus')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">Payable Gross</label>
                                         <input type="text" class="form-control" name="payable_gross" value=" {{ $sal_details->payable_gross_salary  }} ">
+                                        @error('payable_gross')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">PF</label>
                                         <input type="text" class="form-control" name="pf" value=" {{ $sal_details->pf  }} "required>
+                                        @error('pf')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">TDS</label>
                                         <input type="text" class="form-control" name="tds" value=" {{ $sal_details->tds  }} "required>
+                                        @error('tds')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">PT</label>
                                         <input type="text" class="form-control" name="pt" value=" {{ $sal_details->pt  }} "required>
+                                        @error('pt')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Net Salary</label>
                                         <input type="text" class="form-control" name="net_salary" value=" {{ $sal_details->net_salary  }} "required>
+                                        @error('net_salary')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">CTC</label>
                                         <input type="text" class="form-control" name="ctc" value=" {{ $sal_details->ctc  }} "required>
+                                        @error('ctc')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -451,9 +553,6 @@
 
                         <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/storeempdetails">Submit</button>
                     </fieldset>
-                   
- 
-
                     </form>
                   </div>
                 </div>
@@ -468,112 +567,85 @@
 
        <section class="section">
         <div class="section-body">
-          <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Edit Employee Details</h4>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 style="color: white;">Edit Employee Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="wizard_with_validation" method="POST">
+                                @csrf
+                                <h5 style="color: black;">Previous Employee Details</h5>
+                                <fieldset>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="hidden" name="enc_id" value="{{ $enc_id }}">
+                                                    <label class="form-label">Company Name</label>
+                                                    <input type="text" class="form-control" name="company_name" value="{{ $emp->company_name }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Designation</label>
+                                                    <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Start Date</label>
+                                                    <input type="date" class="form-control" name="start_date" value="{{ $emp->start_date }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">End Date</label>
+                                                    <input type="date" class="form-control" name="end_date" value="{{ $emp->end_date }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover" id="previous-employees">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr. No</th>
+                                                    <th>Company Name</th>
+                                                    <th>Designation</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if($prev_details->isNotEmpty())
+                                                    @foreach($prev_details as $key => $employee)
+                                                        <tr style="font-size: 15px;">
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $employee->company_name }}</td>
+                                                            <td>{{ $employee->designation }}</td>
+                                                            <td>{{ $employee->start_date }}</td>
+                                                            <td>{{ $employee->end_date }}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                  <form id="wizard_with_validation" method="POST">
-                      @csrf
-
-                      <h5 style="color: black;">Previous Employee Details</h5>
-                    <fieldset>
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <input type="hidden" name="enc_id" value="{{ $enc_id }}">
-
-                                      <label class="form-label">Company Name</label>
-                                      <input type="text" class="form-control" name="company_name" value="{{ $emp->company_name }}">
-                                  </div>
-                                  <div class="col-md-6">
-                                      <label class="form-label">Designation</label>
-                                      <input type="text" class="form-control" name="designation" value="{{ $emp->designation }}">
-                                  </div>
-
-                                </div>
-                            </div>
-                        </div>
-                   
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                      <label class="form-label">Start Date</label>
-                                      <input type="date" class="form-control" name="start_date" value="{{ $emp->start_date }}">
-                                  </div>
-                                  <div class="col-md-6">
-                                      <label class="form-label">End Date</label>
-                                      <input type="date" class="form-control" name="end_date" value="{{ $emp->end_date }}">
-                                  </div>
-
-                                 
-                                </div>
-                            </div>
-                        </div>
-                   
-                        <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
-                   
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="previous-employees" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No</th>
-                                        <th>Company Name</th>
-                                        <th>Designation</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Action</th> <!-- Add action column if needed -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if($prev_details->isNotEmpty())
-                                    @foreach($prev_details as $key => $employee)
-                                    <tr style="font-size: 15px;">
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $employee->company_name }}</td>
-                                        <td>{{ $employee->designation }}</td>
-                                        <td>{{ $employee->start_date }}</td>
-                                        <td>{{ $employee->end_date }}</td>
-                                        <td>
-                    <!-- Delete button with confirmation -->
-                    <button class="btn btn-danger btn-sm toggle-delete-form" 
-                            data-encrypted-id="{{ $employee->enc_prev_detail_id }}">Delete</button>
-                </td>
-                                    </tr>
-                                    @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                    </fieldset>                    
-                   
-                   
-                    <!-- Include jQuery and jQuery UI libraries here -->
-                       
-                    <script>
-                      // jQuery Datepicker initialization
-                      $(document).ready(function(){
-                          $('.datepicker').datepicker({
-                              format: 'yyyy-mm-dd',
-                              autoclose: true
-                          });
-                      });
-                  </script>
-
-                  </form>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-        
-      </section>
- 
+        </div>  
+    </section>
       </div>
  
       <script>
@@ -673,29 +745,34 @@
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.toggle-delete-form');
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent default behavior of the click event
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent default behavior of the click event
+            const employeeId = button.getAttribute('data-employee-id');
+            const encryptedId = button.getAttribute('data-encrypted-id');
+            const url = "/Employees/deleteprevemploymentdetails/" + encryptedId;
 
-                const encryptedId = button.getAttribute('data-encrypted-id');
-                const url = "/Employees/deleteprevemploymentdetails/" + encryptedId;
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to delete this Details?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
-                });
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this Details?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Here you need to get the encrypted ID for deletion
+                    // You can use a data attribute on the button or any other method to get it
+                    window.location.href = url;
+                }
             });
         });
     });
+});
+
+
 </script>
 </body>
 </html>

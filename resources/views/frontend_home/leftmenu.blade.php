@@ -69,7 +69,7 @@
               @php
               $user = Session::get('user');
               @endphp
-              <div class="dropdown-title">Hello</div>
+              <div class="dropdown-title">Hello {{ $user->first_name }}</div>
               <div class="dropdown-divider"></div>
               <form action="/logout" method="POST">
                 @csrf

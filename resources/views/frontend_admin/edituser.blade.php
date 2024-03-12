@@ -36,7 +36,7 @@
                                     <div class="col">
                                         <label for="email">Email</label>
                                         <input type="email" name="email" class="form-control" placeholder="Email"
-                                        value="{{ $user->email}}" readOnly>
+                                        value="{{ $user->email}}" >
                                     </div>
                                    
                                     <div class="col">
