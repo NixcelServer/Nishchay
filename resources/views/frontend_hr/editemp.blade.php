@@ -295,15 +295,16 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Select Reporting Manager</label>
                                         <select class="form-control" name="selectreportingmanager">
-                                            <option value="{{ $ofc_details->reporting_manager_id }}">Select Reporting Manager</option> <!-- Blank option -->
+                                            <option value="">{{ isset($mng_name) ? $mng_name : 'Select Reporting Manager' }}</option>
                                             <!-- Add reporting manager options here -->
                                             @foreach($managers as $manager)
-                                            <option value="{{ $manager['user_enc_id'] }}" {{ $ofc_details->reporting_manager_id == $manager['reporting_manager_id'] ? 'selected' : '' }}>
-                                            {{ $manager['user_name'] }}
-                                             </option>
+                                                @if (!isset($mng_name) || $manager['user_name'] !== $mng_name)
+                                                    <option value="{{ $manager['user_enc_id'] }}">{{ $manager['user_name'] }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
