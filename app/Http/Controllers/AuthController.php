@@ -102,33 +102,33 @@ class AuthController extends Controller
     }
  
  
-    public function redirectDash()
-    {
+    // public function redirectDash()
+    // {
 
       
-        $redirect = '';
+    //     $redirect = '';
 
 
-        if(Auth::user() && Auth::user()->tbl_role_id == 1)
-        {        
-            $redirect = '/admin/dashboard';
-        }
+    //     if(Auth::user() && Auth::user()->tbl_role_id == 1)
+    //     {        
+    //         $redirect = '/admin/dashboard';
+    //     }
 
 
-        else if(Auth::user() && Auth::user()->tbl_role_id ==2){
+    //     else if(Auth::user() && Auth::user()->tbl_role_id ==2){
             
-            $redirect = '/hr/dashboard'; 
+    //         $redirect = '/hr/dashboard'; 
 
-        }
-        else if(Auth::user() && Auth::user()->tbl_role_id == 3){
-            //dd("Developer");
-        }
-        else{
-            $redirect ='/';
-        }
+    //     }
+    //     else if(Auth::user() && Auth::user()->tbl_role_id == 3){
+    //         //dd("Developer");
+    //     }
+    //     else{
+    //         $redirect ='/';
+    //     }
  
-        return $redirect;
-    }
+    //     return $redirect;
+    // }
  
     public function logout(Request $request)
     {   
