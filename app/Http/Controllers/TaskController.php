@@ -311,14 +311,16 @@ class TaskController extends Controller
                 // Do something...
             } elseif ($myTasksExist) {
                 //$tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','In Progress')->where('transferred_status', '!=', 'Pending')->get();
-                $tasks = TaskDetail::where('selected_user_id', $user_id)
-                                    ->where('flag', 'show')
-                                    ->where('task_status', 'In Progress')
-                                    ->where(function ($query) {
-                                        $query->where('transferred_status', '!=', 'Pending')
-                                            ->orWhereNull('transferred_status');
-                                    })
-                                    ->get();
+               // $tasks = TaskDetail::where('selected_user_id', $user_id)
+                                    // ->where('flag', 'show')
+                                    // ->where('task_status', 'In Progress')
+                                    // ->where(function ($query) {
+                                    //     $query->where('transferred_status', '!=', 'Pending')
+                                    //         ->orWhereNull('transferred_status');
+                                    // })
+                                    // ->get();
+
+            $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','In Progress')->where('flag', 'show')->get();                    
 
                 $inprogresstaskCount = $tasks->count();
                 $ctasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','Completed')->where('flag', 'show')->get();
@@ -732,6 +734,19 @@ class TaskController extends Controller
         $task->add_time = Date::now()->toTimeString();
         $task->transferred_status = "success";
         $task->remark=null;
+
+        //get the user name to whom task was reassigned by using dec_selected_id
+        $user = User::where('tbl_user_id',$dec_selected_user_id)->first();
+        $userName = $user->first_name . " " . $user->last_name;
+
+        $action_details = new TaskActionDetail;
+        $action_details->tbl_task_detail_id = $dec_task_id;
+        $action_details->action_name = "Task Reassigned to ". $userName;
+        $action_details->action_by = $mng_id;
+        $action_details->action_date = Date::now()->toDateString();
+        $action_details->action_time = Date::now()->toTimeString();
+        $action_details->save();
+        
 
         
         $task->save();
