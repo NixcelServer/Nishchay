@@ -67,11 +67,7 @@ class TaskController extends Controller
                 
             }
 
-            if ($myTasksExist && $showTasksExist) {
-                // Both modules exist
-                // Do something...
-
-            } 
+            
             if ($myTasksExist) {
                 $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','Pending')->where('flag', 'show')->get();
                 $pendingtaskCount = $tasks->count();
