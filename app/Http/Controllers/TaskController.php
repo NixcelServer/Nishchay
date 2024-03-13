@@ -193,14 +193,28 @@ class TaskController extends Controller
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
 
+        //check if transferred status is pending if it is pending then only set reassign task to true
+        //as we want to provide this functionality only for manager so check if create task role module exists
+        $transferredStatus = $task->transferred_status; 
+        if($createNewTask){
+            if($transferredStatus == 'Pending'){
+                $reassignTask = true;
+            }
+
+            else{
+                $reassignTask = false;
+            }
+        }
+
         $actionsOnTask = TaskActionDetail::where('tbl_task_detail_id',$dec_task_id)->get();
+        if($deleteTask){
         if($actionsOnTask->isEmpty()){
             $deleteTask = true;
         }
         else{
             $deleteTask = false;
         }
-
+    }
         
         $assignedUser = User::find($task->selected_user_id);
         if ($assignedUser) {
@@ -357,7 +371,8 @@ class TaskController extends Controller
 
             if ($myTasksExist && $showTasksExist) {
                 // Both modules exist
-                $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','In Progress')->where('flag', 'show')->get();
+                $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','In Progress')->where('flag', 'show')->where('transferred_status','pending')->get();
+                
 
                 foreach ($tasks as $task) 
                 {
@@ -379,14 +394,16 @@ class TaskController extends Controller
                 
             } elseif ($myTasksExist) {
                 //$tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','In Progress')->where('transferred_status', '!=', 'Pending')->get();
-                $tasks = TaskDetail::where('selected_user_id', $user_id)
-                                    ->where('flag', 'show')
-                                    ->where('task_status', 'In Progress')
-                                    ->where(function ($query) {
-                                        $query->where('transferred_status', '!=', 'Pending')
-                                            ->orWhereNull('transferred_status');
-                                    })
-                                    ->get();
+                // $tasks = TaskDetail::where('selected_user_id', $user_id)
+                //                     ->where('flag', 'show')
+                //                     ->where('task_status', 'In Progress')
+                //                     ->where(function ($query) {
+                //                         $query->where('transferred_status', '!=', 'Pending')
+                //                             ->orWhereNull('transferred_status');
+                //                     })
+                //                     ->get();
+                $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','In Progress')->where('flag', 'show')->get();
+
 
                 
                 foreach ($tasks as $task) 
