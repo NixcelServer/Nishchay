@@ -63,10 +63,12 @@ class TaskController extends Controller
                 }
             }
 
-            if ($myTasksExist && $showTasksExist) {
-                // Both modules exist
-                // Do something...
-            } elseif ($myTasksExist) {
+            if($myTasksExist && $showTasksExist) {
+                
+            }
+
+            
+            if ($myTasksExist) {
                 $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','Pending')->where('flag', 'show')->get();
                 $pendingtaskCount = $tasks->count();
                 $ctasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','Completed')->where('flag', 'show')->get();
@@ -324,7 +326,9 @@ class TaskController extends Controller
             if ($myTasksExist && $showTasksExist) {
                 // Both modules exist
                 // Do something...
-            } elseif ($myTasksExist) {
+            } 
+            
+            if ($myTasksExist) {
                 //$tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','In Progress')->where('transferred_status', '!=', 'Pending')->get();
                // $tasks = TaskDetail::where('selected_user_id', $user_id)
                                     // ->where('flag', 'show')
@@ -357,7 +361,7 @@ class TaskController extends Controller
                 }
                     $columnName = "Task Assigned By";
                     $title = "In Progress Tasks";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'createNewTask'=>$createNewTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
                         
             } elseif ($showTasksExist) {
                  $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','In Progress')->where('flag', 'show')->where(function ($query) {
@@ -435,7 +439,8 @@ class TaskController extends Controller
            if ($myTasksExist && $showTasksExist) {
                // Both modules exist
                // Do something...
-           } elseif ($myTasksExist) {
+           } 
+           if ($myTasksExist) {
                $tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','Completed')->get();
                 $completedtaskCount = $tasks->count();
                 $ptasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','Pending')->where('flag', 'show')->get();
@@ -456,7 +461,7 @@ class TaskController extends Controller
                }
                    $columnName = "Task Assigned By";
                    $title = "Completed Tasks";
-               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'createNewTask'=>$createNewTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
+               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
                        
            } elseif ($showTasksExist) {
                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','Completed')->where('flag', 'show')->get();
