@@ -67,7 +67,7 @@
                 @endif
               @endif  
 
-              @if ($task->task_status == 'Pending')
+              @if ($task->task_status !== 'Completed')
                   @if (isset($reassignTask) && $reassignTask)
                       <!-- Reassign Task Button -->
                       <a href="/Tasks/transfermytask/{{ $enc_task_id }}" class="btn btn-warning" id="reassign_task_btn">Reassign Task</a>

@@ -86,14 +86,14 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" /> <span
+            <a href="dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 200px; height: auto;" /> <span
                 class="logo-name"></span>
             </a>
           </div>
           <ul class="sidebar-menu">
-            <li class="menu-header">Main</li>
+            <li class="menu-header"></li>
             <li class="dropdown active">
-              <a href="dashboard" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+              <a href="/dashboard" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
 
             {{-- left menu for admin --}}
@@ -103,22 +103,33 @@
               @endphp
 
               @if($user->tbl_role_id == 1)
-              <ul class="menu">
-                <li>
-                  <a href="/admin/users">Users<span class=""></span></a>
+              <ul class="sidebar-menu">
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/users" class="nav-link"><i data-feather="user-check"></i><span>Users</span></a>                  
                 </li>
-                <li>
-                  <a href="/admin/depts">Departments<span class=""></span></a>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/depts"class="nav-link"><i data-feather="grid"></i><span>Department</span></a>
                 </li>
-                <li>
-                  <a href="/admin/designations">Designation<span class=""></span></a>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/designations"class="nav-link"><i data-feather="grid"></i><span>Designation</span></a>
                 </li>
-                <li>
-                  <a href="/admin/roles">Role<span class=""></span></a>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/roles"class="nav-link"><i data-feather="grid"></i><span>Roles</span></a>
                 </li>
-                <li>
-                  <a href="/admin/auditlogdetails">Audit_Log<span class=""></span></a>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/auditlogdetails"class="nav-link"><i data-feather="command"></i><span>Audit_Log</span></a>
                 </li>
+
+                
               </ul>
               @else
               <ul class="menu">

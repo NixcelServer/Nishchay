@@ -28,20 +28,17 @@ use App\Http\Controllers\TaskController;
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
 //Route::group(['middleware'=>'preventBackHistory'],function(){
+
+
 Route::middleware(['validLogin','preventBackHistory'])->group(function () {
-
-
 
 Route::post('/logout',[AuthController::class,'logout']);
 Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
-
-
-
 Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
     //if admin logs in show him admin dashboard
-     Route::get('/dashboard',[AdminController::class,'dashboard']);
+     //Route::get('/dashboard',[AdminController::class,'dashboard']);
      //if admin clicks on user in left menu
      Route::get('/users',[AdminController::class,'showUsers']);
      //admin clicks on create new user button
@@ -199,50 +196,7 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
 
 
-    //when dev clicks on Tasks
-    // Route::get('/',[TaskController::class,'myTasks']);
-    // //view task page
-    // Route::get('/viewmytask/{id}',[TaskController::class,'viewMyTask']);
-
-    // Route::post('/updatemytaskstatus',[TaskController::class,'updateMyTaskStatus']);
-
-    // Route::get('/transfermytask/{id}',[TaskController::class,'transferMyTaskForm']);
-    // //Route::get('/showreassignedtasks',[TaskController::class,'showReassignedTasks']);
-    // Route::post('transfermytask',[TaskController::class,'transferMyTask']);
-
-    // Route::get('/myinprogresstasks',[TaskController::class,'showMyInProcessTasks']);
-
-    // Route::get('/mycompletedtasks',[TaskController::class,'myCompletedTasks']);
-
-    // //mng
-    // Route::get('/showtasks',[TaskController::class,'showTasks']);
-
-    // Route::get('/viewtask',[TaskController::class,'viewTask']);
-
-    // Route::get('/createtask',[TaskController::class,'createTask']);
-
-
-    // //abhitasksroutes
-    // Route::get('/Tasks/pending_tasks',[TaskController::class,'PendingTasks']);
-    // Route::get('/Tasks/completed_tasks',[TaskController::class,'CompletedTasks']);
-    // Route::get('/Tasks/inprogress_tasks',[TaskController::class,'InprogessTasks']);
-    // Route::get('/Tasks/reassigned_tasks',[TaskController::class,'ReassignedTasks']);
-    // Route::get('/Tasks/view_task_page',[TaskController::class,'ViewTasks']);
-
-
-    // Route::post('/assigntask',[TaskController::class,'assignTask']);
-
-    // Route::get('/completedtask',[TaskController::class,'completedTask']);
-
-    // Route::get('/inprogresstask',[TaskController::class,'inProgressTask']);
-
-    // Route::get('/showreassignedtask',[TaskController::class,'showReassignedTask']);
-
-    // Route::get('/viewreassigntask/{id}',[TaskController::class,'viewReassignTask']);
-
-    // Route::post('/reassigntask',[TaskController::class,'reassignTask']);
-
-
+   
 
 });
 

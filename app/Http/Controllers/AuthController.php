@@ -102,34 +102,7 @@ class AuthController extends Controller
     }
  
  
-    public function redirectDash()
-    {
 
-      
-        $redirect = '';
-
-
-        if(Auth::user() && Auth::user()->tbl_role_id == 1)
-        {        
-            $redirect = '/admin/dashboard';
-        }
-
-
-        else if(Auth::user() && Auth::user()->tbl_role_id ==2){
-            
-            $redirect = '/hr/dashboard'; 
-
-        }
-        else if(Auth::user() && Auth::user()->tbl_role_id == 3){
-            //dd("Developer");
-        }
-        else{
-            $redirect ='/';
-        }
- 
-        return $redirect;
-    }
- 
     public function logout(Request $request)
     {   
         $user_details = session('user');
