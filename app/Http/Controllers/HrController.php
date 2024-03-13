@@ -149,7 +149,9 @@ class HrController extends Controller
         }
         
         $ofc_details = OfficialDetail::where('tbl_user_id',$dec_id)->first();
+        //$additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
         $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
+
         $stat_details = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
         $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
         $bank_details = BankDetail::where('tbl_user_id',$dec_id)->first();
