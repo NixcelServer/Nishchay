@@ -233,6 +233,7 @@ class HrController extends Controller
 
          $emp->emp_code = $request->empcode;
          $emp->title = $request->title;
+         $emp->offer_letter_no = $request->offer_letter_no;
          $emp->contact_no = $request->contact_no;
          $emp->gender = $request->gender;
          $emp->birth_date = $request->dob;
