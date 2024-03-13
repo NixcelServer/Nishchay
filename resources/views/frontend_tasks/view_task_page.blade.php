@@ -62,7 +62,7 @@
                 @if(isset($actionOnTask) && $actionOnTask)
               <div class="form-group">
                 <label for="action">Action</label>
-                <textarea class="form-control" id="action" name="action" rows="3"></textarea>
+                <textarea class="form-control" id="action" name="action" rows="3" required></textarea>
               </div>
                 @endif
               @endif  
