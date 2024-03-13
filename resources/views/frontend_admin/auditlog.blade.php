@@ -21,12 +21,12 @@
 <style>
     
     .table thead th {
-          background-color: #000000; /* Add your desired color code */
+          background-color: white; /* Add your desired color code */
           color: #000000; /* Text color for better contrast */
       }
   
     .table {
-          background-color: #bcdafd; /* Background color for the table */
+          background-color: white; /* Background color for the table */
       }
   </style>
 
@@ -64,6 +64,24 @@
             @endforeach
             </tbody>
         </table>
+        <div class="card-footer text-right">
+          <nav class="d-inline-block">
+            <ul class="pagination mb-0">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#">1 <span
+                    class="sr-only">(current)</span></a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">2</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
 
       
