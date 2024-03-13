@@ -21,12 +21,12 @@
 <style>
     
     .table thead th {
-          background-color: #000000; /* Add your desired color code */
-          color: #000000; /* Text color for better contrast */
+          background-color: white; /* Add your desired color code */
+          color: white; /* Text color for better contrast */
       }
   
     .table {
-          background-color: #bcdafd; /* Background color for the table */
+          background-color: white; /* Background color for the table */
       }
   </style>
 

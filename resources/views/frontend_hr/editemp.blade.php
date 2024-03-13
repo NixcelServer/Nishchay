@@ -93,16 +93,17 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Offer Letter No</label>
-                                        <input type="text" class="form-control" name="offer_letter_no" value=" {{ $emp->offer_letter_no }} " required>                                        
+                                        <input type="text" class="form-control" name="offer_letter_no" value="{{ $emp->offer_letter_no }}" required>                                        
                                     </div>
                                     
                                     <div class="col-md-4">
                                         <label class="form-label">Title</label><br>
-                                        <input type="radio" id="mr" name="title" value="Mr">
+                                        <input type="radio" id="mr" name="title" value="Mr" <?php echo ($emp->title === "Mr") ? "checked" : ""; ?>>
                                         <label for="mr">Mr</label>
-                                        <input type="radio" id="mrs" name="title" value="Mrs">
+                                        <input type="radio" id="mrs" name="title" value="Mrs" <?php echo ($emp->title === "Mrs") ? "checked" : ""; ?>>
                                         <label for="mrs">Mrs</label>
                                     </div>
+                                    
 
                                    
                                 </div>
@@ -147,10 +148,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Gender</label>
                                         <select class="form-control" name="gender">
-                                            <option value="Male">Select Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
+                                            <option value="Male" {{ $emp->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                                            <option value="Female" {{ $emp->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                                            <option value="Other" {{ $emp->gender == 'Other' ? 'selected' : '' }}>Other</option>
                                         </select>
                                         @error('gender')
                                             <div class="text-danger">{{ $message }}</div>
@@ -190,7 +190,7 @@
                                     <div class="col-md-4">
                                         <label class="form-label">State</label>
                                         <select class="form-control" id="stateSelect" name="state">
-                                            <option value="">Select State</option>
+                                            <option value="{{ $emp->state }}">Select State</option>
                                         </select>
                                     </div>
 
@@ -321,11 +321,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Technology</label>
-                                        <input type="text" class="form-control" name="technology" value="  ">
+                                        <input type="text" class="form-control" name="technology" value="{{ $additionalDetails->technology }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Module</label>
-                                        <input type="text" class="form-control" name="module" value="  ">
+                                        <input type="text" class="form-control" name="module" value="{{ $additionalDetails->module }}">
                                     </div>
                                 </div>
                             </div>
@@ -655,18 +655,26 @@
             .then(response => response.json())
             .then(data => {
                 const countrySelect = document.getElementById('countrySelect');
-   
+    
                 // Iterate over the data and create an option for each country
                 data.forEach(country => {
                     const option = document.createElement('option');
                     option.value = country.name.common;
                     option.textContent = country.name.common;
+    
+                    // Check if the country matches the previously selected country
+                    if (country.name.common === "<?php echo $emp->country ?>") {
+                        option.selected = true;
+                    }
+    
                     countrySelect.appendChild(option);
                 });
             })
             .catch(error => console.error('Error fetching country data:', error));
     </script>
  
+ 
+
  
 <script>
   const states = [
@@ -717,6 +725,8 @@
       option.textContent = state.state_name;
       stateSelect.appendChild(option);
   });
+
+  
 </script>
  
  
