@@ -157,7 +157,7 @@ class TaskController extends Controller
         
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
-
+        
         
         
         $assignedUser = User::find($task->selected_user_id);
