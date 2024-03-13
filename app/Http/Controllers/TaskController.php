@@ -89,11 +89,11 @@ class TaskController extends Controller
                 return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
                         
             } elseif ($showTasksExist) {
-                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','Pending')->where('flag', 'show')->get();
+                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','Pending')->where('flag', 'show')->where('transferred_status', '!=', 'Pending')->get();
                  $pendingtaskCount = $tasks->count();
                  $ctasks = TaskDetail::where('add_by', $user_id)->where('task_status','Completed')->where('flag', 'show')->get();
                 $completedtaskCount = $ctasks->count();
-                $iptasks = TaskDetail::where('add_by', $user_id)->where('task_status','In Progress')->where('flag', 'show')->get();
+                $iptasks = TaskDetail::where('add_by', $user_id)->where('task_status','In Progress')->where('flag', 'show')->where('transferred_status', '!=', 'Pending')->get();
                 $inprogresstaskCount = $iptasks->count();
                 $rtasks = TaskDetail::where('transferred_status','Pending')->where('flag','show')->where('add_by',$user_id)->get();
                 $reassigntaskCount = $rtasks->count();
@@ -145,7 +145,7 @@ class TaskController extends Controller
                 $createNewTask = true;
             }
 
-            if ($reassignTask && $deleteTask && $actionOnTask) {
+            if ($reassignTask && $deleteTask && $actionOnTask && $createNewTask) {
                 break;
             }
 
@@ -172,15 +172,23 @@ class TaskController extends Controller
         //as we want to provide this functionality only for manager so check if create task role module exists
         $transferredStatus = $task->transferred_status; 
         
-        if($createNewTask){
-            if($transferredStatus == 'Pending'){
-                $reassignTask = true;
-            }
+        // if($createNewTask){
+        //     if($transferredStatus == 'Pending'){
+        //         $reassignTask = true;
+        //     }
 
-            else{
-                $reassignTask = false;
-            }
+        //     else{
+        //         $reassignTask = false;
+        //     }
+        // }
+        if($createNewTask){ 
+            $reassignTask = false;
         }
+
+        else{
+            $reassignTask = true;
+        }
+        
         
 
         $assignedUser = User::find($task->selected_user_id);
@@ -345,12 +353,12 @@ class TaskController extends Controller
                 return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'createNewTask'=>$createNewTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
                         
             } elseif ($showTasksExist) {
-                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','In Progress')->where('flag', 'show')->get();
+                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','In Progress')->where('flag', 'show')->where('transferred_status', '!=', 'Pending')->get();
                  
                 $inprogresstaskCount = $tasks->count();
                 $ctasks = TaskDetail::where('add_by', $user_id)->where('task_status','Completed')->where('flag', 'show')->get();
                 $completedtaskCount = $ctasks->count();
-                $iptasks = TaskDetail::where('add_by', $user_id)->where('task_status','Pending')->where('flag', 'show')->get();
+                $iptasks = TaskDetail::where('add_by', $user_id)->where('task_status','Pending')->where('flag', 'show')->where('transferred_status', '!=', 'Pending')->get();
                 $pendingtaskCount = $iptasks->count();
                 $rtasks = TaskDetail::where('transferred_status','Pending')->where('flag','show')->where('add_by',$user_id)->get();
                 $reassigntaskCount = $rtasks->count();
@@ -625,9 +633,9 @@ class TaskController extends Controller
 
         $ctasks = TaskDetail::where('add_by',$mng_id)->where('task_status','Completed')->where('flag', 'show')->get();
         $completedtaskCount = $ctasks->count();
-        $ptasks = TaskDetail::where('add_by', $mng_id)->where('task_status','Pending')->where('flag', 'show')->get();
+        $ptasks = TaskDetail::where('add_by', $mng_id)->where('task_status','Pending')->where('flag', 'show')->where('transferred_status', '!=', 'Pending')->get();
         $pendingtaskCount = $ptasks->count();
-        $iptasks = TaskDetail::where('add_by', $mng_id)->where('task_status','In Progress')->where('flag', 'show')->get();
+        $iptasks = TaskDetail::where('add_by', $mng_id)->where('task_status','In Progress')->where('flag', 'show')->where('transferred_status', '!=', 'Pending')->get();
         $inprogresstaskCount = $iptasks->count();
         $tasks = TaskDetail::where('transferred_status','Pending')->where('flag','show')->where('add_by',$mng_id)->get();
         $reassigntaskCount = $tasks->count();
