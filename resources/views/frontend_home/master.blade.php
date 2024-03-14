@@ -16,6 +16,14 @@
   <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
 </head>
 
+<style>
+  body {
+  background-image: url('assets/img/background.jpg');
+  background-size: cover;
+  background-position: center;
+}
+</style>
+
 <body>
   <div class="loader"></div>
   <div id="app">

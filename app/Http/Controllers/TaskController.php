@@ -134,6 +134,8 @@ class TaskController extends Controller
         $deleteTask = false;
         $actionOnTask = false;
         $createNewTask = false;
+        $submitButton = true;
+        $completedDate = false;
 
         foreach ($moduleData as $data) {
             if ($data['module']->module_name === 'Reassign Task') {
@@ -157,12 +159,18 @@ class TaskController extends Controller
 
         }    
         
+        if($createNewTask){
+            $submitButton = false;
+        }
 
 
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
         
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+        if($task->task_status == 'Completed'){
+            $completedDate = true;
+        }
 
         $actionsOnTask = TaskActionDetail::where('tbl_task_detail_id',$dec_task_id)->get();
         if($deleteTask){
@@ -211,7 +219,7 @@ class TaskController extends Controller
             }
          
         }
-        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask,'actionOnTask'=>$actionOnTask,'createNewTask'=>$createNewTask]);
+        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask,'actionOnTask'=>$actionOnTask,'createNewTask'=>$createNewTask,'submitButton'=>$submitButton,'completedDate'=>$completedDate]);
     }
 
     public function updateMyTaskStatus(Request $request)
@@ -221,6 +229,14 @@ class TaskController extends Controller
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
         
         $task->task_status = $request->status;
+        // If the 'status' field received in the request is 'Completed', update the 'task_completion_date' field with the current date
+        $task->task_status = $request->status;
+        if($request->status == 'Completed'){
+            $task->task_completion_date = Date::now()->toDateString();
+        }
+        else{
+            $task->task_completion_date = null;
+        }
         
         $task->update_date = Date::now()->toDateString();
         $task->update_time = Date::now()->toTimeString();
