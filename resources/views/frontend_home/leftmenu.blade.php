@@ -44,6 +44,7 @@
   margin-left: 0; /* Remove left margin for the first item */
 }
 
+
 </style>
 
 <body>
@@ -86,14 +87,14 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 200px; height: auto;" /> <span
+            <a href="/dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 150px; height: auto;" /> <span
                 class="logo-name"></span>
             </a>
           </div>
           <ul class="sidebar-menu">
-            <li class="menu-header"></li>
-            <li class="dropdown active">
-              <a href="/dashboard" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+            <li class="menu-header" ></li>
+            <li class="dropdown active" style="margin-top: 20px;">
+              <a href="/dashboard" class="nav-link" style="color: black;"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
 
             {{-- left menu for admin --}}
@@ -106,40 +107,47 @@
               <ul class="sidebar-menu">
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/users" class="nav-link"><i data-feather="user-check"></i><span>Users</span></a>                  
+                  <a href="/admin/users" class="nav-link" style="color: black;"><i data-feather="user-check"></i><span>Users</span></a>                  
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/depts"class="nav-link"><i data-feather="grid"></i><span>Department</span></a>
+                  <a href="/admin/depts"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Department</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/designations"class="nav-link"><i data-feather="grid"></i><span>Designation</span></a>
+                  <a href="/admin/designations"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Designation</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/roles"class="nav-link"><i data-feather="grid"></i><span>Roles</span></a>
+                  <a href="/admin/roles"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Roles</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/auditlogdetails"class="nav-link"><i data-feather="command"></i><span>Audit_Log</span></a>
+                  <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Audit_Log</span></a>
                 </li>
 
                 
               </ul>
               @else
-              <ul class="menu">
+              
+                
+                
                 @foreach($uniqueParentNames as $parentName)
-                <li>
-                  <a href="/{{ $parentName }}">{{ $parentName }}<span class=""></span></a>
+                <li class="menu-header"></li>
+                <ul class="sidebar-menu">
+                <li class="dropdown active">
+                  <a href="/{{ $parentName }}"class="nav-link" style="color: black;"><i data-feather="command"></i><span>{{ $parentName }}</span></a>
                 </li>
+                </ul>
                 @endforeach
-              </ul>
+              
+              
               @endif
+          </ul>
 
 
 
