@@ -8,6 +8,7 @@ use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\QueryController;
 use App\Http\Controllers\TaskController;
 
 
@@ -201,3 +202,7 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 });
 
 //});
+
+//Query URL's testing
+Route::get('/Queries',[QueryController::class,'ShowQueries']);
+Route::get('/QueriesDev',[QueryController::class,'ShowQueriesDev']);

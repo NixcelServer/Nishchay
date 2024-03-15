@@ -18,13 +18,13 @@
                 <div class="col-12">
                     <div class="card" style="max-width: 1000px;">
                         <div class="card-header">
-                            <h4 class="mt-2">Nixcel Software Solutions Queries</h4>
+                            <h4 class="mt-2">Nixcel Software Solutions Designation</h4>
                         </div>
                         <div class="col-12 text-right mt-n4">
-                            {{-- <div class="buttons">
+                            <div class="buttons">
                                 <!-- Button to show Add New Designation Modal -->
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#addDesignationModal">Add New Designation</button>
-                            </div> --}}
+                            </div>
                         </div>
                         <!-- Table displaying designations -->
                         <div class="card-body">
@@ -32,17 +32,14 @@
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                                     <thead>
                                         <tr>
-                                            <th>Query ID</th>
-                                            <th>Query Description</th>
-                                            <th>Query Raised by</th>
-                                            <th>Query Raised Date</th>
-                                            <th>Status</th>
+                                            <th>Sr.No</th>
+                                            <th>Designation</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <tbody>
-                                        {{-- @foreach($designations as $key => $designation)
+                                        @foreach($designations as $key => $designation)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $designation->designation_name }}</td>
@@ -56,7 +53,7 @@
                                             </td>
 
                                         </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                     </tbody>
                                 </table>
@@ -120,7 +117,36 @@
     </div>
 </div>
 
+<!-- Edit Designation Modal -->
+@foreach($designations as $designation) 
+<div class="modal fade" id="editDesignationModal_{{ $designation->tbl_designation_id }}" tabindex="-1" role="dialog" aria-labelledby="editDesignationModalLabel_{{ $designation->tbl_designation_id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id=editDesignationForm action="/admin/editdesignation" method="POST">
+                @csrf
+                <input type="hidden" name="enc_id" value="{{ $designation->encrypted_id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDesignationModalLabel_{{ $designation->tbl_designation_id }}">Edit Designation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editDesignationName_{{ $designation->tbl_designation_id }}">Enter Designation Name</label>
+                        <input type="text" class="form-control designationName" id="editDesignationName_{{ $designation->tbl_designation_id }}" name="designationName" value="{{ $designation->designation_name }}" required>
+<span class="text-danger designationNameError"></span>
 
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 
 
 
@@ -151,7 +177,13 @@
         });
     });
 
-
+    // Script to toggle display of edit designation form
+document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
+    button.addEventListener('click', function () {
+        var designationId = this.dataset.designationId;
+        $('#editDesignationModal_' + designationId).modal('show');
+    });
+});
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
