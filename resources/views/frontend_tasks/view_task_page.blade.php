@@ -48,9 +48,15 @@
                 <label for="completed_date">Expected Delivery Date</label>
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_delivery_date }}" readonly>
               </div>
+              @if($completedDate)
+              <div class="form-group">
+                <label for="completed_date">Task Completed On</label>
+                <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_completion_date }}" readonly>
+              </div>
+              @endif
               <div class="form-group">
     <label for="status">Status</label>
-    <select class="form-control" id="status" name="status"{{ $createNewTask ? ($task->task_status == 'Completed' ? '' : ' disabled') : '' }}>
+    <select class="form-control" id="status" name="status"{{ !$changeStatus ? ($task->task_status == 'Completed' ? '' : ' disabled') : '' }}>
         <option value="">Select Status</option> <!-- Default option -->
         <option value="Pending" {{ $task->task_status == 'Pending' ? 'selected' : '' }}>Pending</option>
         <option value="In Progress" {{ $task->task_status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
@@ -81,8 +87,11 @@
                   @endif
               @endif
 
-
+              @if($submitButton)
               <button type="submit" class="btn btn-primary">Submit</button>
+              @else
+              <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
+              @endif
             </form>
           </div>
         </div>
