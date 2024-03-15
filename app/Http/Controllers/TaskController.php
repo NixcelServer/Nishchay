@@ -15,6 +15,7 @@ use App\Models\Module;
 use App\Models\TaskActionDetail;
 use App\Models\RoleModule;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Session;
 
 
 class TaskController extends Controller
@@ -33,6 +34,8 @@ class TaskController extends Controller
             $deleteTask = false;
             $actionOnTask = false;
             $reassignTask = false;
+            $showTasksButton = false;
+            $myTasksButton = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -62,12 +65,33 @@ class TaskController extends Controller
                     break;
                 }
             }
-
+        
+            //Leader functionality
+            //if both modules are assigned we will check if showTasks in session is true
+            //if it is not true we will display My Tasks->in my Tasks we have to display show tasks button
+            //to redirect to show tasks
+            //else we will display show Tasks->in show Tasks we have to display my tasks button
+            //to redirect to my tasks
             if($myTasksExist && $showTasksExist) {
-                
-            }
 
             
+                $redirectToShowTasks = session('showTasks');
+
+                if($redirectToShowTasks){
+                    $myTasksExist = false;
+                    $showTasksExist = true;
+                    $showTasksButton = false;
+                    $myTasksButton = true;
+                }
+                else if($redirectToShowTasks == false){
+                    $showTasksExist = false;
+                    $myTasksExist = true;
+                    $myTasksButton = false;
+                    $createNewTask = false;
+                    $showTasksButton = true;
+                }
+            }   
+                
             if ($myTasksExist) {
                 $tasks = TaskDetail::where('selected_user_id', $user_id)->where('task_status','Pending')->where('flag', 'show')->get();
                 $pendingtaskCount = $tasks->count();
@@ -88,7 +112,7 @@ class TaskController extends Controller
                 }
                     
                     $columnName = "Task Assigned By";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'showTasksButton'=>$showTasksButton]);
                         
             } elseif ($showTasksExist) {
                  $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','Pending')->where('flag', 'show')->where(function ($query) {
@@ -119,7 +143,7 @@ class TaskController extends Controller
                     
                     $columnName = "Task Assigned To";
                     $role = "Manager";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask,'deleteTask'=>$deleteTask,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'createNewTask'=>$createNewTask,'deleteTask'=>$deleteTask,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount,'myTasksButton'=>$myTasksButton]);
              
             } else {
                 // Neither module exists
@@ -136,6 +160,11 @@ class TaskController extends Controller
         $deleteTask = false;
         $actionOnTask = false;
         $createNewTask = false;
+        $showTasksExist = false;
+        $myTasksExist = false;
+        $changeStatus = true;
+        $submitButton = true;
+        $completedDate = false;
 
         foreach ($moduleData as $data) {
             if ($data['module']->module_name === 'Reassign Task') {
@@ -143,6 +172,14 @@ class TaskController extends Controller
             }
             if ($data['module']->module_name === 'Delete Task') {
                 $deleteTask = true;
+            }
+
+            if ($data['module']->module_name === 'Show Tasks') {
+                $showTasksExist = true;
+            }
+
+            if ($data['module']->module_name === 'My Tasks') {
+                $myTasksExist = true;
             }
 
             if($data['module']->module_name === 'Action on Tasks'){
@@ -153,18 +190,47 @@ class TaskController extends Controller
                 $createNewTask = true;
             }
 
-            if ($reassignTask && $deleteTask && $actionOnTask) {
+            if ($reassignTask && $deleteTask && $actionOnTask && $createNewTask && $showTasksExist && $myTasksExist) {
                 break;
             }
 
         }    
-        
 
+        if($createNewTask){
+            $changeStatus = false;
+            $submitButton = false;
+        }
+        
+        
+        if($myTasksExist && $showTasksExist)
+        {
+            $redirectToShowTasks = session('showTasks');
+
+            if($redirectToShowTasks){
+                $actionOnTask = false;
+                $deleteTask = true;
+                $submitButton = false;
+                
+            }
+            else if($redirectToShowTasks == false){
+                $actionOnTask = true;
+                $deleteTask = false;
+                $changeStatus = true;
+                $submitButton = true;
+                //$createNewTask = true;
+            }
+        }
+
+        
 
         $dec_task_id = EncryptionDecryptionHelper::encdecId($enc_task_id,'decrypt');
         
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+
+        if($task->task_status == 'Completed'){
+            $completedDate = true;
+        }
 
         $actionsOnTask = TaskActionDetail::where('tbl_task_detail_id',$dec_task_id)->get();
         if($deleteTask){
@@ -213,7 +279,8 @@ class TaskController extends Controller
             }
          
         }
-        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask,'actionOnTask'=>$actionOnTask,'createNewTask'=>$createNewTask]);
+        
+        return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask,'actionOnTask'=>$actionOnTask,'createNewTask'=>$createNewTask,'changeStatus'=>$changeStatus,'submitButton'=>$submitButton,'completedDate'=>$completedDate]);
     }
 
     public function updateMyTaskStatus(Request $request)
@@ -222,7 +289,14 @@ class TaskController extends Controller
         $dec_task_id = EncryptionDecryptionHelper::encdecId($request->input('enc_task_id'),'decrypt');
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
         
+        // If the 'status' field received in the request is 'Completed', update the 'task_completion_date' field with the current date
         $task->task_status = $request->status;
+        if($request->status == 'Completed'){
+            $task->task_completion_date = Date::now()->toDateString();
+        }
+        else{
+            $task->task_completion_date = null;
+        }
         
         $task->update_date = Date::now()->toDateString();
         $task->update_time = Date::now()->toTimeString();
@@ -300,6 +374,8 @@ class TaskController extends Controller
             $showTasksExist = false;
             $createNewTask = false;
             $reassignTask = false;
+            $showTasksButton = false;
+            $myTasksButton = false;
 
             foreach ($moduleData as $data) {
                 if ($data['module']->module_name === 'My Tasks') {
@@ -323,10 +399,31 @@ class TaskController extends Controller
                 }
             }
 
-            if ($myTasksExist && $showTasksExist) {
-                // Both modules exist
-                // Do something...
-            } 
+            //Leader functionality
+            //if both modules are assigned we will check if showTasks in session is true
+            //if it is not true we will display My Tasks->in my Tasks we have to display show tasks button
+            //to redirect to show tasks
+            //else we will display show Tasks->in show Tasks we have to display my tasks button
+            //to redirect to my tasks
+            if($myTasksExist && $showTasksExist) {
+
+            
+                $redirectToShowTasks = session('showTasks');
+
+                if($redirectToShowTasks){
+                    $myTasksExist = false;
+                    $showTasksExist = true;
+                    $showTasksButton = false;
+                    $myTasksButton = true;
+                }
+                else if($redirectToShowTasks == false){
+                    $showTasksExist = false;
+                    $myTasksExist = true;
+                    $myTasksButton = false;
+                    $createNewTask = false;
+                    $showTasksButton = true;
+                }
+            }  
             
             if ($myTasksExist) {
                 //$tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','In Progress')->where('transferred_status', '!=', 'Pending')->get();
@@ -361,7 +458,7 @@ class TaskController extends Controller
                 }
                     $columnName = "Task Assigned By";
                     $title = "In Progress Tasks";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'showTasksButton'=>$showTasksButton]);
                         
             } elseif ($showTasksExist) {
                  $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','In Progress')->where('flag', 'show')->where(function ($query) {
@@ -394,7 +491,7 @@ class TaskController extends Controller
                     $columnName = "Task Assigned To";
                     $title = "In Progress Tasks";
                     $role = "Manager";
-                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount]);
+                return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount,'myTasksButton'=>$myTasksButton]);
              
             } else {
                 // Neither module exists
@@ -415,6 +512,8 @@ class TaskController extends Controller
            $showTasksExist = false;
            $createNewTask = false;
            $reassignTask = false;
+           $showTasksButton = false;
+           $myTasksButton = false;
 
            foreach ($moduleData as $data) {
                if ($data['module']->module_name === 'My Tasks') {
@@ -436,10 +535,32 @@ class TaskController extends Controller
                 }
            }
 
-           if ($myTasksExist && $showTasksExist) {
-               // Both modules exist
-               // Do something...
-           } 
+           //Leader functionality
+            //if both modules are assigned we will check if showTasks in session is true
+            //if it is not true we will display My Tasks->in my Tasks we have to display show tasks button
+            //to redirect to show tasks
+            //else we will display show Tasks->in show Tasks we have to display my tasks button
+            //to redirect to my tasks
+            if($myTasksExist && $showTasksExist) {
+
+            
+                $redirectToShowTasks = session('showTasks');
+
+                if($redirectToShowTasks){
+                    $myTasksExist = false;
+                    $showTasksExist = true;
+                    $showTasksButton = false;
+                    $myTasksButton = true;
+                }
+                else if($redirectToShowTasks == false){
+                    $showTasksExist = false;
+                    $myTasksExist = true;
+                    $myTasksButton = false;
+                    $createNewTask = false;
+                    $showTasksButton = true;
+                }
+            } 
+           
            if ($myTasksExist) {
                $tasks = TaskDetail::where('selected_user_id', $user_id)->where('flag', 'show')->where('task_status','Completed')->get();
                 $completedtaskCount = $tasks->count();
@@ -461,7 +582,7 @@ class TaskController extends Controller
                }
                    $columnName = "Task Assigned By";
                    $title = "Completed Tasks";
-               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount]);
+               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'showTasksButton'=>$showTasksButton]);
                        
            } elseif ($showTasksExist) {
                 $tasks = TaskDetail::where('add_by',$user_id)->where('task_status','Completed')->where('flag', 'show')->get();
@@ -491,7 +612,7 @@ class TaskController extends Controller
                    $columnName = "Task Assigned To";
                    $title = "Completed Tasks";
                    $role = "Manager";
-               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount]);
+               return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'title'=>$title,'role'=>$role,'createNewTask'=>$createNewTask,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount,'myTasksButton'=>$myTasksButton]);
             
            } else {
                // Neither module exists
@@ -651,22 +772,44 @@ class TaskController extends Controller
 
     public function showReassignedTasks()
     {
+        //if My Tasks And Show Tasks modules exist we want to display my tasks button
+        $moduleData = session('moduleData');
+        $myTasksExist = false;
+        $showTasksExist = false;
+        $myTasksButton = false;
+
+        foreach ($moduleData as $data) {
+            if ($data['module']->module_name === 'My Tasks') {
+                $myTasksExist = true;
+            }
+            if ($data['module']->module_name === 'Show Tasks') {
+                $showTasksExist = true;
+            }
+        }
         
+        if($myTasksExist && $showTasksExist){
+            $myTasksButton = true;
+        }
+        
+
         $user_details = session('user');
         $mng_id = $user_details->tbl_user_id;
 
         $ctasks = TaskDetail::where('add_by',$mng_id)->where('task_status','Completed')->where('flag', 'show')->get();
         $completedtaskCount = $ctasks->count();
+
         $ptasks = TaskDetail::where('add_by', $mng_id)->where('task_status','Pending')->where('flag', 'show')->where(function ($query) {
             $query->where('transferred_status', '!=', 'Pending')
                   ->orWhereNull('transferred_status');
         })->get();
         $pendingtaskCount = $ptasks->count();
+
         $iptasks = TaskDetail::where('add_by', $mng_id)->where('task_status','In Progress')->where('flag', 'show')->where(function ($query) {
             $query->where('transferred_status', '!=', 'Pending')
                   ->orWhereNull('transferred_status');
         })->get();
         $inprogresstaskCount = $iptasks->count();
+
         $tasks = TaskDetail::where('transferred_status','Pending')->where('flag','show')->where('add_by',$mng_id)->get();
         $reassigntaskCount = $tasks->count();
 
@@ -687,7 +830,7 @@ class TaskController extends Controller
         $view = "reassign";
         $title ="Reassign Tasks";
         $reassignTask = true;
-        return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'reassign'=>$reassign,'title'=>$title,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount]);
+        return view('frontend_tasks.showTasks',['tasks'=>$tasks,'columnName'=>$columnName,'role'=>$role,'reassign'=>$reassign,'title'=>$title,'reassignTask'=>$reassignTask,'pendingtaskCount'=>$pendingtaskCount,'completedtaskCount'=>$completedtaskCount,'inprogresstaskCount'=>$inprogresstaskCount,'reassigntaskCount'=>$reassigntaskCount,'myTasksButton'=>$myTasksButton]);
     }
 
 
@@ -794,6 +937,18 @@ class TaskController extends Controller
 
         return redirect('/Tasks/showreassignedtask');
 
+    }
+
+    public function redirectToShowTasks()
+    {
+        Session::put('showTasks',true);
+        return redirect('/Tasks');
+    }
+
+    public function redirectToMyTasks()
+    {
+        Session::put('showTasks',false);
+        return redirect('/Tasks');
     }
 
    
