@@ -689,7 +689,7 @@ class TaskController extends Controller
         
                 // Check if either of the module IDs exists for the role
                 $roleModules = RoleModule::where('tbl_role_id', $roleId)
-                    ->whereIn('tbl_module_id', [20, 25])
+                    ->whereIn('tbl_module_id', [19, 24])
                     ->pluck('tbl_module_id')
                     ->toArray();
         
@@ -862,7 +862,7 @@ class TaskController extends Controller
         
                 // Check if either of the module IDs exists for the role
                 $roleModules = RoleModule::where('tbl_role_id', $roleId)
-                    ->whereIn('tbl_module_id', [20, 25])
+                    ->whereIn('tbl_module_id', [19, 24])
                     ->pluck('tbl_module_id')
                     ->toArray();
         
