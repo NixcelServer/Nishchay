@@ -9,6 +9,7 @@ use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\QueryController;
 
 
 
@@ -198,8 +199,13 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
 });
 
+Route::group(['prefix' => '/Queries','middleware'=>['web','queryAuth']],function(){
 
 
+    //when user clicks on query
+    Route::get('/',[QueryController::class,'showPendingQueries']);
+
+});
    
 
 });

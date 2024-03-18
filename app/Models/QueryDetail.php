@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class QueryDetail extends Model
 {
     use HasFactory;
+    protected $table = 'tbl_query_details';
+    public $timestamps = false;
+
 }

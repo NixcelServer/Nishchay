@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tbl_query_details', function (Blueprint $table) {
             $table->id('tbl_query_detail_id');
             $table->string('query_description')->required();
+            $table->integer('selected_user_id')->required();
             $table->string('query_solution');
             $table->date('query_answered_date');
             $table->integer('add_by');
