@@ -20,6 +20,7 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 
 
@@ -80,6 +81,8 @@ class AdminController extends Controller
     //create new user in db and redirect to user home page
     public function storeUser(Request $request){
         
+        
+
         $user_details = session('user');
         AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
 
@@ -117,7 +120,12 @@ class AdminController extends Controller
 
         //store details into employee also
         $userId = $user->tbl_user_id;
+
+
         
+        //we want to create auto incrementing employee code 
+        $employeeCode = IdGenerator::generate(['table'=>'tbl_emp_details','field'=>'emp_code','length' => 8, 'prefix' =>'N-']); 
+         
         $emp = new EmployeeDetail;
         $emp->tbl_user_id = $userId;
         $emp->first_name = $request->first_name;
@@ -125,6 +133,7 @@ class AdminController extends Controller
         $emp->last_name = $request->last_name;
         $emp->email = $request->email;
         $emp->tbl_role_id = $dec_role_id;
+        $emp->emp_code = $employeeCode;
         $emp->add_by = $user_details->tbl_user_id;
         $emp->add_date = Date::now()->toDateString();
         $emp->add_time = Date::now()->toTimeString();

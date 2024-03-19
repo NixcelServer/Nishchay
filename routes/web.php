@@ -146,6 +146,10 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //store salary details and then redirect to show employees page
     Route::post('/eidtemp/saldetails',[HrController::class,'salDetails']);
+
+    //upload documents functionality
+
+    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForms']);
     
 });
 
