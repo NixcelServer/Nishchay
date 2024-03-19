@@ -50,31 +50,14 @@
                                                 <!-- Edit action link with encrypted ID -->
                                                 <a href="/admin/edituser/{{$user->encrypted_id}}" class="btn btn-warning btn-sm">Edit</a>
                                                 <!-- Delete action form with encrypted ID and SweetAlert confirmation -->
-                                                <a href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger btn-sm delete-user" data-encrypted-id="{{$user->encrypted_id}}">Delete</a>
+                                                <button href="/admin/delete/{{$user->encrypted_id}}" class="btn btn-danger btn-sm delete-user" data-encrypted-id="{{$user->encrypted_id}}">Delete</button>
                                             </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                     
                                 </table>
-                                <div class="card-footer text-right">
-                                    <nav class="d-inline-block">
-                                      <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                          <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1 <span
-                                              class="sr-only">(current)</span></a></li>
-                                        <li class="page-item">
-                                          <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                          <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                        </li>
-                                      </ul>
-                                    </nav>
-                                  </div>
+                                
                             </div>
                         </div>
                     </div>

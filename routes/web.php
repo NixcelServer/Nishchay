@@ -108,7 +108,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //     // Route::get('/manage-role',[SuperAdminController::class,'manageRole'])->name('manageRole');
 //     // Route::post('/update-role',[SuperAdminController::class,'updateRole'])->name('updateRole');
 
-//Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+         //Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
 
 
 Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
@@ -206,3 +206,7 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 //Query URL's testing
 Route::get('/Queries',[QueryController::class,'ShowQueries']);
 Route::get('/QueriesDev',[QueryController::class,'ShowQueriesDev']);
+
+
+
+Route::get('/Employees/uploaddoc',[HrController::class,'ShowUploadDoc']);

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Nixcel Software Solutions</title>
+  <title>Nixcel - Employee Management System</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/css/app.min.css">
   <link rel="stylesheet" href="assets/bundles/bootstrap-social/bootstrap-social.css">
@@ -34,7 +34,7 @@
             <div class="card card-primary">
               <div class="card-header" style="display: flex; justify-content: center;">
                 <a>
-                    <img alt="image" src="assets/img/logo.png" class="header-logo" style="max-width: 150px; height: auto;">
+                    <img alt="image" src="assets/img/logo123.png" class="header-logo" style="max-width: 150px; height: auto;">
                     <span class="logo-name"></span>
                 </a>
             </div>

@@ -7,7 +7,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <!-- Add the CSRF token meta tag here -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Nixcel - LeftMenu Template</title>
+  <title>Nixcel - Employee Management System</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="/assets/css/app.min.css">
   <!-- Template CSS -->
@@ -16,6 +16,9 @@
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="/assets/css/custom.css">
   <link rel='shortcut icon' type='image/x-icon' href='/assets/img/favicon.ico' />
+<!-- datatable -->
+  <link rel="stylesheet" href="/assets/bundles/datatables/datatables.min.css">
+  <link rel="stylesheet" href="/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
 </head>
 
 <style>
@@ -87,13 +90,13 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="/dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 150px; height: auto;" /> <span
-                class="logo-name"></span>
+            <a href="/dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 43px; height: auto;" /> <span
+                class="logo-name" style="color: rgb(52, 52, 151); style="font-family: 'Georgia', sans-serif;">Nixcel</span>
             </a>
           </div>
           <ul class="sidebar-menu">
             <li class="menu-header" ></li>
-            <li class="dropdown active" style="margin-top: 20px;">
+            <li class="dropdown active" style="margin-top: 5px;">
               <a href="/dashboard" class="nav-link" style="color: black;"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
 
@@ -127,7 +130,7 @@
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Audit_Log</span></a>
+                  <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Log</span></a>
                 </li>
 
                 
@@ -268,7 +271,13 @@
   <!-- Page Specific JS File -->
   <script src="/assets/js/page/form-wizard.js"></script>
   
-  
+{{-- --- data table js files --- --}}
+<!-- JS Libraies -->
+<script src="/assets/bundles/datatables/datatables.min.js"></script>
+<script src="/assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="/assets/bundles/jquery-ui/jquery-ui.min.js"></script>
+<!-- Page Specific JS File -->
+<script src="/assets/js/page/datatables.js"></script>
 </body>
 
 

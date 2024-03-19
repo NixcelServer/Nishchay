@@ -570,6 +570,12 @@ class HrController extends Controller
     //     return redirect('/hr/employees');
 
     // }
+
+    //upload documents
+    public function ShowUploadDoc()
+    {
+        return view('frontend_hr.upload_document');
+    }
 }
 
 //testing

@@ -1,16 +1,4 @@
-[16:55] Abhijeet Bhosale
 @extends('frontend_home.leftmenu')
- 
-<style>
-    /* Custom CSS to adjust positioning */
-    .main-content {
-        margin-top: -30px; /* Adjust this value as needed */
-    }
- 
-    #designationName{
-        width: 400px; /* Adjust the width as needed */
-    }
-</style>
  
 <div class="main-content">
     <section class="section">
@@ -38,7 +26,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    
                                     <tbody>
                                         @foreach($designations as $key => $designation)
                                         <tr>
@@ -50,32 +38,15 @@
                                                     data-designation-id="{{ $designation->tbl_designation_id }}"
                                                     data-encrypted-id="{{ $designation->encrypted_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <a href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger btn-sm delete-designation" data-encrypted-id="{{ $designation->encrypted_id }}">Delete</a>
+                                                <button href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger btn-sm delete-designation " data-encrypted-id="{{ $designation->encrypted_id }}">Delete</button>
                                             </td>
 
                                         </tr>
                                         @endforeach
-                                    </tbody>
+                                    
                                     </tbody>
                                 </table>
-                                <div class="card-footer text-right">
-                                    <nav class="d-inline-block">
-                                      <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                          <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1 <span
-                                              class="sr-only">(current)</span></a></li>
-                                        <li class="page-item">
-                                          <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                          <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                        </li>
-                                      </ul>
-                                    </nav>
-                                  </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -186,38 +157,4 @@ document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
     });
 });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- <script>
-    $(document).ready(function() {
-        $('#editDesignationForm').submit(function(e) {
-            e.preventDefault(); // Prevent form submission
-
-            var designationName = $(this).find('.designationName').val();
-            console.log(designationName);
-            var designations = {!! json_encode($designations) !!}; // Convert PHP array to JavaScript array
-
-            //Perform validation
-            if (designationName.trim() === '') {
-                $(this).find('.designationNameError').text('Please enter designation name.');
-                return;
-            }
-
-            // Check if designation name already exists
-            var exists = designations.some(function(designation) {
-                return designation.designation_name === designationName;
-            });
-
-            if (exists) {
-                $(this).find('.designationNameError').text('Designation with this name already exists.');
-                return;
-            }
-
-            // If validation passes, submit the form
-            this.submit();
-        });
-        $('.designationName').on('input', function() {
-            $(this).siblings('.designationNameError').text('');
-        });
-    });
-</script> -->

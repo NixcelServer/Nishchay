@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Nixcel -HR DashBoard</title>
+  <title>Nixcel - Employee Management System</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="/assets/css/app.min.css">
   <!-- Template CSS -->
@@ -692,35 +692,38 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover" id="previous-employees">
-                                            <thead>
-                                                <tr>
-                                                    <th>Sr. No</th>
-                                                    <th>Company Name</th>
-                                                    <th>Designation</th>
-                                                    <th>Start Date</th>
-                                                    <th>End Date</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if($prev_details->isNotEmpty())
-                                                    @foreach($prev_details as $key => $employee)
-                                                        <tr style="font-size: 15px;">
-                                                            <td>{{ $key + 1 }}</td>
-                                                            <td>{{ $employee->company_name }}</td>
-                                                            <td>{{ $employee->designation }}</td>
-                                                            <td>{{ $employee->start_date }}</td>
-                                                            <td>{{ $employee->end_date }}</td>
-                                                            <td>
-                                                                <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
+                                              <thead>
+                                                            <tr>
+                                                                <th>Sr. No</th>
+                                                                <th>Company Name</th>
+                                                                <th>Designation</th>
+                                                                <th>Start Date</th>
+                                                                <th>End Date</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if($prev_details->isNotEmpty())
+                                                                @foreach($prev_details as $key => $employee)
+                                                                    <tr style="font-size: 15px;">
+                                                                        <td>{{ $key + 1 }}</td>
+                                                                        <td>{{ $employee->company_name }}</td>
+                                                                        <td>{{ $employee->designation }}</td>
+                                                                        <td>{{ $employee->start_date }}</td>
+                                                                        <td>{{ $employee->end_date }}</td>
+                                                                        <td>
+                                                                            <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
+                                            </table>
+                                            
+                                        </div>
                                     </div>
                                 </fieldset>
                             </form>
