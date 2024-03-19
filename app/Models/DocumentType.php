@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class QueryDetail extends Model
+class DocumentType extends Model
 {
     use HasFactory;
-    protected $table = 'tbl_query_details';
+    protected $table = 'mst_tbl_doc_type';
     public $timestamps = false;
-
 }

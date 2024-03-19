@@ -19,6 +19,7 @@ use App\Models\Role;
 use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
+use App\Models\DocumentType;
 use Illuminate\Validation\Rule;
 //use App\Models\AuditLogHelper;
 use App\Helpers\AuditLogHelper;
@@ -471,101 +472,15 @@ class HrController extends Controller
         return view('hr.official_details_form',['enc_id'=>$enc_id]);
     }
 
-    // public function storeOfficialDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
 
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+    //upload documents form
+    public function uploadDocumentsForm($enc_user_id)
+    {
+        $docType = DocumentType::all();
 
-    //     $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->get();
-    //     $officialDetails->official_email_id = $request->email;
-    //     $officialDetails->work_location = $request->work_location;
-    //     $officialDetails->reporting_manager_id = $request->reporting_manager_id;
-    //     $officialDetails->add_by = $userdetails->tbl_user_id;
-    //     $officialDetails->add_date = Date::now()->toDateString();
-    //     $officialDetails->add_time = Date::now()->toTimeString();
-    //     $officialDetails->save();
+        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docType'=>$docType]);
+    }
+    
 
-    //     return view('hr.statutory_comp_form',['enc_id'=>$enc_id]);
-    // }
 
-    // public function statutoryDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
-
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
-
-    //     $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->get();
-    //     $statDetails->uan = $request->uan;
-    //     $statDetails->old_epf_no = $request->old_epf_no;
-    //     $statDetails->nixcel_epf_no = $request->nixcel_epf_no;
-    //     $statDetails->nixcel_essi_no = $request->nixcel_essi_no;
-    //     $statDetails->nominee_name = $request->nominee_name;
-    //     $statDetails->relation_with_nominee = $request->relation_with_nominee;
-    //     $statDetails->add_by = $userdetails->tbl_user_id;
-    //     $statDetails->add_date = Date::now()->toDateString();
-    //     $statDetails->add_time = Date::now()->toTimeString();
-    //     $statDetails->flag = "show";
-
-    //     $statDetails->save();
-
-    //     return view('hr.bank_details_form',['enc_id'=>$enc_id]);
-
-    // }
-
-    // public function bankDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
-
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
-
-    //     $bankDetails = BankDetail::where('tbl_user_id',$enc_id)->get();
-    //     $bankDetails->bank_name = $request->bank_name;
-    //     $bankDetails->city = $request->city;
-    //     $bankDetails->ifsc = $request->ifsc;
-    //     $bankDetails->account_no = $request->account_no;
-    //     $bankDetails->add_by = $userdetails->tbl_user_id;
-    //     $bankDetails->add_date = Date::now()->toDateString();
-    //     $bankDetails->add_time = Date::now()->toTimeString();
-    //     $bankDetails->save();
-
-    //     return view('hr.sal_details',['enc_id'=>$enc_id]);
-    // }
-
-    // public function salDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
-
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
-
-    //     $salDetails = SalaryStructureDetail::where('tbl_user_id',$dec_id)->get();
-
-    //     $salDetails->actual_gross =$request->actual_gross;
-    //     $salDetails->basic = $request->basic;
-    //     $salDetails->hra = $request->hra;
-    //     $salDetails->special_allowance = $request->special_allowance;
-    //     $salDetails->medical_allowance = $request->medical_allowance;
-    //     $salDetails->statutory_bonus = $request->statutory_bonus;
-    //     $salDetails->payable_gross_salary = $request->payable_gross_salary;
-    //     $salDetails->pf = $request->pf;
-    //     $salDetails->tds = $request->tds;
-    //     $salDetails->pt = $request->pt;
-    //     $salDetails->net_salary = $request->net_salary;
-    //     $salDetails->ctc = $request->ctc;
-    //     $salDetails->add_by = $userdetails->tbl_user_id;
-    //     $salDetails->add_date = Date::now()->toDateString();
-    //     $salDetails->add_time = Date::now()->toTimeString();
-    //     $salDetails->save();
-
-    //     return redirect('/hr/employees');
-
-    // }
 }

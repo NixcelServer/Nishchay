@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'isAdmin' => \App\Http\Middleware\AdminAuthentication::class,
         'isHr' => \App\Http\Middleware\HrAuthentication::class,
         'isDev' => \App\Http\Middleware\DevAuthentication::class,
+        'queryAuth' => \App\Http\Middleware\QueryAuthentication::class,
         'preventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
         'validLogin' => \App\Http\Middleware\ValidLogin::class
     ];

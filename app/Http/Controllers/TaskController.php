@@ -599,6 +599,7 @@ class TaskController extends Controller
                 $inprogresstaskCount = $iptasks->count();
                 $rtasks = TaskDetail::where('transferred_status','Pending')->where('flag','show')->where('add_by',$user_id)->get();
                 $reassigntaskCount = $rtasks->count();
+
                foreach($tasks as $task)
                    {
                        // Encode the task ID using the helper function
@@ -675,6 +676,7 @@ class TaskController extends Controller
 
       
         $emps = OfficialDetail::where('reporting_manager_id',$mng_id)->get();
+        
 
         $empsWithModulesAndNames = [];
 
@@ -686,12 +688,18 @@ class TaskController extends Controller
                 $enc_user_id = EncryptionDecryptionHelper::encdecId($user->tbl_user_id, 'encrypt');
                 // Retrieve the role ID directly from the user object
                 $roleId = $user->tbl_role_id;
+
+                //get the modules id from db
+                $moduleId = Module::where('module_name','My Tasks')->first();
+                
         
-                // Check if either of the module IDs exists for the role
-                $roleModules = RoleModule::where('tbl_role_id', $roleId)
-                    ->whereIn('tbl_module_id', [19, 24])
-                    ->pluck('tbl_module_id')
-                    ->toArray();
+                // Check if  My Tasks module Id exists for the role
+                $roleModules = RoleModule::where('tbl_role_id', $roleId)->where('tbl_module_id', $moduleId->tbl_module_id)->exists();
+
+                 
+                    //->whereIn('tbl_module_id', [20, 25]);
+                    // ->pluck('tbl_module_id')
+                    // ->toArray();
         
                 // If either module ID exists for the role, include the employee and user's name in the result
                 if (!empty($roleModules)) {
@@ -704,6 +712,7 @@ class TaskController extends Controller
             }
         }
 
+       // dd($empsWithModulesAndNames);
         $user_details = session('user');
         AuditLogHelper::logDetails('create new task', $user_details->tbl_user_id);
 
@@ -860,11 +869,18 @@ class TaskController extends Controller
                 // Retrieve the role ID directly from the user object
                 $roleId = $user->tbl_role_id;
         
+                 //get the modules id from db
+                 $moduleId = Module::where('module_name','My Tasks')->first();
+                
+        
+                 // Check if  My Tasks module Id exists for the role
+                 $roleModules = RoleModule::where('tbl_role_id', $roleId)->where('tbl_module_id', $moduleId->tbl_module_id)->exists();
+ 
                 // Check if either of the module IDs exists for the role
-                $roleModules = RoleModule::where('tbl_role_id', $roleId)
-                    ->whereIn('tbl_module_id', [19, 24])
-                    ->pluck('tbl_module_id')
-                    ->toArray();
+                // $roleModules = RoleModule::where('tbl_role_id', $roleId)
+                //     ->whereIn('tbl_module_id', [1, 2])
+                //     ->pluck('tbl_module_id')
+                //     ->toArray();
         
                 // If either module ID exists for the role, include the employee and user's name in the result
                 if (!empty($roleModules)) {
