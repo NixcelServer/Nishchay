@@ -9,17 +9,18 @@
                         <div class="card-header">
                             <h4>Upload Documents</h4>
                         </div>
-                        <form action="" method="POST"> <!-- Set the action to the route of your storeUser method -->
+                        <form action="/Employees/uploaddoc" method="POST" enctype="multipart/form-data"> <!-- Set the action to the route of your storeUser method -->
                             @csrf <!-- CSRF protection -->
                             <div class="card-body">
                                 <div class="form-group row">
                                     <div class="col">
+                                    <input type="hidden" name="enc_user_id" value="{{ $enc_user_id }}">
                                         <label for="document_type">Document Type</label>
-                                        <select name="document_type" class="form-control" id="document_type">
-                                            <option value="passport">Passport</option>
-                                            <option value="driver_license">Driver's License</option>
-                                            <option value="id_card">ID Card</option>
-                                            <!-- Add more options as needed -->
+                                        <select name="doc_type_id" class="form-control" id="doc_type_id">
+                                            <option value="">Select Document Type</option>
+                                            @foreach ($docTypes as $docType)
+                                            <option value="{{ $docType->enc_doc_type_id}}">{{ $docType->doc_type }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col">
@@ -29,9 +30,7 @@
                                                 <input type="file" class="custom-file-input" id="document" name="document">
                                                 <label class="custom-file-label" for="document">Choose file</label>
                                             </div>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary" type="button" id="attachBtn">Attach</button>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -57,22 +56,27 @@
                       <thead>
                         <tr>
                           <th>Sr. No</th>
-                          <th>Employee Name</th>
-                          <th>Document Type</th>
+                          <th>Document Name</th>
+                          {{-- <th>Document Type</th> --}}
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
+                      @foreach ($docs as $index => $doc)
                         <tr>
-                          <td>1</td>
-                          <td>Abhijeet Kiran Bhosale</td>
-                          <td>PAN Card</td>
+                            
+                          <td>{{ $index + 1 }}</td>
+                          <td>{{ $doc->doc_name }}</td>
+                        {{-- <td>{{ $doc->doc_path }}</td> --}}  
                           <td>
-                            <a href="#">
+      
+
+                           {{-- <a href="#">
                                 <i class="fas fa-eye"></i> View
-                            </a>
+                            </a>  --}} 
                             </td>
                         </tr>
+                        @endforeach
                       </tbody>
                     </table>
                   </div>

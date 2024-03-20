@@ -102,6 +102,13 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
      Route::get('/auditlogdetails',[AdminController::class,'auditlogDetails']);
 
+     //technologies
+     Route::get('/technologies',[TechnologyController::class,'technologies']);
+    //store technology
+     Route::post('/storetechnology',[TechnologyController::class,'storeTechnology']);
+     //delete technology
+     Route::post('/deletetechnology',[TechnologyController::class,'deleteTechnology']);
+
  });
 
  //     // Route::get('/users',[SuperAdminController::class,'users'])->name('superAdminUsers');
@@ -149,7 +156,10 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //upload documents functionality
 
-    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForms']);
+    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForm']);
+
+    //upload the doc inside the empcode folder
+    Route::post('/uploaddoc',[HrController::class,'uploadDocuments']);
     
 });
 
