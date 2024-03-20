@@ -109,6 +109,10 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      //delete technology
      Route::post('/deletetechnology',[TechnologyController::class,'deleteTechnology']);
 
+
+     Route::get('/doctype',[DocTypeController::class,'showDocType']);
+     Route::post('/createdoctype',[DocTypeController::class,'createDocType']);
+
  });
 
  //     // Route::get('/users',[SuperAdminController::class,'users'])->name('superAdminUsers');
