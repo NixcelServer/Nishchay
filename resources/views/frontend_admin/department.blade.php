@@ -1,4 +1,14 @@
 @extends('frontend_home.leftmenu')
+<style>
+    .custom-thead {
+        background-color: #c7e1ff;
+    }
+
+    /* Custom CSS to adjust positioning */
+    .main-content {
+        margin-top: -30px; /* Adjust this value as needed */
+    }
+</style>
 
 <div class="main-content">
     <section class="section">
@@ -19,7 +29,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                                    <thead>
+                                    <thead class="custom-thead">
                                         <tr >
                                             <th>Sr.No</th>
                                             <th>Department Name</th>

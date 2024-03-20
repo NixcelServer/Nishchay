@@ -1,12 +1,21 @@
-@extends('frontend_home.leftmenu')
-
+<head>
+    <!-- Preload Critical CSS -->
+  <link rel="preload" href="/assets/css/app.min.css" as="style">
+  <link rel="preload" href="/assets/css/style.css" as="style">
+  <link rel="preload" href="/assets/css/components.css" as="style">
+  <link rel="preload" href="/assets/css/custom.css" as="style">
+   <!-- Preload Critical JS -->
+   <link rel="preload" href="/assets/js/app.min.js" as="script">
+   <link rel="preload" href="/assets/js/scripts.js" as="script">
+   <link rel="preload" href="/assets/js/custom.js" as="script">
+</head>
 <style>
-    /* Custom CSS to adjust positioning */
-    .main-content {
-        margin-top: -30px; /* Adjust this value as needed */
+    .custom-thead {
+        background-color: #c7e1ff;
     }
 </style>
 
+@extends('frontend_home.leftmenu')
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -24,7 +33,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                                    <thead>
+                                    <thead class="custom-thead">
                                         <tr>
                                             <th>Sr.No</th>
                                             <th>Name</th>
@@ -69,7 +78,12 @@
         
     </section>
 </div>
-
+<style>
+    /* Custom CSS to adjust positioning */
+    .main-content {
+        margin-top: -30px; /* Adjust this value as needed */
+    }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>

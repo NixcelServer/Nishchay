@@ -13,43 +13,41 @@
                             @csrf <!-- CSRF protection -->
                             <div class="card-body">
                                 <div class="form-group row">
+                                        <div class="col">
+                                            <input type="text" name="first_name" class="form-control" placeholder="First Name" id="firstNameInput" value="{{ old('first_name') }}" required pattern="^[A-Za-z\s]+$" oninput="this.value = this.value.toUpperCase()>
+                                            <small class="text-danger" id="firstNameError"></small>
+                                        </div>
                                     <div class="col">
-                                        <input type="text" name="first_name" class="form-control" placeholder="First Name" value="{{ old('first_name') }}" required pattern="^[A-Za-z\s]+$">
-                                        <small class="text-danger" id="firstNameError"></small>
-                                    </div>
-                                    <div class="col">
-                                        <input type="text" name="middle_name" class="form-control" placeholder="Middle Name" value="{{ old('middle_name') }}" pattern="^[A-Za-z\s]+$">
+                                        <input type="text" name="middle_name" class="form-control" placeholder="Middle Name" id="middleNameInput" value="{{ old('middle_name') }}" pattern="^[A-Za-z\s]+$" oninput="this.value = this.value.toUpperCase()>
                                         <small class="text-danger" id="middleNameError"></small>
                                     </div>
                                     <div class="col">
-                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" value="{{ old('last_name') }}" required pattern="^[A-Za-z\s]+$">
+                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" id="lastNameInput" value="{{ old('last_name') }}" required pattern="^[A-Za-z\s]+$" oninput="this.value = this.value.toUpperCase()>
                                         <small class="text-danger" id="lastNameError"></small>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <div class="col">
-                                        <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required pattern="[a-z0-9._%+-]+@gmail\.com$" >
+                                        <input type="email" name="email" class="form-control" style="width: 100%;" placeholder="Email" value="{{ old('email') }}" required pattern="[a-z0-9._%+-]+@gmail\.com$">
                                         @error('email')
                                         <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                        @enderror
                                         <small class="text-danger" id="emailError"></small>
                                     </div>
                                     <div class="col">
-                                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" value="{{ old('password') }}" required>
-                                        @error('password')
+                                        <input type="text" name="emp_code" class="form-control" style="width: 100%;" placeholder="Employee Code" value="{{ old('emp_code') }}" required pattern="[A-Z0-9]{6}" title="Enter a valid 6-character alphanumeric code" readonly>
+                                        @error('emp_code')
                                         <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                    </div>
-                                    <div class="col">
-                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required onkeyup="checkPasswordMatch();">
-                                        <div id="passwordMatch"></div>
+                                        @enderror
+                                        <small class="text-danger" id="empCodeError"></small>
                                     </div>
                                 </div>
+                                
 
                                 <div class="form-group row">
                                 <div class="col">
-                                    <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 35%;" required>
+                                    <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 100%;" required>
                                         <option value="">Select Role</option> <!-- Blank option -->
                                         @foreach($roles as $role)
                                             @if($role->role_name !== 'Admin')
@@ -57,6 +55,16 @@
                                             @endif
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" value="{{ old('password') }}" required>
+                                    @error('password')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                                </div>
+                                <div class="col">
+                                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required onkeyup="checkPasswordMatch();">
+                                    <div id="passwordMatch"></div>
                                 </div>
                                     <div class="col-auto">
                                         <button class="btn btn-primary" type="submit">Submit</button>
@@ -121,4 +129,18 @@
 
         return isValid;
     }
+</script>
+
+<script>
+    document.getElementById('firstNameInput').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
+    document.getElementById('middleNameInput').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
+    document.getElementById('lastNameInput').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
 </script>

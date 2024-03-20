@@ -5,6 +5,15 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Nixcel - Employee Management System</title>
+ <!-- Preload Critical CSS -->
+ <link rel="preload" href="/assets/css/app.min.css" as="style">
+ <link rel="preload" href="/assets/css/style.css" as="style">
+ <link rel="preload" href="/assets/css/components.css" as="style">
+ <link rel="preload" href="/assets/css/custom.css" as="style">
+  <!-- Preload Critical JS -->
+  <link rel="preload" href="/assets/js/app.min.js" as="script">
+  <link rel="preload" href="/assets/js/scripts.js" as="script">
+  <link rel="preload" href="/assets/js/custom.js" as="script">
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/css/app.min.css">
   <link rel="stylesheet" href="assets/bundles/bootstrap-social/bootstrap-social.css">

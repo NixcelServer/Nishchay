@@ -8,6 +8,15 @@
   <!-- Add the CSRF token meta tag here -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Nixcel - Employee Management System</title>
+  <!-- Preload Critical CSS -->
+  <link rel="preload" href="/assets/css/app.min.css" as="style">
+  <link rel="preload" href="/assets/css/style.css" as="style">
+  <link rel="preload" href="/assets/css/components.css" as="style">
+  <link rel="preload" href="/assets/css/custom.css" as="style">
+   <!-- Preload Critical JS -->
+   <link rel="preload" href="/assets/js/app.min.js" as="script">
+   <link rel="preload" href="/assets/js/scripts.js" as="script">
+   <link rel="preload" href="/assets/js/custom.js" as="script">
   <!-- General CSS Files -->
   <link rel="stylesheet" href="/assets/css/app.min.css">
   <!-- Template CSS -->
@@ -130,7 +139,17 @@
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Log</span></a>
+                  <a href="/admin/technology"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Technology</span></a>
+                </li>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/document_type"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Document Type</span></a>
+                </li>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Activity Log</span></a>
                 </li>
 
                 
@@ -247,6 +266,7 @@
             </div>
           </div>
         </div> --}}
+        
       </div>    
           
  

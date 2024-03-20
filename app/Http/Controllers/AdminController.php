@@ -345,10 +345,26 @@ class AdminController extends Controller
             
         }
        }
-        
-
+       
         return view('frontend_admin.auditlog',['auditlogs'=>$auditlogs]);
      }
+     public function fetchAllAuditLog()
+{
+    $auditLogs = AuditLogDetail::all(); // Assuming AuditLog is your model representing the audit log data
 
+    return response()->json([
+        'success' => true,
+        'data' => $auditLogs,
+    ]);
+}
+
+public function showTechnologies()
+{
+    return view('frontend_admin.technology');
+}
+public function showDocumentType()
+{
+    return view('frontend_admin.document_type');
+}
     
 }

@@ -14,46 +14,42 @@
                 <div class="col-12">
                     <div class="card" style="max-width: 1000px;">
                         <div class="card-header">
-                            <h4 class="mt-2">Nixcel Software Solutions Designation</h4>
+                            <h4 class="mt-2">Nixcel Software Solutions Document Types</h4>
                         </div>
                         <div class="col-12 text-right mt-n4">
                             <div class="buttons">
-                                <!-- Button to show Add New Designation Modal -->
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#addDesignationModal">Add New Designation</button>
+                                <!-- Button to show Add New Document Type Modal -->
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addDocumentTypeModal">Add New Document Type</button>
                             </div>
                         </div>
-                        <!-- Table displaying designations -->
+                        <!-- Table displaying document types -->
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                                     <thead class="custom-thead">
                                         <tr>
                                             <th>Sr.No</th>
-                                            <th>Designation</th>
+                                            <th>Document Type</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    
                                     <tbody>
-                                        @foreach($designations as $key => $designation)
+                                        {{-- @foreach($documentTypes as $key => $documentType)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $designation->designation_name }}</td>
+                                            <td>{{ $documentType->document_type_name }}</td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
                                                 <button class="btn btn-warning btn-sm toggle-edit-form"
-                                                    data-designation-id="{{ $designation->tbl_designation_id }}"
-                                                    data-encrypted-id="{{ $designation->encrypted_id }}">Edit</button>
+                                                    data-document-type-id="{{ $documentType->tbl_document_type_id }}"
+                                                    data-encrypted-id="{{ $documentType->encrypted_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <button href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger btn-sm delete-designation " data-encrypted-id="{{ $designation->encrypted_id }}">Delete</button>
+                                                <button href="/admin/deletedocumenttype/{{ $documentType->encrypted_id }}" class="btn btn-danger btn-sm delete-document-type" data-encrypted-id="{{ $documentType->encrypted_id }}">Delete</button>
                                             </td>
-
                                         </tr>
-                                        @endforeach
-                                    
+                                        @endforeach --}}
                                     </tbody>
                                 </table>
-                                
                             </div>
                         </div>
                     </div>
@@ -67,25 +63,24 @@
         margin-bottom: 0; /* Remove bottom margin */
     }
 </style>
-<!-- Add Designation Modal -->
-<div class="modal fade" id="addDesignationModal" tabindex="-1" role="dialog" aria-labelledby="addDesignationModalLabel" aria-hidden="true">
+
+<!-- Add Document Type Modal -->
+<div class="modal fade" id="addDocumentTypeModal" tabindex="-1" role="dialog" aria-labelledby="addDocumentTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form  action="/admin/storedesignation" method="POST">
+            <form  action="/admin/storedocumenttype" method="POST">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addDesignationModalLabel">Add New Designation</h5>
+                    <h5 class="modal-title" id="addDocumentTypeModalLabel">Add New Document Type</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="designationName">Enter Designation Name</label>
-
-                        <input type="text" class="form-control" id="designationName" name="designationName" required>
-                        <span id="designationNameError" class="text-danger"></span>
-
+                        <label for="documentTypeName">Enter Document Type Name</label>
+                        <input type="text" class="form-control" id="documentTypeName" name="documentTypeName" required>
+                        <span id="documentTypeNameError" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center"> <!-- Add justify-content-center class -->
@@ -96,26 +91,25 @@
     </div>
 </div>
 
-<!-- Edit Designation Modal -->
-@foreach($designations as $designation) 
-<div class="modal fade" id="editDesignationModal_{{ $designation->tbl_designation_id }}" tabindex="-1" role="dialog" aria-labelledby="editDesignationModalLabel_{{ $designation->tbl_designation_id }}" aria-hidden="true">
+<!-- Edit Document Type Modal -->
+{{-- @foreach($documentTypes as $documentType) 
+<div class="modal fade" id="editDocumentTypeModal_{{ $documentType->tbl_document_type_id }}" tabindex="-1" role="dialog" aria-labelledby="editDocumentTypeModalLabel_{{ $documentType->tbl_document_type_id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id=editDesignationForm action="/admin/editdesignation" method="POST">
+            <form id=editDocumentTypeForm action="/admin/editdocumenttype" method="POST">
                 @csrf
-                <input type="hidden" name="enc_id" value="{{ $designation->encrypted_id }}">
+                <input type="hidden" name="enc_id" value="{{ $documentType->encrypted_id }}">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editDesignationModalLabel_{{ $designation->tbl_designation_id }}">Edit Designation</h5>
+                    <h5 class="modal-title" id="editDocumentTypeModalLabel_{{ $documentType->tbl_document_type_id }}">Edit Document Type</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="editDesignationName_{{ $designation->tbl_designation_id }}">Enter Designation Name</label>
-                        <input type="text" class="form-control designationName" id="editDesignationName_{{ $designation->tbl_designation_id }}" name="designationName" value="{{ $designation->designation_name }}" required>
-<span class="text-danger designationNameError"></span>
-
+                        <label for="editDocumentTypeName_{{ $documentType->tbl_document_type_id }}">Enter Document Type Name</label>
+                        <input type="text" class="form-control documentTypeName" id="editDocumentTypeName_{{ $documentType->tbl_document_type_id }}" name="documentTypeName" value="{{ $documentType->document_type_name }}" required>
+                        <span class="text-danger documentTypeNameError"></span>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
@@ -125,15 +119,13 @@
         </div>
     </div>
 </div>
-@endforeach
-
-
+@endforeach --}}
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     // Script for delete confirmation with SweetAlert
-    document.querySelectorAll('.delete-designation').forEach(function (button) {
+    document.querySelectorAll('.delete-document-type').forEach(function (button) {
         button.addEventListener('click', function (event) {
             event.preventDefault();
             var encryptedId = this.dataset.encryptedId; // Retrieve encrypted_id from data attribute
@@ -141,27 +133,26 @@
             // Use SweetAlert to confirm the delete action
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You want to delete this Designation?",
+                text: "You want to delete this Document Type?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Delete Designation'
+                confirmButtonText: 'Yes, Delete Document Type'
             }).then((result) => {
                 if (result.isConfirmed) {
                     // If confirmed, redirect to the delete URL
-                    window.location.href = "/admin/deletedesignation/" + encryptedId;
+                    window.location.href = "/admin/deletedocumenttype/" + encryptedId;
                 }
             });
         });
     });
 
-    // Script to toggle display of edit designation form
-document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
-    button.addEventListener('click', function () {
-        var designationId = this.dataset.designationId;
-        $('#editDesignationModal_' + designationId).modal('show');
+    // Script to toggle display of edit document type form
+    document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var documentTypeId = this.dataset.documentTypeId;
+            $('#editDocumentTypeModal_' + documentTypeId).modal('show');
+        });
     });
-});
 </script>
-

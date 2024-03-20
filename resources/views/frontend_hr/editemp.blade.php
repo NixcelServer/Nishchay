@@ -120,11 +120,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Middle Name</label>
-                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}">
+                                        <input type="text" class="form-control" name="middlename" value="{{ $emp->middle_name }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" name="lastname"  value="{{ $emp->last_name }}"required>
+                                        <input type="text" class="form-control" name="lastname" value="{{ $emp->last_name }}"required>
                                     </div>
                                   </div>
                               </div>
@@ -871,5 +871,7 @@
 
 
 </script>
+
+
 </body>
 </html>

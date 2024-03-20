@@ -1,22 +1,10 @@
 @extends('frontend_home.leftmenu')
- 
 <style>
-    /* Custom CSS to adjust positioning */
-    .main-content {
-        margin-top: -30px; /* Adjust this value as needed */
-    }
- 
-    /* Custom CSS to adjust width of input field */
-    #roleName {
-        width: 200px; /* Adjust the width as needed */
-    }
- 
-    .card-footer.text-left button {
-        margin-top: -5px; /* Adjust this value as needed */
+    .custom-thead {
+        background-color: #c7e1ff;
     }
 </style>
- 
-<div class="main-content">
+ <div class="main-content">
     <section class="section">
         <div class="section-body">
             <div class="row">
@@ -37,7 +25,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                                    <thead>
+                                    <thead class="custom-thead">
                                         <tr >
                                             <th>Sr.No</th>
                                             <th>Role</th>
@@ -142,7 +130,21 @@
 </div>
 @endforeach
 
-
+<style>
+    /* Custom CSS to adjust positioning */
+    .main-content {
+        margin-top: -30px; /* Adjust this value as needed */
+    }
+ 
+    /* Custom CSS to adjust width of input field */
+    #roleName {
+        width: 200px; /* Adjust the width as needed */
+    }
+ 
+    .card-footer.text-left button {
+        margin-top: -5px; /* Adjust this value as needed */
+    }
+</style>
 
 
 

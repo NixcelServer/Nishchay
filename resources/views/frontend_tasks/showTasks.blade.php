@@ -167,6 +167,8 @@
                     <th>{{ $columnName }}</th>
                     <th>Date</th>
                     <th>View</th>
+                    
+                    
                   </tr>
                 </thead>
                 <tbody>

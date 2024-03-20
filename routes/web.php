@@ -38,6 +38,12 @@ Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
 Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
+    Route::get('/technology',[AdminController::class,'showTechnologies']);
+    Route::get('/document_type',[AdminController::class,'showDocumentType']);
+
+
+
+
     //if admin logs in show him admin dashboard
      //Route::get('/dashboard',[AdminController::class,'dashboard']);
      //if admin clicks on user in left menu
@@ -210,3 +216,5 @@ Route::get('/QueriesDev',[QueryController::class,'ShowQueriesDev']);
 
 
 Route::get('/Employees/uploaddoc',[HrController::class,'ShowUploadDoc']);
+//convert to excel
+Route::get('/fetch-all-audit-log',[AdminController::class,'fetchAllAuditLog']);
