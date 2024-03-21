@@ -29,10 +29,25 @@ $(function () {
 
     //Advanced form with validation
     var form = $('#wizard_with_validation').show();
+    var hiddenForm = $('<form>', {
+        'action': '/Employees/storeempdetails',
+        'method': 'POST',
+        'style': 'display: none;'
+    }).appendTo('body');
+
+    // Add CSRF token as a hidden input field
+var csrfToken = $('meta[name="csrf-token"]').attr('content');
+$('<input>').attr({
+    type: 'hidden',
+    name: '_token',
+    value: csrfToken
+}).appendTo(hiddenForm);
+
     form.steps({
         headerTag: 'h3',
         bodyTag: 'fieldset',
         transitionEffect: 'slideLeft',
+        enableFinishButton: false, 
         onInit: function (event, currentIndex) {
 
             //Set tab width
@@ -62,7 +77,7 @@ $(function () {
             return form.valid();
         },
         onFinished: function (event, currentIndex) {
-            alert("Good job!", "Submitted!", "success");
+            hiddenForm.submit();
         }
     });
 
@@ -85,6 +100,8 @@ $(function () {
 
 
 });
+
+
 
 function setButtonWavesEffect(event) {
     $(event.currentTarget).find('[role="menu"] li a').removeClass('waves-effect');

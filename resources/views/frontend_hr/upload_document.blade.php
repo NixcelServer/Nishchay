@@ -7,6 +7,24 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
+
+                            <h4>User Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>User Name: </p>
+                            <p>Emp Code: </p>
+                            <p>Email: </p>
+                            <p>Contact No: </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+
                             <h4>Upload Documents</h4>
                         </div>
                         <form action="/Employees/uploaddoc" method="POST" enctype="multipart/form-data"> <!-- Set the action to the route of your storeUser method -->
@@ -14,6 +32,7 @@
                             <div class="card-body">
                                 <div class="form-group row">
                                   <div class="col">
+
                                     <input type="hidden" name="enc_user_id" value="{{ $enc_user_id}}">
                                         <label for="document_type">Document Type</label>
                                         <select name="doc_type_id" class="form-control" id="doc_type_id">
@@ -21,6 +40,7 @@
                                             @foreach ($docTypes as $docType)
                                             <option value="{{ $docType->enc_doc_type_id}}">{{ $docType->doc_type }}</option>
                                             @endforeach 
+
                                         </select>
                                     </div>
                                     <div class="col">
@@ -55,12 +75,14 @@
                                     <thead>
                                         <tr>
                                           <th>Sr. No</th>
+
                                           <th>Document Type</th>
                                           <th>Status</th>
                                           <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                     @foreach ($docs as $index => $doc)
                                       <tr>
                                         <td>{{ $index + 1 }}</td>
@@ -74,12 +96,15 @@
                                             </button>
                                             
                                             <button type="button" class="btn btn-danger" onclick="deleteDocument({{ json_encode($doc->enc_tbl_doc_id) }})">
+
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
                                         </div>
                                         </td>
                                     </tr>
+
                                        @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -91,6 +116,7 @@
     </section>
 </div>
 <script>
+
   function openDocument(documentUrl,documentId) {
 
     console.log("Document ID:", documentId);
@@ -105,6 +131,7 @@
       
       $('#documentModal').modal('show');
       console.log("Document ID:", documentId);
+
   }
 
   function verifyDocument() {
@@ -113,6 +140,7 @@
           icon: 'success',
           title: 'Document Verified!',
           showConfirmButton: false,
+
           timer: 100000
       });
 
@@ -134,6 +162,7 @@
      
   
 
+
   function updateFileName(input) {
       var fileName = input.files[0].name;
       $('#documentLabel').text(fileName);
@@ -142,7 +171,7 @@
   function deleteDocument(documentId) {
       // Add logic to delete the document with the given ID
       // For example, you can make an AJAX request to delete the document
-      console.log("Document ID: ",documentId);
+
       Swal.fire({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -153,15 +182,19 @@
           confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
           if (result.isConfirmed) {
+
             var deleteUrl = "/Employees/deletedoc/" +documentId;
             //window.location.href = deleteUrl;
+
               // Here you can place your logic to delete the document
               Swal.fire(
                   'Deleted!',
                   'Your file has been deleted.',
                   'success'
               );
+
               window.location.href = deleteUrl;
+
           }
       });
   }
@@ -184,6 +217,7 @@
           <div class="modal-body">
               <iframe id="documentFrame" src="" width="100%" height="500px" frameborder="0"></iframe>
               <div class="text-center mt-3">
+
               <span id="documentId" style="display: none;"></span>
               @if($verifyButton)
               <a id="verifyDocumentBtn" href="#" class="btn btn-primary" onclick="verifyDocument()">
@@ -192,6 +226,7 @@
               @endif          
           </a>
 </div>
+
           </div>
       </div>
   </div>

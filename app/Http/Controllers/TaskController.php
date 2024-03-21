@@ -160,9 +160,11 @@ class TaskController extends Controller
         $deleteTask = false;
         $actionOnTask = false;
         $createNewTask = false;
+
         $showTasksExist = false;
         $myTasksExist = false;
         $changeStatus = true;
+
         $submitButton = true;
         $completedDate = false;
 
@@ -201,10 +203,12 @@ class TaskController extends Controller
             $submitButton = false;
         }
         
+
         
         if($myTasksExist && $showTasksExist)
         {
             $redirectToShowTasks = session('showTasks');
+
 
             if($redirectToShowTasks){
                 $actionOnTask = false;
@@ -227,6 +231,9 @@ class TaskController extends Controller
         
         
         $task = TaskDetail::where('tbl_task_detail_id',$dec_task_id)->first();
+        if($task->task_status == 'Completed'){
+            $completedDate = true;
+        }
 
         if($task->task_status == 'Completed'){
             $completedDate = true;
@@ -279,8 +286,10 @@ class TaskController extends Controller
             }
          
         }
+
         
         return view('frontend_tasks.view_task_page',['task'=>$task,'enc_task_id'=>$enc_task_id,'action_details'=>$action_details,'reassignTask'=>$reassignTask,'deleteTask'=>$deleteTask,'actionOnTask'=>$actionOnTask,'createNewTask'=>$createNewTask,'changeStatus'=>$changeStatus,'submitButton'=>$submitButton,'completedDate'=>$completedDate]);
+
     }
 
     public function updateMyTaskStatus(Request $request)
@@ -291,6 +300,8 @@ class TaskController extends Controller
         
         // If the 'status' field received in the request is 'Completed', update the 'task_completion_date' field with the current date
         $task->task_status = $request->status;
+
+
         if($request->status == 'Completed'){
             $task->task_completion_date = Date::now()->toDateString();
         }

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Nixcel -HR DashBoard</title>
+  <title>Nixcel - Employee Management System</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="/assets/css/app.min.css">
   <!-- Template CSS -->
@@ -120,11 +120,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Middle Name</label>
-                                        <input type="text" class="form-control" name="middlename"value="{{ $emp->middle_name }}">
+                                        <input type="text" class="form-control" name="middlename" value="{{ $emp->middle_name }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" name="lastname"  value="{{ $emp->last_name }}"required>
+                                        <input type="text" class="form-control" name="lastname" value="{{ $emp->last_name }}"required>
                                     </div>
                                   </div>
                               </div>
@@ -138,13 +138,25 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Contact No</label>
-
-                                        <input type="text" class="form-control" name="contact_no" value="{{ $emp->contact_no }}"required>
-                                        @error('contact_no')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-
+                                        <input type="text" class="form-control" name="contact_no" id="contact_no" value="{{ $emp->contact_no }}" required>
+                                        <div id="contact_no_error" class="text-danger" style="display: none;">Please enter exactly 10 digits for the contact number.</div>
                                     </div>
+                                    <script>
+                                        // Function to validate contact number length
+                                        function validateContactNo() {
+                                            var contactNo = document.getElementById('contact_no').value;
+                                            if (contactNo.length !== 10) {
+                                                document.getElementById('contact_no_error').style.display = 'block';
+                                                return false;
+                                            } else {
+                                                document.getElementById('contact_no_error').style.display = 'none';
+                                                return true;
+                                            }
+                                        }
+                                    
+                                        // Event listener to trigger validation when focus is lost from the contact number input
+                                        document.getElementById('contact_no').addEventListener('blur', validateContactNo);
+                                    </script>
                                     <div class="col-md-4">
                                         <label class="form-label">Gender</label>
                                         <select class="form-control" name="gender">
@@ -200,12 +212,26 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Pincode</label>
-                                        <input type="text" class="form-control" name="pincode" value="{{ $emp->pincode }}" required pattern="\d{6}">
+                                        <input type="text" class="form-control" name="pincode" id="pincode" value="{{ $emp->pincode }}" required pattern="\d{6}">
                                         
                                         @error('pincode')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
+                                        <div id="pincodeError" class="text-danger"></div>
                                     </div>
+                                    <script>
+                                        document.getElementById('pincode').addEventListener('input', function(event) {
+                                            let pincode = event.target.value;
+                                            let pincodeError = document.getElementById('pincodeError');
+                                            
+                                            if (pincode.length !== 6) {
+                                                pincodeError.textContent = 'Please enter 6 digits';
+                                            } else {
+                                                pincodeError.textContent = '';
+                                            }
+                                        });
+                                    </script>
+                                    
 
                                   </div>
                               </div>
@@ -339,11 +365,26 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">UAN No</label>
-                                        <input type="text" class="form-control" name="uan_no" value=" {{ $stat_details->uan }} "required>
+                                        <input type="text" class="form-control" name="uan_no" id="uan_no" value="{{ $stat_details->uan }}" required>
+                                        
                                         @error('uan_no')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
+                                        <div id="uanError" class="text-danger"></div>
                                     </div>
+                                    <script>
+                                        document.getElementById('uan_no').addEventListener('input', function(event) {
+                                            let uanNo = event.target.value;
+                                            let uanError = document.getElementById('uanError');
+                                            
+                                            if (uanNo.length !== 12 || isNaN(uanNo)) {
+                                                uanError.textContent = 'Please enter a valid 12-digit UAN number';
+                                            } else {
+                                                uanError.textContent = '';
+                                            }
+                                        });
+                                    </script>
+                                    
                                     <div class="col-md-4">
                                         <label class="form-label">Old EPF No</label>
                                         <input type="text" class="form-control" name="old_epf_no" value=" {{ $stat_details->old_epf_no }} "required>
@@ -396,21 +437,48 @@
                             <div class="form-line">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label class="form-label">Adhaar No</label>
-
-                                        <input type="text" class="form-control" name="aadharno" value=" {{ $kyc_details->aadharcard_no  }} "required>
+                                        <label class="form-label">Aadhaar No</label>
+                                        <input type="text" class="form-control" name="aadharno" id="aadharno" value="{{ $kyc_details->aadharcard_no }}" required pattern="\d{12}">
+                                        
                                         @error('aadharno')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
-
+                                        <div id="aadharError" class="text-danger"></div>
                                     </div>
+                                    <script>
+                                        document.getElementById('aadharno').addEventListener('input', function(event) {
+                                            let aadharNo = event.target.value;
+                                            let aadharError = document.getElementById('aadharError');
+                                            
+                                            if (aadharNo.length !== 12) {
+                                                aadharError.textContent = 'Please enter 12 digits Aadhar No';
+                                            } else {
+                                                aadharError.textContent = '';
+                                            }
+                                        });
+                                    </script>
                                     <div class="col-md-4">
                                         <label class="form-label">Pancard No</label>
-                                        <input type="text" class="form-control" name="pancardno" value=" {{ $kyc_details->pancard_no  }} "required>
+                                        <input type="text" class="form-control" name="pancardno" id="pancardno" value="{{ $kyc_details->pancard_no }}" required pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}">
+                                        
                                         @error('pancardno')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
+                                        <div id="pancardnoError" class="text-danger"></div>
                                     </div>
+                                    <script>
+                                        document.getElementById('pancardno').addEventListener('input', function(event) {
+                                            let pancardno = event.target.value;
+                                            let pancardnoError = document.getElementById('pancardnoError');
+                                            
+                                            if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pancardno)) {
+                                                pancardnoError.textContent = 'Please enter a valid Pan card number';
+                                            } else {
+                                                pancardnoError.textContent = '';
+                                            }
+                                        });
+                                    </script>
+                                    
                                     <div class="col-md-4">
                                         <label class="form-label">Bank Name</label>
 
@@ -443,11 +511,25 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">Account No</label>
-                                        <input type="text" class="form-control" name="accountno" value=" {{ $bank_details->account_no  }} "required>
+                                        <input type="text" class="form-control" name="accountno" id="accountno" value="{{ $bank_details->account_no }}" required>
+                                        
                                         @error('accountno')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
+                                        <div id="accountnoError" class="text-danger"></div>
                                     </div>
+                                    <script>
+                                        document.getElementById('accountno').addEventListener('input', function(event) {
+                                            let accountno = event.target.value;
+                                            let accountnoError = document.getElementById('accountnoError');
+                                            
+                                            if (!(/^\d{11,16}$/.test(accountno))) {
+                                                accountnoError.textContent = 'Please enter between 11 and 16 digits';
+                                            } else {
+                                                accountnoError.textContent = '';
+                                            }
+                                        });
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -551,8 +633,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/storeempdetails">Submit</button>
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/storeempdetails">Submit</button>
+                        </div>
                     </fieldset>
                     </form>
                   </div>
@@ -609,35 +692,38 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary submit-button" formaction="/Employees/editemp/storeprevempdetails">Submit</button>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover" id="previous-employees">
-                                            <thead>
-                                                <tr>
-                                                    <th>Sr. No</th>
-                                                    <th>Company Name</th>
-                                                    <th>Designation</th>
-                                                    <th>Start Date</th>
-                                                    <th>End Date</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if($prev_details->isNotEmpty())
-                                                    @foreach($prev_details as $key => $employee)
-                                                        <tr style="font-size: 15px;">
-                                                            <td>{{ $key + 1 }}</td>
-                                                            <td>{{ $employee->company_name }}</td>
-                                                            <td>{{ $employee->designation }}</td>
-                                                            <td>{{ $employee->start_date }}</td>
-                                                            <td>{{ $employee->end_date }}</td>
-                                                            <td>
-                                                                <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
+                                              <thead>
+                                                            <tr>
+                                                                <th>Sr. No</th>
+                                                                <th>Company Name</th>
+                                                                <th>Designation</th>
+                                                                <th>Start Date</th>
+                                                                <th>End Date</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if($prev_details->isNotEmpty())
+                                                                @foreach($prev_details as $key => $employee)
+                                                                    <tr style="font-size: 15px;">
+                                                                        <td>{{ $key + 1 }}</td>
+                                                                        <td>{{ $employee->company_name }}</td>
+                                                                        <td>{{ $employee->designation }}</td>
+                                                                        <td>{{ $employee->start_date }}</td>
+                                                                        <td>{{ $employee->end_date }}</td>
+                                                                        <td>
+                                                                            <button class="btn btn-danger btn-sm toggle-delete-form" data-encrypted-id="{{$employee->enc_prev_detail_id}}">Delete</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
+                                            </table>
+                                            
+                                        </div>
                                     </div>
                                 </fieldset>
                             </form>
@@ -785,5 +871,7 @@
 
 
 </script>
+
+
 </body>
 </html>

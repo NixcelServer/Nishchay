@@ -4,7 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Nixcel Software Solutions</title>
+  <title>Nixcel - Employee Management System</title>
+ <!-- Preload Critical CSS -->
+ <link rel="preload" href="/assets/css/app.min.css" as="style">
+ <link rel="preload" href="/assets/css/style.css" as="style">
+ <link rel="preload" href="/assets/css/components.css" as="style">
+ <link rel="preload" href="/assets/css/custom.css" as="style">
+  <!-- Preload Critical JS -->
+  <link rel="preload" href="/assets/js/app.min.js" as="script">
+  <link rel="preload" href="/assets/js/scripts.js" as="script">
+  <link rel="preload" href="/assets/js/custom.js" as="script">
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/css/app.min.css">
   <link rel="stylesheet" href="assets/bundles/bootstrap-social/bootstrap-social.css">
@@ -16,6 +25,14 @@
   <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
 </head>
 
+<style>
+  body {
+  background-image: url('assets/img/background.jpg');
+  background-size: cover;
+  background-position: center;
+}
+</style>
+
 <body>
   <div class="loader"></div>
   <div id="app">
@@ -26,7 +43,7 @@
             <div class="card card-primary">
               <div class="card-header" style="display: flex; justify-content: center;">
                 <a>
-                    <img alt="image" src="assets/img/logo.png" class="header-logo" style="max-width: 150px; height: auto;">
+                    <img alt="image" src="assets/img/logo123.png" class="header-logo" style="max-width: 150px; height: auto;">
                     <span class="logo-name"></span>
                 </a>
             </div>
