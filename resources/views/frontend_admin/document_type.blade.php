@@ -34,20 +34,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach($documentTypes as $key => $documentType)
+
+                                         @foreach($docTypes as $key => $documentType)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $documentType->document_type_name }}</td>
+                                            <td>{{ $documentType->doc_type }}</td>
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
                                                 <button class="btn btn-warning btn-sm toggle-edit-form"
-                                                    data-document-type-id="{{ $documentType->tbl_document_type_id }}"
-                                                    data-encrypted-id="{{ $documentType->encrypted_id }}">Edit</button>
+                                                    
+                                                    data-encrypted-id="{{ $documentType->enc_tbl_doc_type_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <button href="/admin/deletedocumenttype/{{ $documentType->encrypted_id }}" class="btn btn-danger btn-sm delete-document-type" data-encrypted-id="{{ $documentType->encrypted_id }}">Delete</button>
+                                                <button href="/admin/deletedocumenttype/{{ $documentType->enc_tbl_doc_type_id }}" class="btn btn-danger btn-sm delete-document-type" data-encrypted-id="{{ $documentType->enc_tbl_doc_type_id }}">Delete</button>
                                             </td>
                                         </tr>
-                                        @endforeach --}}
+                                        @endforeach 
+
                                     </tbody>
                                 </table>
                             </div>
@@ -155,4 +157,6 @@
             $('#editDocumentTypeModal_' + documentTypeId).modal('show');
         });
     });
+
 </script>
+

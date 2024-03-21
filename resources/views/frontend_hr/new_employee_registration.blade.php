@@ -23,7 +23,13 @@
     .custom-thead {
         background-color: #c7e1ff;
     }
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
+
 
 <body>
       <!-- Main Content -->
@@ -97,4 +103,5 @@
       </div>     
 </body>
 </html>
+
 

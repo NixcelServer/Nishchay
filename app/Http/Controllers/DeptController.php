@@ -39,8 +39,12 @@ class DeptController extends Controller
      {   
 
       $request->validate([
-         'departmentName' => 'required|unique:mst_tbl_depts,dept_name'
-      ]);  
+         'departmentName' => [
+             'required',
+             'unique_based_on_flag', // Custom validation rule
+         ],
+     ]);
+       
 
          $user_details = session('user');
          AuditLogHelper::logDetails('create department', $user_details->tbl_user_id);
@@ -70,10 +74,12 @@ class DeptController extends Controller
  
      public function editDept(Request $request)//edit the dept
       {
+         
          $request->validate([
             'departmentName' => 'required|unique:mst_tbl_depts,dept_name'
          ]);    
         //get user details from session , they will be used in update by colm
+        
         $user = session('user');
         $user_id = $user->tbl_user_id;
         

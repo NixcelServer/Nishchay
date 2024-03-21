@@ -11,6 +11,12 @@ use App\Helpers\AuditLogHelper;
 use App\Models\RoleModule;
 use App\Models\Module;
 use Illuminate\Http\Response;
+
+use App\Models\Role;
+use App\Models\Department;
+use App\Models\EmployeeDetail;
+use App\Models\Designation;
+use App\Models\TaskDetail;
  
 class AuthController extends Controller
 {
@@ -114,8 +120,65 @@ class AuthController extends Controller
         return redirect('/');
     }
     
+
     public function dashboard()
-    {
+    {   
+        $userDetails = session('user');
+        //get the unique Parent Names from session find the modules assgined
+        $uniqueParentNames = session('uniqueParentNames');
+       // dd($uniqueParentNames);
+        $moduleUserExist = in_array('Users', $uniqueParentNames);
+        $moduleTaskExist = in_array('Tasks', $uniqueParentNames);
+        $moduleEmployeeExist = in_array('Employees', $uniqueParentNames);
+        $moduleQueryExist = in_array('Queries',$uniqueParentNames);
+        
+
+        if($moduleUserExist)
+        {
+            $usersCount = User::where('flag', 'show')
+                   ->where('tbl_role_id', '<>', 1)
+                   ->count();
+
+            $deptsCount = Department::where('flag','show')->count();
+            
+            $desgCount = Designation::where('flag','show')->count();
+
+            $roleCount = Role::where('flag','show')->count();
+
+    
+
+            return view('frontend_home.dashboard',['usersCount'=>$usersCount,'deptsCount'=>$deptsCount,'desgCount'=>$desgCount,'roleCount'=>$roleCount]);
+
+        }
+
+        if($moduleEmployeeExist && $moduleTaskExist)
+        {
+            $empCount = EmployeeDetail::where('flag','show')->count();
+
+            $taskCount = TaskDetail::where('selected_user_id',$userDetails->tbl_user_id)->where('flag','show')->count();
+
+            
+            return view('frontend_home.dashboard',['empCount'=>$empCount,'taskCount'=>$taskCount]);
+        }
+
+        if($moduleEmployeeExist)
+        {
+            
+            $empCount = EmployeeDetail::where('flag','show')->count();
+
+            return view('frontend_home.dashboard',['empCount'=>$empCount]);
+            
+        }
+
+        if($moduleTaskExist)
+        {
+        
+            $taskCount = TaskDetail::where('selected_user_id',$userDetails->tbl_user_id)->where('flag','show')->count();
+
+            return view('frontend_home.dashboard',['taskCount'=>$taskCount]);
+        }
+
+
         return view('frontend_home.dashboard');
     }
 

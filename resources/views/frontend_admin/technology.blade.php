@@ -36,20 +36,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach($technologies as $key => $technology)
+
+                                        @foreach($technologies as $key => $technology)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $technology->technology_name }}</td>
+                                            <td>{{ $technology->tech_name }}</td>
+
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
                                                 <button class="btn btn-warning btn-sm toggle-edit-form"
                                                     data-technology-id="{{ $technology->tbl_technology_id }}"
-                                                    data-encrypted-id="{{ $technology->encrypted_id }}">Edit</button>
+
+                                                    data-encrypted-id="{{ $technology->enc_tbl_tech_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <button href="/admin/deletetechnology/{{ $technology->encrypted_id }}" class="btn btn-danger btn-sm delete-technology " data-encrypted-id="{{ $technology->encrypted_id }}">Delete</button>
+                                                <button href="/admin/deletetechnology/{{ $technology->enc_tbl_tech_id }}" class="btn btn-danger btn-sm delete-technology " data-encrypted-id="{{ $technology->enc_tbl_tech_id }}">Delete</button>
                                             </td>
                                         </tr>
-                                        @endforeach --}}
+                                        @endforeach 
+
                                     </tbody>
                                 </table>
                             </div>
@@ -89,7 +93,9 @@
 </div>
 
 <!-- Edit Technology Modal -->
-{{-- @foreach($technologies as $technology) 
+
+ @foreach($technologies as $technology) 
+
 <div class="modal fade" id="editTechnologyModal_{{ $technology->tbl_technology_id }}" tabindex="-1" role="dialog" aria-labelledby="editTechnologyModalLabel_{{ $technology->tbl_technology_id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -116,7 +122,9 @@
         </div>
     </div>
 </div>
-@endforeach --}}
+
+@endforeach 
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -152,4 +160,6 @@
             $('#editTechnologyModal_' + technologyId).modal('show');
         });
     });
+
 </script>
+

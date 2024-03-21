@@ -7,6 +7,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
+
                             <h4>User Details</h4>
                         </div>
                         <div class="card-body">
@@ -23,6 +24,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
+
                             <h4>Upload Documents</h4>
                         </div>
                         <form action="/Employees/uploaddoc" method="POST" enctype="multipart/form-data"> <!-- Set the action to the route of your storeUser method -->
@@ -30,13 +32,15 @@
                             <div class="card-body">
                                 <div class="form-group row">
                                   <div class="col">
-                                    <input type="hidden" name="enc_user_id" value="">
+
+                                    <input type="hidden" name="enc_user_id" value="{{ $enc_user_id}}">
                                         <label for="document_type">Document Type</label>
                                         <select name="doc_type_id" class="form-control" id="doc_type_id">
                                             <option value="">Select Document Type</option>
-                                            {{-- @foreach ($docTypes as $docType)
+                                            @foreach ($docTypes as $docType)
                                             <option value="{{ $docType->enc_doc_type_id}}">{{ $docType->doc_type }}</option>
-                                            @endforeach --}}
+                                            @endforeach 
+
                                         </select>
                                     </div>
                                     <div class="col">
@@ -71,41 +75,36 @@
                                     <thead>
                                         <tr>
                                           <th>Sr. No</th>
-                                          <th>User Name</th>
+
                                           <th>Document Type</th>
                                           <th>Status</th>
                                           <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
+                                    @foreach ($docs as $index => $doc)
                                       <tr>
-                                        <td>1</td>
-                                        <td>Abhijeet Kiran Bhosale</td>
-                                        <td>PAN Card</td>
-                                        <td>Pending</td>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $doc->doc_name }}</td>
+                                        <td>{{ $doc->doc_status }}</td>
+                                        
                                         <td>
                                           <div class="d-flex justify-content-between">
-                                            <button href="#" onclick="openDocument('path_to_your_document.pdf')" class="mr-2">
+                                            <button href="#" onclick="openDocument('/{{ $doc->doc_path}}{{ $doc->doc_name}}', {{ json_encode($doc->enc_tbl_doc_id) }})" class="mr-2">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
-                                            <button type="button" class="btn btn-danger" onclick="deleteDocument(1)">
+                                            
+                                            <button type="button" class="btn btn-danger" onclick="deleteDocument({{ json_encode($doc->enc_tbl_doc_id) }})">
+
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
                                         </div>
                                         </td>
                                     </tr>
-                                        {{-- <tr>
-                                          @foreach ($docs as $index => $doc)
-                                          <tr>
-                                              
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $doc->doc_name }}</td>
-                                            <td>{{ $doc->doc_path }}</td>
-                                            <td>{{ $status-> }}</td>  
-                                            <td><a href="#"><i class="fas fa-eye"></i> View</a></td>
-                                          </tr>
-                                          @endforeach
-                                        </tr> --}}
+
+                                       @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -117,9 +116,22 @@
     </section>
 </div>
 <script>
-  function openDocument(documentUrl) {
+
+  function openDocument(documentUrl,documentId) {
+
+    console.log("Document ID:", documentId);
       $('#documentFrame').attr('src', documentUrl);
+
+      // Update the content of the modal with the document ID
+    $('#documentModal').find('.document-id').text(documentId);
+
+    // Set the document ID into the href attribute of the Verify Document button
+    var verifyUrl = "/Employees/verifydoc/" + documentId;
+    $('#verifyDocumentBtn').attr('href', verifyUrl);
+      
       $('#documentModal').modal('show');
+      console.log("Document ID:", documentId);
+
   }
 
   function verifyDocument() {
@@ -128,9 +140,28 @@
           icon: 'success',
           title: 'Document Verified!',
           showConfirmButton: false,
-          timer: 1500
+
+          timer: 100000
       });
-  }
+
+      // Extract the document ID from the modal
+    var documentId = $('#documentId').text();
+    
+    // Construct the verification URL with the document ID
+    var verifyUrl = "/Employees/verifydoc/" + documentId;
+
+     
+
+    //Optionally, you can navigate to the verification URL if needed
+     // Redirect to the verification URL after the specified time
+     
+        window.location.href = verifyUrl;
+    
+    // Ensure the timeout matches the Swal timer duration
+}
+     
+  
+
 
   function updateFileName(input) {
       var fileName = input.files[0].name;
@@ -140,6 +171,7 @@
   function deleteDocument(documentId) {
       // Add logic to delete the document with the given ID
       // For example, you can make an AJAX request to delete the document
+
       Swal.fire({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -150,12 +182,19 @@
           confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
           if (result.isConfirmed) {
+
+            var deleteUrl = "/Employees/deletedoc/" +documentId;
+            //window.location.href = deleteUrl;
+
               // Here you can place your logic to delete the document
               Swal.fire(
                   'Deleted!',
                   'Your file has been deleted.',
                   'success'
               );
+
+              window.location.href = deleteUrl;
+
           }
       });
   }
@@ -178,10 +217,16 @@
           <div class="modal-body">
               <iframe id="documentFrame" src="" width="100%" height="500px" frameborder="0"></iframe>
               <div class="text-center mt-3">
-                <a href=" " class="btn btn-primary">
-                    <button id="verifyDocumentBtn" onclick="verifyDocument()">Verify Document</button>
-                </a>
-            </div>
+
+              <span id="documentId" style="display: none;"></span>
+              @if($verifyButton)
+              <a id="verifyDocumentBtn" href="#" class="btn btn-primary" onclick="verifyDocument()">
+            Verify Document
+        </a> 
+              @endif          
+          </a>
+</div>
+
           </div>
       </div>
   </div>

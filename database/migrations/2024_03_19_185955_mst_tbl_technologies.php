@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_query_details', function (Blueprint $table) {
-            $table->id('tbl_query_detail_id');
-            $table->string('query_description')->required();
-            $table->integer('selected_user_id')->required();
-            $table->string('query_solution');
-            $table->date('query_answered_date');
+        Schema::create('mst_tbl_technologies', function (Blueprint $table) {
+            $table->id('tbl_tech_id');
+            $table->string('tech_name');
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
-            $table->integer('update_by');
-            $table->date('update_date');
-            $table->time('update_time');
+            $table->integer('deleted_by');
+            $table->date('deleted_date');
+            $table->time('deleted_time');
             $table->string('flag');
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_query_details');
+        Schema::dropIfExists('mst_tbl_technologies');
     }
 };

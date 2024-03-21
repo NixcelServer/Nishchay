@@ -32,30 +32,30 @@
       <!-- Main Content -->
       <div class="main-content">
           <div class="row ">
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
-              <div class="card">
-                <div class="card-statistic-4">
-                  <div class="align-items-center justify-content-between">
-                    <div class="row ">
-                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
-                        <div class="card-content">
-                          <h5 class="font-15">Total Users</h5>
-                        </br>
-                          <h2 class="mb-3 font-18">21</h2>
-                        
-                          <p class="mb-0"><span class="col-green">10%</span> Increase</p>
-                        </div>
-                      </div>
-                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
-                        <div class="banner-img">
-                          <img src="/assets/img/banner/1.png" alt="">
+                  @if(isset($usersCount))
+                  <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="card">
+                      <div class="card-statistic-4">
+                        <div class="align-items-center justify-content-between">
+                          <div class="row ">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                              <div class="card-content">
+                                <h5 class="font-15">Users</h5>
+                                <h2 class="mb-3 font-18">{{ $usersCount }}</h2>
+                              </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                              <div class="banner-img">
+                                <img src="/assets/img/banner/1.png" alt="">
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
+                  @endif
+            @if(isset($deptsCount))
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="card">
                 <div class="card-statistic-4">
@@ -63,9 +63,11 @@
                     <div class="row ">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                         <div class="card-content">
-                          <h5 class="font-15">Total Technologies</h5>
-                          <h2 class="mb-3 font-18">15</h2>
-                          <p class="mb-0"><span class="col-orange">09%</span> Increase</p>
+
+                          <h5 class="font-15"> Departments</h5>
+                          <h2 class="mb-3 font-18">{{ $deptsCount }}</h2>
+                          
+
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
@@ -78,6 +80,8 @@
                 </div>
               </div>
             </div>
+            @endif
+            @if(isset($desgCount))
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="card">
                 <div class="card-statistic-4">
@@ -85,10 +89,11 @@
                     <div class="row ">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                         <div class="card-content">
-                          <h5 class="font-15">Total Departments</h5>
-                          <h2 class="mb-3 font-18">12</h2>
-                          <p class="mb-0"><span class="col-green">18%</span>
-                            Increase</p>
+
+                          <h5 class="font-15">Designations</h5>
+                          <h2 class="mb-3 font-18">{{ $desgCount }}</h2>
+                      
+
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
@@ -101,6 +106,8 @@
                 </div>
               </div>
             </div>
+            @endif
+            @if(isset($roleCount))
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="card">
                 <div class="card-statistic-4">
@@ -108,10 +115,10 @@
                     <div class="row ">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                         <div class="card-content">
-                          <h5 class="font-15">Total Roles</h5>
-                        </br>
-                          <h2 class="mb-3 font-18">10</h2>
-                          <p class="mb-0"><span class="col-green">42%</span> Increase</p>
+
+                          <h5 class="font-15">Roles</h5>
+                          <h2 class="mb-3 font-18">{{ $roleCount }}</h2>
+
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
@@ -124,7 +131,60 @@
                 </div>
               </div>
             </div>
-          </div>
+          
+      @endif
+      @if(isset($empCount))
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="card">
+                <div class="card-statistic-4">
+                  <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                        <div class="card-content">
+
+                          <h5 class="font-15">Employees</h5>
+                          <h2 class="mb-3 font-18">{{ $empCount }}</h2>
+
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                        <div class="banner-img">
+                          <img src="/assets/img/banner/4.png" alt="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+      
+      @endif
+      @if(isset($taskCount))
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="card">
+                <div class="card-statistic-4">
+                  <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                        <div class="card-content">
+                          <h5 class="font-15">Tasks</h5>
+                          <h2 class="mb-3 font-18">{{ $taskCount }}</h2>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                        <div class="banner-img">
+                          <img src="/assets/img/banner/4.png" alt="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+      @endif
+      </div>
       </div>
       <footer class="main-footer">
         <div class="footer-left">

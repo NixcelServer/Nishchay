@@ -139,18 +139,22 @@
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/technology"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Technology</span></a>
+                  <a href="/admin/technologies"class="nav-link"><i data-feather="command"></i><span>Technologies</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/document_type"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Document Type</span></a>
+                  <a href="/admin/documenttypes"class="nav-link"><i data-feather="command"></i><span>Document Type</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
+
                   <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Activity Log</span></a>
+
                 </li>
+
+                
 
                 
               </ul>

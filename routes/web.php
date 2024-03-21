@@ -10,7 +10,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\QueryController;
+use App\Http\Controllers\TechnologyController;
 
+use App\Http\Controllers\DocTypeController;
 
 
 
@@ -108,6 +111,23 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
      Route::get('/auditlogdetails',[AdminController::class,'auditlogDetails']);
 
+     //technologies
+     Route::get('/technologies',[TechnologyController::class,'technologies']);
+    //store technology
+     Route::post('/storetechnology',[TechnologyController::class,'storeTechnology']);
+
+     //EDIT TECHNOLOGY
+     Route::get('/edittechnology/{id}',[TechnologyController::class,'editTechnology']);
+     
+     //delete technology
+     Route::get('/deletetechnology/{id}',[TechnologyController::class,'deleteTechnology']);
+
+
+     Route::get('/documenttypes',[DocTypeController::class,'showDocType']);
+     Route::post('/storedocumenttype',[DocTypeController::class,'createDocType']);
+     Route::get('/deletedocumenttype/{id}',[DocTypeController::class,'deleteDocType']);
+    
+
  });
 
  //     // Route::get('/users',[SuperAdminController::class,'users'])->name('superAdminUsers');
@@ -152,6 +172,19 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //store salary details and then redirect to show employees page
     Route::post('/eidtemp/saldetails',[HrController::class,'salDetails']);
+
+    //upload documents functionality
+
+    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForm']);
+
+    //upload the doc inside the empcode folder
+    Route::post('/uploaddoc',[HrController::class,'uploadDocuments']);
+
+    //verify the document
+    Route::get('/verifydoc/{id}',[HrController::class,'verifyDoc']);
+
+    //delete the document
+    Route::get('/deletedoc/{id}',[HrController::class,'deleteDoc']);
     
 });
 
@@ -198,11 +231,20 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
      Route::post('/reassigntask',[TaskController::class,'reassignTask']);
 
+     Route::get('/created/showtasks',[TaskController::class,'redirectToShowTasks']);
+
+     Route::get('/created/mytasks',[TaskController::class,'redirectToMyTasks']);
+
 
 });
 
+Route::group(['prefix' => '/Queries','middleware'=>['web','queryAuth']],function(){
 
 
+    //when user clicks on query
+    Route::get('/',[QueryController::class,'showPendingQueries']);
+
+});
    
 
 });
