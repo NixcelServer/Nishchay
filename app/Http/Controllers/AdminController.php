@@ -20,6 +20,7 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\File;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 
@@ -68,20 +69,24 @@ class AdminController extends Controller
         // $user_details = session('user');
         // AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
 
+        //we want to create auto incrementing employee code 
+        $employeeCode = IdGenerator::generate(['table'=>'tbl_emp_details','field'=>'emp_code','length' => 8, 'prefix' =>'N-']); 
+
         $roles = Role::where('flag', 'show')->get();
+        
 
         foreach ($roles as $role) {
             // Encode the role ID using the helper function
             $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
 
-        return view('frontend_admin.add_new_user_form',compact('roles'));
+        return view('frontend_admin.add_new_user_form',['roles'=>$roles,'employeeCode'=>$employeeCode]);
     }
 
     //create new user in db and redirect to user home page
     public function storeUser(Request $request){
         
-        
+
 
         $user_details = session('user');
         AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
@@ -123,8 +128,18 @@ class AdminController extends Controller
 
 
         
-        //we want to create auto incrementing employee code 
-        $employeeCode = IdGenerator::generate(['table'=>'tbl_emp_details','field'=>'emp_code','length' => 8, 'prefix' =>'N-']); 
+         
+        $employeeCode = $request->emp_code; 
+
+        // Create a folder with the employee code inside "uploads"
+        $employeeFolderPath = public_path('uploads/' . $employeeCode);
+        File::makeDirectory($employeeFolderPath, 0777, true);
+
+        // Create a folder named "documents" inside the employee's folder
+        $documentPath = $employeeFolderPath . '/documents'; 
+        File::makeDirectory($documentPath, 0777, true);
+
+
          
         $emp = new EmployeeDetail;
         $emp->tbl_user_id = $userId;

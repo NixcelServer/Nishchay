@@ -126,8 +126,20 @@
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
+                  <a href="/admin/technologies"class="nav-link"><i data-feather="command"></i><span>Technologies</span></a>
+                </li>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/documenttypes"class="nav-link"><i data-feather="command"></i><span>Document Type</span></a>
+                </li>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
                   <a href="/admin/auditlogdetails"class="nav-link"><i data-feather="command"></i><span>Audit_Log</span></a>
                 </li>
+
+                
 
                 
               </ul>

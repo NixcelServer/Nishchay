@@ -102,6 +102,19 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
      Route::get('/auditlogdetails',[AdminController::class,'auditlogDetails']);
 
+     //technologies
+     Route::get('/technologies',[TechnologyController::class,'technologies']);
+    //store technology
+     Route::post('/storetechnology',[TechnologyController::class,'storeTechnology']);
+     //delete technology
+     Route::post('/deletetechnology',[TechnologyController::class,'deleteTechnology']);
+
+
+     Route::get('/doctype',[DocTypeController::class,'showDocType']);
+     Route::post('/createdoctype',[DocTypeController::class,'createDocType']);
+     Route::post('/deletedoctype',[DocTypeController::class,'deleteDocType']);
+    
+
  });
 
  //     // Route::get('/users',[SuperAdminController::class,'users'])->name('superAdminUsers');
@@ -149,7 +162,13 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //upload documents functionality
 
-    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForms']);
+    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForm']);
+
+    //upload the doc inside the empcode folder
+    Route::post('/uploaddoc',[HrController::class,'uploadDocuments']);
+
+    //verify the document
+    Route::get('/verifydoc/{id}',[HrController::class,'verifyDoc']);
     
 });
 

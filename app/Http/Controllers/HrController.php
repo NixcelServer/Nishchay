@@ -20,9 +20,11 @@ use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
 use App\Models\DocumentType;
+use App\Models\Document;
 use Illuminate\Validation\Rule;
 //use App\Models\AuditLogHelper;
 use App\Helpers\AuditLogHelper;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -476,11 +478,136 @@ class HrController extends Controller
     //upload documents form
     public function uploadDocumentsForm($enc_user_id)
     {
-        $docType = DocumentType::all();
+        $docTypes = DocumentType::all();
+        
+        foreach($docTypes as $docType)
+        {
+            $docType->enc_doc_type_id = EncryptionDecryptionHelper::encdecId($docType->tbl_doc_type_id,'encrypt');
+        }
 
-        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docType'=>$docType]);
+        $dec_user_id = EncryptionDecryptionHelper::encdecId($enc_user_id,'decrypt');
+
+        $docs = Document::where('tbl_user_id',$dec_user_id)->get();
+
+        foreach($docs as $doc)
+        {
+            $doc->enc_tbl_doc_id = EncryptionDecryptionHelper::encdecId($doc->tbl_doc_id,'encrypt');
+        }
+
+
+        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs]);
     }
     
+
+
+
+    //upload documents
+    public function uploadDocuments(Request $request)
+    {
+       
+    //     //decrypt the user id
+    //     $dec_user_id = EncryptionDecryptionHelper::encdecId($request->enc_user_id,'decrypt');
+    //     //get empcode
+    //     $empCode = EmployeeDetail::where('tbl_user_id', $dec_user_id)->value('emp_code');
+
+
+
+    //     //decrypt the selected document id
+    //     $dec_doc_type_id = EncryptionDecryptionHelper::encdecId($request->doc_type_id,'decrypt');
+
+
+    //     //store the document into the folder
+        
+    //     $path = 'uploads/'. $empCode . '/documents';
+        
+    //     $originalName = $request->file('document')->getClientOriginalName();
+    
+        
+        
+    //     $doc = $request->file('document');
+
+        
+    //   //  $result = Storage::disk('public')->put($path, $doc, $originalName);
+
+        
+
+    //     dd("success");
+
+
+        // try {
+            // Decrypt the user ID
+            $dec_user_id = EncryptionDecryptionHelper::encdecId($request->enc_user_id, 'decrypt');
+            
+            // Retrieve the employee code based on the decrypted user ID
+            $empCode = EmployeeDetail::where('tbl_user_id', $dec_user_id)->value('emp_code');
+            
+            // Decrypt the selected document type ID
+            $dec_doc_type_id = EncryptionDecryptionHelper::encdecId($request->doc_type_id, 'decrypt');
+            
+            // Set the path for storing the document based on the employee code
+            $path = 'uploads/' . $empCode . '/documents/';
+            
+            // Get the original name of the document file
+            $originalName = $request->file('document')->getClientOriginalName();
+
+            
+            
+            // Get the document file itself
+            $doc = $request->file('document');
+            
+
+            $doc->move(public_path($path), $originalName);
+
+        // Define the full path where you want to store the file
+        // $fullPath = $path . '/' . $originalName;
+            
+            // Store the document file in the specified path with default visibility (public)
+        // $doc->storeAs($path, $originalName, 'public');
+
+
+        //insert the data into documents table
+        $document = new Document;
+        $document->tbl_user_id = $dec_user_id;
+        $document->tbl_doc_type_id = $dec_doc_type_id;
+        $document->doc_name = $originalName;
+        $document->doc_path = $path;
+        $document->doc_status = 'Verification Pending';
+        
+        $document->save(); 
+        
+        
+
+
+
+
+
+
+            
+        // } catch (\Exception $e) {
+        //     // Exception occurred during file upload process
+        //     // Log the exception or handle it appropriately
+        //     \Log::error('Exception during file upload: ' . $e->getMessage());
+        //     dd("Exception during file upload");
+        // }
+
+        
+
+
+        return redirect()->back();
+    }
+
+    //verify documents change the status as verified
+    public function verifyDoc($enc_tbl_doc_id)
+    {
+        dd("hi");
+        $dec_tbl_doc_id = EncryptionDecryptionHelper::encdecId($enc_tbl_doc_id,'decrypt');
+
+        $doc = Document::where('tbl_doc_id',$dec_tbl_doc_id)->first();
+        $doc->flag = 'deleted';
+        $doc->save();
+
+        dd("deleted");
+    }
 
 
 }
