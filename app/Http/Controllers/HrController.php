@@ -510,13 +510,18 @@ class HrController extends Controller
 
         $docs = Document::where('tbl_user_id',$dec_user_id)->where('flag','show')->get();
 
+        //get the user info
+        $empDetails = EmployeeDetail::where('tbl_user_id',$dec_user_id)->first();
+        $empDetails->empName = $empDetails->first_name . $empDetails->last_name;
+
+
         foreach($docs as $doc)
         {
             $doc->enc_tbl_doc_id = EncryptionDecryptionHelper::encdecId($doc->tbl_doc_id,'encrypt');
         }
 
 
-        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs,'verifyButton'=>$verifyButton]);
+        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs,'verifyButton'=>$verifyButton,'empDetails'=>$empDetails]);
     }
     
 
