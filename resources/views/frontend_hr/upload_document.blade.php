@@ -178,8 +178,10 @@
           <div class="modal-body">
               <iframe id="documentFrame" src="" width="100%" height="500px" frameborder="0"></iframe>
               <div class="text-center mt-3">
-                  <button id="verifyDocumentBtn" class="btn btn-primary" onclick="verifyDocument()">Verify Document</button>
-              </div>
+                <a href=" " class="btn btn-primary">
+                    <button id="verifyDocumentBtn" onclick="verifyDocument()">Verify Document</button>
+                </a>
+            </div>
           </div>
       </div>
   </div>

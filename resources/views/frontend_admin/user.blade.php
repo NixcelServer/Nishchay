@@ -10,9 +10,9 @@
    <link rel="preload" href="/assets/js/custom.js" as="script">
 </head>
 <style>
-    .custom-thead {
+    /* .custom-thead {
         background-color: #c7e1ff;
-    }
+    } */
 </style>
 
 @extends('frontend_home.leftmenu')
