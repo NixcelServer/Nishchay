@@ -478,6 +478,24 @@ class HrController extends Controller
     //upload documents form
     public function uploadDocumentsForm($enc_user_id)
     {
+
+         //check if verify document module exist then only set $verifyButton to true
+         $moduleData = session('moduleData');
+         $verifyButton = false;
+
+         foreach($moduleData as $data)
+         {
+             if($data['module']->module_name === 'Verify Documents')
+             {
+                 $verifyButton = true;
+             }
+
+             if($verifyButton)
+             {
+                 break;
+             }
+         }
+
         $docTypes = DocumentType::all();
         
         foreach($docTypes as $docType)
@@ -487,7 +505,7 @@ class HrController extends Controller
 
         $dec_user_id = EncryptionDecryptionHelper::encdecId($enc_user_id,'decrypt');
 
-        $docs = Document::where('tbl_user_id',$dec_user_id)->get();
+        $docs = Document::where('tbl_user_id',$dec_user_id)->where('flag','show')->get();
 
         foreach($docs as $doc)
         {
@@ -495,7 +513,7 @@ class HrController extends Controller
         }
 
 
-        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs]);
+        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs,'verifyButton'=>$verifyButton]);
     }
     
 
@@ -503,39 +521,13 @@ class HrController extends Controller
 
     //upload documents
     public function uploadDocuments(Request $request)
-    {
+    {   
+           
+            
+            //get user details from session
+            $userDetails = session('user');
        
-    //     //decrypt the user id
-    //     $dec_user_id = EncryptionDecryptionHelper::encdecId($request->enc_user_id,'decrypt');
-    //     //get empcode
-    //     $empCode = EmployeeDetail::where('tbl_user_id', $dec_user_id)->value('emp_code');
 
-
-
-    //     //decrypt the selected document id
-    //     $dec_doc_type_id = EncryptionDecryptionHelper::encdecId($request->doc_type_id,'decrypt');
-
-
-    //     //store the document into the folder
-        
-    //     $path = 'uploads/'. $empCode . '/documents';
-        
-    //     $originalName = $request->file('document')->getClientOriginalName();
-    
-        
-        
-    //     $doc = $request->file('document');
-
-        
-    //   //  $result = Storage::disk('public')->put($path, $doc, $originalName);
-
-        
-
-    //     dd("success");
-
-
-        // try {
-            // Decrypt the user ID
             $dec_user_id = EncryptionDecryptionHelper::encdecId($request->enc_user_id, 'decrypt');
             
             // Retrieve the employee code based on the decrypted user ID
@@ -558,11 +550,6 @@ class HrController extends Controller
 
             $doc->move(public_path($path), $originalName);
 
-        // Define the full path where you want to store the file
-        // $fullPath = $path . '/' . $originalName;
-            
-            // Store the document file in the specified path with default visibility (public)
-        // $doc->storeAs($path, $originalName, 'public');
 
 
         //insert the data into documents table
@@ -572,26 +559,15 @@ class HrController extends Controller
         $document->doc_name = $originalName;
         $document->doc_path = $path;
         $document->doc_status = 'Verification Pending';
+        $document->add_by = $userDetails->tbl_user_id;
+        $document->add_date = Date::now()->toDateString();
+        $document->add_time = Date::now()->toTimeString();
+        $document->flag = 'show';
         
         $document->save(); 
         
         
-
-
-
-
-
-
-            
-        // } catch (\Exception $e) {
-        //     // Exception occurred during file upload process
-        //     // Log the exception or handle it appropriately
-        //     \Log::error('Exception during file upload: ' . $e->getMessage());
-        //     dd("Exception during file upload");
-        // }
-
-        
-
+        AuditLogHelper::logDetails('Document Uploaded',$userDetails->tbl_user_id);
 
         return redirect()->back();
     }
@@ -599,14 +575,46 @@ class HrController extends Controller
     //verify documents change the status as verified
     public function verifyDoc($enc_tbl_doc_id)
     {
-        dd("hi");
+        $userDetails = session('user');
+        
         $dec_tbl_doc_id = EncryptionDecryptionHelper::encdecId($enc_tbl_doc_id,'decrypt');
 
         $doc = Document::where('tbl_doc_id',$dec_tbl_doc_id)->first();
+
+        $doc->doc_status = 'Verified';
+        $doc->verified_by = $userDetails->tbl_user_id;
+        $doc->verified_date = Date::now()->toDateString();
+        $doc->verified_time = Date::now()->toTimeString();
+        
+        $doc->save();
+
+        AuditLogHelper::logDetails('Document Verified',$userDetails->tbl_user_id);
+
+
+        return redirect()->back();
+    }
+
+    public function deleteDoc($enc_tbl_doc_id)
+    {
+        //get the user details from the session
+        $userDetails = session('user');
+
+        //decrypt the user id
+        $dec_tbl_doc_id = EncryptionDecryptionHelper::encdecId($enc_tbl_doc_id,'decrypt');
+
+        $doc = Document::where('tbl_doc_id',$dec_tbl_doc_id)->first();
+
+        $doc->deleted_by = $userDetails->tbl_user_id;
+        $doc->deleted_date = Date::now()->toDateString();
+        $doc->deleted_time = Date::now()->toTimeString();
         $doc->flag = 'deleted';
         $doc->save();
 
-        dd("deleted");
+        AuditLogHelper::logDetails('Document Deleted',$userDetails->tbl_user_id);
+
+
+        return redirect()->back();
+
     }
 
 

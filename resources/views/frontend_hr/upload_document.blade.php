@@ -69,11 +69,11 @@
                                         
                                         <td>
                                           <div class="d-flex justify-content-between">
-                                            <button href="#" onclick="openDocument('/{{ $doc->doc_path}}{{ $doc->doc_name}}', {{ $doc->enc_tbl_doc_id }})" class="mr-2">
+                                            <button href="#" onclick="openDocument('/{{ $doc->doc_path}}{{ $doc->doc_name}}', {{ json_encode($doc->enc_tbl_doc_id) }})" class="mr-2">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
                                             
-                                            <button type="button" class="btn btn-danger" onclick="deleteDocument(1)">
+                                            <button type="button" class="btn btn-danger" onclick="deleteDocument({{ json_encode($doc->enc_tbl_doc_id) }})">
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
                                         </div>
@@ -92,6 +92,8 @@
 </div>
 <script>
   function openDocument(documentUrl,documentId) {
+
+    console.log("Document ID:", documentId);
       $('#documentFrame').attr('src', documentUrl);
 
       // Update the content of the modal with the document ID
@@ -107,6 +109,12 @@
 
   function verifyDocument() {
       // Your verification logic goes here
+      Swal.fire({
+          icon: 'success',
+          title: 'Document Verified!',
+          showConfirmButton: false,
+          timer: 100000
+      });
 
       // Extract the document ID from the modal
     var documentId = $('#documentId').text();
@@ -114,16 +122,17 @@
     // Construct the verification URL with the document ID
     var verifyUrl = "/Employees/verifydoc/" + documentId;
 
-      Swal.fire({
-          icon: 'success',
-          title: 'Document Verified!',
-          showConfirmButton: false,
-          timer: 1500
-      });
+     
 
     //Optionally, you can navigate to the verification URL if needed
-     window.location.href = verifyUrl;  
-  }
+     // Redirect to the verification URL after the specified time
+     
+        window.location.href = verifyUrl;
+    
+    // Ensure the timeout matches the Swal timer duration
+}
+     
+  
 
   function updateFileName(input) {
       var fileName = input.files[0].name;
@@ -133,6 +142,7 @@
   function deleteDocument(documentId) {
       // Add logic to delete the document with the given ID
       // For example, you can make an AJAX request to delete the document
+      console.log("Document ID: ",documentId);
       Swal.fire({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -143,12 +153,15 @@
           confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
           if (result.isConfirmed) {
+            var deleteUrl = "/Employees/deletedoc/" +documentId;
+            //window.location.href = deleteUrl;
               // Here you can place your logic to delete the document
               Swal.fire(
                   'Deleted!',
                   'Your file has been deleted.',
                   'success'
               );
+              window.location.href = deleteUrl;
           }
       });
   }
@@ -172,9 +185,11 @@
               <iframe id="documentFrame" src="" width="100%" height="500px" frameborder="0"></iframe>
               <div class="text-center mt-3">
               <span id="documentId" style="display: none;"></span>
+              @if($verifyButton)
               <a id="verifyDocumentBtn" href="#" class="btn btn-primary" onclick="verifyDocument()">
             Verify Document
-        </a>         
+        </a> 
+              @endif          
           </a>
 </div>
           </div>

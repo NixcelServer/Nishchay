@@ -17,6 +17,16 @@ return new class extends Migration
             $table->integer('tbl_doc_type_id');
             $table->integer('doc_name');
             $table->string('doc_path');
+            $table->integer('add_by');
+            $table->integer('add_date');
+            $table->integer('add_time');
+            $table->integer('verified_by');
+            $table->date('verified_date');
+            $table->time('verified_time');
+            $table->integer('deleted_by');
+            $table->date('deleted_date');
+            $table->time('deleted_time');
+            
             
             
         });
