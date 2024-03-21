@@ -9,5 +9,6 @@ class Document extends Model
 {
     use HasFactory;
     protected $table = 'tbl_docs';
+    protected $primaryKey = 'tbl_doc_id';
     public $timestamps = false;
 }

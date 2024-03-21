@@ -10,7 +10,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\QueryController;
+use App\Http\Controllers\TechnologyController;
 
+use App\Http\Controllers\DocTypeController;
 
 
 
@@ -106,13 +108,17 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      Route::get('/technologies',[TechnologyController::class,'technologies']);
     //store technology
      Route::post('/storetechnology',[TechnologyController::class,'storeTechnology']);
+
+     //EDIT TECHNOLOGY
+     Route::get('/edittechnology/{id}',[TechnologyController::class,'editTechnology']);
+     
      //delete technology
-     Route::post('/deletetechnology',[TechnologyController::class,'deleteTechnology']);
+     Route::get('/deletetechnology/{id}',[TechnologyController::class,'deleteTechnology']);
 
 
-     Route::get('/doctype',[DocTypeController::class,'showDocType']);
-     Route::post('/createdoctype',[DocTypeController::class,'createDocType']);
-     Route::post('/deletedoctype',[DocTypeController::class,'deleteDocType']);
+     Route::get('/documenttypes',[DocTypeController::class,'showDocType']);
+     Route::post('/storedocumenttype',[DocTypeController::class,'createDocType']);
+     Route::get('/deletedocumenttype/{id}',[DocTypeController::class,'deleteDocType']);
     
 
  });
@@ -169,6 +175,9 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //verify the document
     Route::get('/verifydoc/{id}',[HrController::class,'verifyDoc']);
+
+    //delete the document
+    Route::get('/deletedoc/{id}',[HrController::class,'deleteDoc']);
     
 });
 

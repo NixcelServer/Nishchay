@@ -9,5 +9,8 @@ class DocumentType extends Model
 {
     use HasFactory;
     protected $table = 'mst_tbl_doc_type';
+
+    protected $primaryKey = 'tbl_doc_type_id';
+
     public $timestamps = false;
 }

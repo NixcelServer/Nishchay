@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('tech_name');
             $table->integer('add_by');
             $table->date('add_date');
-            $table->date('add_time');
+            $table->time('add_time');
             $table->integer('deleted_by');
             $table->date('deleted_date');
-            $table->date('deleted_time');
+            $table->time('deleted_time');
             $table->string('flag');
         });
     }
