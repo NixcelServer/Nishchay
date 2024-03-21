@@ -1,12 +1,16 @@
 @extends('frontend_home.leftmenu')
+ 
 <style>
-    .custom-thead {
-        background-color: #c7e1ff;
-    }
+    /* Custom CSS to adjust positioning */
     .main-content {
         margin-top: -30px; /* Adjust this value as needed */
     }
-</style> 
+ 
+    #designationName{
+        width: 400px; /* Adjust the width as needed */
+    }
+</style>
+ 
 <div class="main-content">
     <section class="section">
         <div class="section-body">
@@ -14,28 +18,31 @@
                 <div class="col-12">
                     <div class="card" style="max-width: 1000px;">
                         <div class="card-header">
-                            <h4 class="mt-2">Nixcel Software Solutions Designation</h4>
+                            <h4 class="mt-2">Nixcel Software Solutions Queries</h4>
                         </div>
                         <div class="col-12 text-right mt-n4">
-                            <div class="buttons">
+                            {{-- <div class="buttons">
                                 <!-- Button to show Add New Designation Modal -->
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#addDesignationModal">Add New Designation</button>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- Table displaying designations -->
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                                    <thead class="custom-thead">
+                                    <thead>
                                         <tr>
-                                            <th>Sr.No</th>
-                                            <th>Designation</th>
+                                            <th>Query ID</th>
+                                            <th>Query Description</th>
+                                            <th>Query Raised by</th>
+                                            <th>Query Raised Date</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    
                                     <tbody>
-                                        @foreach($designations as $key => $designation)
+                                    <tbody>
+                                        {{-- @foreach($designations as $key => $designation)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $designation->designation_name }}</td>
@@ -45,15 +52,32 @@
                                                     data-designation-id="{{ $designation->tbl_designation_id }}"
                                                     data-encrypted-id="{{ $designation->encrypted_id }}">Edit</button>
                                                 <!-- Delete action form with encrypted ID -->
-                                                <button href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger btn-sm delete-designation " data-encrypted-id="{{ $designation->encrypted_id }}">Delete</button>
+                                                <a href="/admin/deletedesignation/{{ $designation->encrypted_id }}" class="btn btn-danger btn-sm delete-designation" data-encrypted-id="{{ $designation->encrypted_id }}">Delete</a>
                                             </td>
 
                                         </tr>
-                                        @endforeach
-                                    
+                                        @endforeach --}}
+                                    </tbody>
                                     </tbody>
                                 </table>
-                                
+                                <div class="card-footer text-right">
+                                    <nav class="d-inline-block">
+                                      <ul class="pagination mb-0">
+                                        <li class="page-item disabled">
+                                          <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1 <span
+                                              class="sr-only">(current)</span></a></li>
+                                        <li class="page-item">
+                                          <a class="page-link" href="#">2</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                          <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                                        </li>
+                                      </ul>
+                                    </nav>
+                                  </div>
                             </div>
                         </div>
                     </div>
@@ -96,36 +120,7 @@
     </div>
 </div>
 
-<!-- Edit Designation Modal -->
-@foreach($designations as $designation) 
-<div class="modal fade" id="editDesignationModal_{{ $designation->tbl_designation_id }}" tabindex="-1" role="dialog" aria-labelledby="editDesignationModalLabel_{{ $designation->tbl_designation_id }}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id=editDesignationForm action="/admin/editdesignation" method="POST">
-                @csrf
-                <input type="hidden" name="enc_id" value="{{ $designation->encrypted_id }}">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editDesignationModalLabel_{{ $designation->tbl_designation_id }}">Edit Designation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="editDesignationName_{{ $designation->tbl_designation_id }}">Enter Designation Name</label>
-                        <input type="text" class="form-control designationName" id="editDesignationName_{{ $designation->tbl_designation_id }}" name="designationName" value="{{ $designation->designation_name }}" required>
-<span class="text-danger designationNameError"></span>
 
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endforeach
 
 
 
@@ -156,12 +151,7 @@
         });
     });
 
-    // Script to toggle display of edit designation form
-document.querySelectorAll('.toggle-edit-form').forEach(function (button) {
-    button.addEventListener('click', function () {
-        var designationId = this.dataset.designationId;
-        $('#editDesignationModal_' + designationId).modal('show');
-    });
-});
+
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

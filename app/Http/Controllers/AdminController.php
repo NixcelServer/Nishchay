@@ -369,10 +369,43 @@ class AdminController extends Controller
             
         }
        }
-        
-
+       
         return view('frontend_admin.auditlog',['auditlogs'=>$auditlogs]);
      }
+     
+     public function fetchAllAuditLog()
+{
+    $auditlogs = AuditLogDetail::orderBy('activity_date', 'desc')->get();
+    $auditLogsWithUsername = [];
 
+    foreach ($auditlogs as $auditlog) {
+        $user = User::where('tbl_user_id', $auditlog->activity_by)->first();
+
+        if ($user) {
+            $auditLogsWithUsername[] = [
+                'id' => $auditlog->id,
+                'activity_name' => $auditlog->activity_name,
+                'activity_by' => $user->first_name . " " . $user->last_name,
+                'activity_date' => $auditlog->activity_date,
+                'activity_time' => $auditlog->activity_time    
+            ];
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'data' => $auditLogsWithUsername,
+    ]);
+}
+
+
+public function showTechnologies()
+{
+    return view('frontend_admin.technology');
+}
+public function showDocumentType()
+{
+    return view('frontend_admin.document_type');
+}
     
 }

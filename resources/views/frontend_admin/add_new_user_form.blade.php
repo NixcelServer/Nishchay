@@ -36,7 +36,9 @@
                                         <small class="text-danger" id="emailError"></small>
                                     </div>
                                     <div class="col">
+
                                         <input type="text" name="emp_code" class="form-control" style="width: 100%;" placeholder="Employee Code" value="{{ $employeeCode }}" required pattern="[A-Z0-9]{6}" title="Enter a valid 6-character alphanumeric code" readonly>
+
                                         @error('emp_code')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror

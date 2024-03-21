@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\QueryDetail;
 
 class QueryController extends Controller
@@ -69,6 +70,7 @@ class QueryController extends Controller
         
             
              }
+
 
     }
 }

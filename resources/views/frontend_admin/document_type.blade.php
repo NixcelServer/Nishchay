@@ -34,6 +34,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                          @foreach($docTypes as $key => $documentType)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
@@ -48,6 +49,7 @@
                                             </td>
                                         </tr>
                                         @endforeach 
+
                                     </tbody>
                                 </table>
                             </div>
@@ -129,7 +131,7 @@
         button.addEventListener('click', function (event) {
             event.preventDefault();
             var encryptedId = this.dataset.encryptedId; // Retrieve encrypted_id from data attribute
-            
+
             // Use SweetAlert to confirm the delete action
             Swal.fire({
                 title: 'Are you sure?',
@@ -155,4 +157,6 @@
             $('#editDocumentTypeModal_' + documentTypeId).modal('show');
         });
     });
+
 </script>
+

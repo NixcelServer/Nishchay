@@ -1,22 +1,10 @@
 @extends('frontend_home.leftmenu')
- 
 <style>
-    /* Custom CSS to adjust positioning */
-    .main-content {
-        margin-top: -30px; /* Adjust this value as needed */
-    }
- 
-    /* Custom CSS to adjust width of input field */
-    #roleName {
-        width: 200px; /* Adjust the width as needed */
-    }
- 
-    .card-footer.text-left button {
-        margin-top: -5px; /* Adjust this value as needed */
+    .custom-thead {
+        background-color: #c7e1ff;
     }
 </style>
- 
-<div class="main-content">
+ <div class="main-content">
     <section class="section">
         <div class="section-body">
             <div class="row">
@@ -37,7 +25,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                                    <thead>
+                                    <thead class="custom-thead">
                                         <tr >
                                             <th>Sr.No</th>
                                             <th>Role</th>
@@ -61,34 +49,17 @@
                                                                 data-encrypted-id="{{ $role->encrypted_id }}">Edit</button>
 
                                                         <!-- Delete action form with encrypted ID -->
-                                                        <a href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger btn-sm delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</a>
+                                                        <button href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger btn-sm delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</button>
 
                                                         <!-- Assign Module action link -->
-                                                        <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-sm btn-info">Assign Module</a>
+                                                        <button href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-sm btn-info">Assign Module</button>
                                                     </td>
                                                 </tr>
                                             @endif
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="card-footer text-right">
-                                    <nav class="d-inline-block">
-                                      <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                          <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1 <span
-                                              class="sr-only">(current)</span></a></li>
-                                        <li class="page-item">
-                                          <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                          <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                        </li>
-                                      </ul>
-                                    </nav>
-                                  </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -159,7 +130,21 @@
 </div>
 @endforeach
 
-
+<style>
+    /* Custom CSS to adjust positioning */
+    .main-content {
+        margin-top: -30px; /* Adjust this value as needed */
+    }
+ 
+    /* Custom CSS to adjust width of input field */
+    #roleName {
+        width: 200px; /* Adjust the width as needed */
+    }
+ 
+    .card-footer.text-left button {
+        margin-top: -5px; /* Adjust this value as needed */
+    }
+</style>
 
 
 

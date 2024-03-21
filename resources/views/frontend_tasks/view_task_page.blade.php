@@ -49,12 +49,14 @@
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_delivery_date }}" readonly>
               </div>
               @if($completedDate)
+
               <div class="form-group">
                 <label for="completed_date">Task Completed On</label>
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_completion_date }}" readonly>
               </div>
               @endif
               <div class="form-group">
+
     <label for="status">Status</label>
     <select class="form-control" id="status" name="status"{{ !$changeStatus ? ($task->task_status == 'Completed' ? '' : ' disabled') : '' }}>
         <option value="">Select Status</option> <!-- Default option -->
@@ -84,8 +86,9 @@
                   @if (isset($deleteTask) && $deleteTask)
                       <!-- Delete Task Button -->
                       <a href="/Tasks/deletetask/{{ $enc_task_id }}" class="btn btn-danger" id="delete_task_btn">Delete Task</a>
-                  @endif
+                      @endif
               @endif
+
 
               @if($submitButton)
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -98,6 +101,28 @@
       </div>
     </div>
   
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+document.getElementById('delete_task_btn').addEventListener('click', function(event) {
+    event.preventDefault();
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this task!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            window.location.href = event.target.getAttribute('href');
+        } else {
+            swal("Your task is safe!", {
+                icon: "info",
+            });
+        }
+    });
+});
+</script>
   <!-- Add your script files here -->
 
   <table class="table">

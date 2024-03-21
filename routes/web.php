@@ -8,6 +8,7 @@ use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\QueryController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\TechnologyController;
@@ -40,6 +41,12 @@ Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
 Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
+    Route::get('/technology',[AdminController::class,'showTechnologies']);
+    Route::get('/document_type',[AdminController::class,'showDocumentType']);
+
+
+
+
     //if admin logs in show him admin dashboard
      //Route::get('/dashboard',[AdminController::class,'dashboard']);
      //if admin clicks on user in left menu
@@ -127,7 +134,7 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 //     // Route::get('/manage-role',[SuperAdminController::class,'manageRole'])->name('manageRole');
 //     // Route::post('/update-role',[SuperAdminController::class,'updateRole'])->name('updateRole');
 
-//Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+         //Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
 
 
 Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
@@ -243,3 +250,13 @@ Route::group(['prefix' => '/Queries','middleware'=>['web','queryAuth']],function
 });
 
 //});
+
+//Query URL's testing
+Route::get('/Queries',[QueryController::class,'ShowQueries']);
+Route::get('/QueriesDev',[QueryController::class,'ShowQueriesDev']);
+
+
+
+Route::get('/Employees/uploaddoc',[HrController::class,'ShowUploadDoc']);
+//convert to excel
+Route::get('/fetch-all-audit-log',[AdminController::class,'fetchAllAuditLog']);
