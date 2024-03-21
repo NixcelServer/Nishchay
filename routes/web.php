@@ -10,7 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\QueryController;
+
 use App\Http\Controllers\TechnologyController;
 
 use App\Http\Controllers\DocTypeController;
@@ -251,12 +251,4 @@ Route::group(['prefix' => '/Queries','middleware'=>['web','queryAuth']],function
 
 //});
 
-//Query URL's testing
-Route::get('/Queries',[QueryController::class,'ShowQueries']);
-Route::get('/QueriesDev',[QueryController::class,'ShowQueriesDev']);
 
-
-
-Route::get('/Employees/uploaddoc',[HrController::class,'ShowUploadDoc']);
-//convert to excel
-Route::get('/fetch-all-audit-log',[AdminController::class,'fetchAllAuditLog']);

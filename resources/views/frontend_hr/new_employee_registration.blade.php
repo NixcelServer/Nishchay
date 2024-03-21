@@ -90,7 +90,7 @@
                             <a href="/Employees/editemp/{{ $emp->encrypted_id }}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top"
                                 title="Edit User"><i class="fas fa-edit"></i></a>
                                                                             @endif
-                           <a href="/Employees/uploaddoc" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top"
+                           <a href="/Employees/uploaddoc/{{ $emp->encrypted_id }}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top"
                            title="Upload Documents"><i class="fas fa-file-upload"></i></a>                                               
                             </form>
                         </td>
