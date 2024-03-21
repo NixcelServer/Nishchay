@@ -112,6 +112,8 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
      Route::get('/doctype',[DocTypeController::class,'showDocType']);
      Route::post('/createdoctype',[DocTypeController::class,'createDocType']);
+     Route::post('/deletedoctype',[DocTypeController::class,'deleteDocType']);
+    
 
  });
 
@@ -164,6 +166,9 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //upload the doc inside the empcode folder
     Route::post('/uploaddoc',[HrController::class,'uploadDocuments']);
+
+    //verify the document
+    Route::get('/verifydoc/{id}',[HrController::class,'verifyDoc']);
     
 });
 

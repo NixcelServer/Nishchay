@@ -57,7 +57,7 @@ class TechnologyController extends Controller
 
 
 
-        $tech = Technology::where('tbl_tech_id',$dec_tech_id);
+        $tech = Technology::where('tbl_tech_id',$dec_tech_id)->first();
         $tech->flag = 'deleted';
         $tech->deleted_by = $userDetails->tbl_user_id;
         $tech->deleted_date = Date::now()->toDateString();
@@ -68,5 +68,7 @@ class TechnologyController extends Controller
 
         return redirect()->back();
     }
+
+    
 
 }

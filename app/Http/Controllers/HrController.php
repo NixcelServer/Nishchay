@@ -489,6 +489,11 @@ class HrController extends Controller
 
         $docs = Document::where('tbl_user_id',$dec_user_id)->get();
 
+        foreach($docs as $doc)
+        {
+            $doc->enc_tbl_doc_id = EncryptionDecryptionHelper::encdecId($doc->tbl_doc_id,'encrypt');
+        }
+
 
         return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs]);
     }
@@ -499,7 +504,7 @@ class HrController extends Controller
     //upload documents
     public function uploadDocuments(Request $request)
     {
-        
+       
     //     //decrypt the user id
     //     $dec_user_id = EncryptionDecryptionHelper::encdecId($request->enc_user_id,'decrypt');
     //     //get empcode
@@ -540,13 +545,16 @@ class HrController extends Controller
             $dec_doc_type_id = EncryptionDecryptionHelper::encdecId($request->doc_type_id, 'decrypt');
             
             // Set the path for storing the document based on the employee code
-            $path = 'uploads/' . $empCode . '/documents';
-
+            $path = 'uploads/' . $empCode . '/documents/';
+            
             // Get the original name of the document file
             $originalName = $request->file('document')->getClientOriginalName();
+
+            
             
             // Get the document file itself
             $doc = $request->file('document');
+            
 
             $doc->move(public_path($path), $originalName);
 
@@ -563,6 +571,7 @@ class HrController extends Controller
         $document->tbl_doc_type_id = $dec_doc_type_id;
         $document->doc_name = $originalName;
         $document->doc_path = $path;
+        $document->doc_status = 'Verification Pending';
         
         $document->save(); 
         
@@ -585,6 +594,19 @@ class HrController extends Controller
 
 
         return redirect()->back();
+    }
+
+    //verify documents change the status as verified
+    public function verifyDoc($enc_tbl_doc_id)
+    {
+        dd("hi");
+        $dec_tbl_doc_id = EncryptionDecryptionHelper::encdecId($enc_tbl_doc_id,'decrypt');
+
+        $doc = Document::where('tbl_doc_id',$dec_tbl_doc_id)->first();
+        $doc->flag = 'deleted';
+        $doc->save();
+
+        dd("deleted");
     }
 
 
