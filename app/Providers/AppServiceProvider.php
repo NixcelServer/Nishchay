@@ -27,9 +27,15 @@ class AppServiceProvider extends ServiceProvider
         $existingDepartment = \App\Models\Department::where('dept_name', $value)
             ->where('flag', 'show')
             ->exists();
-        dd($existingDepartment);
+        if($existingDepartment)
+        {
+            return false;
+        }
+        else{
+            return true;
+        }
         // If the department with the same name and flag 'show' exists, return false
-        return !$existingDepartment;
+        
     });
 }
 
