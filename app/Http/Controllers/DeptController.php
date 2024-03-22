@@ -45,7 +45,7 @@ class DeptController extends Controller
          ],
      ]);
        
-
+      
          $user_details = session('user');
          AuditLogHelper::logDetails('create department', $user_details->tbl_user_id);
         //get user detials from session to add in add by colm
