@@ -11,10 +11,10 @@
                             <h4>User Details</h4>
                         </div>
                         <div class="card-body">
-                            <p>User Name: </p>
-                            <p>Emp Code: </p>
-                            <p>Email: </p>
-                            <p>Contact No: </p>
+                            <p>User Name: {{ $empDetails->empName }}</p>
+                            <p>Emp Code: {{ $empDetails->emp_code }} </p>
+                            <p>Email: {{ $empDetails->email }}</p>
+                            <p>Contact No: {{ $empDetails->contact_no}} </p>
                         </div>
                     </div>
                 </div>
