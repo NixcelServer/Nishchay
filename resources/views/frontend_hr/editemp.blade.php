@@ -86,7 +86,7 @@
                                     <div class="col-md-4">
                                     <input type="hidden" name="enc_id" value="{{ $enc_id }}">
                                         <label class="form-label">EMP Code</label>
-                                        <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" required>
+                                        <input type="text" class="form-control" name="empcode" value="{{ $emp->emp_code }}" readonly>
                                         @error('empcode')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror

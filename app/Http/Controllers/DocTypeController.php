@@ -28,7 +28,13 @@ class DocTypeController extends Controller
     //create doc type
     public function createDocType(Request $request)
     {
-    
+        $request->validate([
+            'documentTypeName'=>[
+                'required',
+                'unique_docType_based_on_flag'
+            ],
+        ]);
+
         $userDetails = session('user');
 
         $docType = new DocumentType;

@@ -34,7 +34,10 @@ class DesignationController extends Controller
     public function storeDesignation(Request $request)
     {   
         $request -> validate([
-            'designationName' => 'required|unique:mst_tbl_designations,designation_name'
+            'designationName' => [
+                'required',
+                'unique_designation_based_on_flag',
+            ],
         ]);
         //get user detials from session to add in add by colm
         $user = session('user');
@@ -106,6 +109,9 @@ class DesignationController extends Controller
          $designation = Designation::findOrFail($dec_id);
  
          $designation->flag = "deleted";
+         $designation->update_by = $user_details->tbl_user_id;
+         $designation->update_date = Date::now()->toDateString();
+         $designation->update_time = Date::now()->toTimeString();
          $designation->save();
          return redirect()->back();
     }

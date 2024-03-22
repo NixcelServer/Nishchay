@@ -30,6 +30,12 @@ class TechnologyController extends Controller
 
     public function storeTechnology(Request $request)
     {
+        $request->validate([
+            'technologyName'=>[
+                'required',
+                'unique_tech_based_on_flag'
+            ],
+        ]);
         //get user details from session
         
 

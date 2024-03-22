@@ -62,11 +62,14 @@ class AuthController extends Controller
 
             auth()->login($user);
             
-            Session::put('user', $user);
+           Session::put('user', $user);
+        
 
             //get the user id and iterate over rolemodules to get the data of modules assigned to him
         $role_id = $user->tbl_role_id;
         $roleModules = RoleModule::where('tbl_role_id',$role_id)->get();
+
+        
 
         $moduleData = [];
         foreach($roleModules as $roleModule){
@@ -81,7 +84,7 @@ class AuthController extends Controller
             }
         }
         Session::put('moduleData',$moduleData);
-
+        
 
         $uniqueParentNames = [];
 
@@ -97,6 +100,7 @@ class AuthController extends Controller
                 
             }
             Session::put('uniqueParentNames',$uniqueParentNames);
+           
             
             return redirect('/dashboard');
  
@@ -131,6 +135,7 @@ class AuthController extends Controller
         $moduleTaskExist = in_array('Tasks', $uniqueParentNames);
         $moduleEmployeeExist = in_array('Employees', $uniqueParentNames);
         $moduleQueryExist = in_array('Queries',$uniqueParentNames);
+        
         
 
         if($moduleUserExist)
