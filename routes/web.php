@@ -8,8 +8,12 @@ use App\Http\Controllers\DeptController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\QueryController;
 use App\Http\Controllers\TaskController;
 
+use App\Http\Controllers\TechnologyController;
+
+use App\Http\Controllers\DocTypeController;
 
 
 
@@ -37,6 +41,12 @@ Route::get('/dashboard',[AuthController::class,'dashboard']);
 
 
 Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
+    Route::get('/technology',[AdminController::class,'showTechnologies']);
+    Route::get('/document_type',[AdminController::class,'showDocumentType']);
+
+
+
+
     //if admin logs in show him admin dashboard
      //Route::get('/dashboard',[AdminController::class,'dashboard']);
      //if admin clicks on user in left menu
@@ -101,13 +111,30 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
 
      Route::get('/auditlogdetails',[AdminController::class,'auditlogDetails']);
 
+     //technologies
+     Route::get('/technologies',[TechnologyController::class,'technologies']);
+    //store technology
+     Route::post('/storetechnology',[TechnologyController::class,'storeTechnology']);
+
+     //EDIT TECHNOLOGY
+     Route::get('/edittechnology/{id}',[TechnologyController::class,'editTechnology']);
+     
+     //delete technology
+     Route::get('/deletetechnology/{id}',[TechnologyController::class,'deleteTechnology']);
+
+
+     Route::get('/documenttypes',[DocTypeController::class,'showDocType']);
+     Route::post('/storedocumenttype',[DocTypeController::class,'createDocType']);
+     Route::get('/deletedocumenttype/{id}',[DocTypeController::class,'deleteDocType']);
+    
+
  });
 
  //     // Route::get('/users',[SuperAdminController::class,'users'])->name('superAdminUsers');
 //     // Route::get('/manage-role',[SuperAdminController::class,'manageRole'])->name('manageRole');
 //     // Route::post('/update-role',[SuperAdminController::class,'updateRole'])->name('updateRole');
 
-//Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
+         //Route::get('/hr/editemp/{id}',[HrController::class,'editEmpForm']);
 
 
 Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
@@ -145,6 +172,19 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
     //store salary details and then redirect to show employees page
     Route::post('/eidtemp/saldetails',[HrController::class,'salDetails']);
+
+    //upload documents functionality
+
+    Route::get('/uploaddoc/{id}',[HrController::class,'uploadDocumentsForm']);
+
+    //upload the doc inside the empcode folder
+    Route::post('/uploaddoc',[HrController::class,'uploadDocuments']);
+
+    //verify the document
+    Route::get('/verifydoc/{id}',[HrController::class,'verifyDoc']);
+
+    //delete the document
+    Route::get('/deletedoc/{id}',[HrController::class,'deleteDoc']);
     
 });
 
@@ -198,10 +238,17 @@ Route::group(['prefix' => '/Employees','middleware'=>['web','isHr']],function(){
 
 });
 
+Route::group(['prefix' => '/Queries','middleware'=>['web','queryAuth']],function(){
 
 
+    //when user clicks on query
+    Route::get('/',[QueryController::class,'showPendingQueries']);
+
+});
    
 
 });
 
 //});
+
+

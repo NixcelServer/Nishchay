@@ -20,6 +20,8 @@ use App\Helpers\EncryptionDecryptionHelper;
 use App\Helpers\AuditLogHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\File;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 
 
@@ -67,19 +69,25 @@ class AdminController extends Controller
         // $user_details = session('user');
         // AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
 
+        //we want to create auto incrementing employee code 
+        $employeeCode = IdGenerator::generate(['table'=>'tbl_emp_details','field'=>'emp_code','length' => 8, 'prefix' =>'N-']); 
+
         $roles = Role::where('flag', 'show')->get();
+        
 
         foreach ($roles as $role) {
             // Encode the role ID using the helper function
             $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
 
-        return view('frontend_admin.add_new_user_form',compact('roles'));
+        return view('frontend_admin.add_new_user_form',['roles'=>$roles,'employeeCode'=>$employeeCode]);
     }
 
     //create new user in db and redirect to user home page
     public function storeUser(Request $request){
         
+
+
         $user_details = session('user');
         AuditLogHelper::logDetails('create user', $user_details->tbl_user_id);
 
@@ -117,7 +125,22 @@ class AdminController extends Controller
 
         //store details into employee also
         $userId = $user->tbl_user_id;
+
+
         
+         
+        $employeeCode = $request->emp_code; 
+
+        // Create a folder with the employee code inside "uploads"
+        $employeeFolderPath = public_path('uploads/' . $employeeCode);
+        File::makeDirectory($employeeFolderPath, 0777, true);
+
+        // Create a folder named "documents" inside the employee's folder
+        $documentPath = $employeeFolderPath . '/documents'; 
+        File::makeDirectory($documentPath, 0777, true);
+
+
+         
         $emp = new EmployeeDetail;
         $emp->tbl_user_id = $userId;
         $emp->first_name = $request->first_name;
@@ -125,6 +148,7 @@ class AdminController extends Controller
         $emp->last_name = $request->last_name;
         $emp->email = $request->email;
         $emp->tbl_role_id = $dec_role_id;
+        $emp->emp_code = $employeeCode;
         $emp->add_by = $user_details->tbl_user_id;
         $emp->add_date = Date::now()->toDateString();
         $emp->add_time = Date::now()->toTimeString();
@@ -345,10 +369,43 @@ class AdminController extends Controller
             
         }
        }
-        
-
+       
         return view('frontend_admin.auditlog',['auditlogs'=>$auditlogs]);
      }
+     
+     public function fetchAllAuditLog()
+{
+    $auditlogs = AuditLogDetail::orderBy('activity_date', 'desc')->get();
+    $auditLogsWithUsername = [];
 
+    foreach ($auditlogs as $auditlog) {
+        $user = User::where('tbl_user_id', $auditlog->activity_by)->first();
+
+        if ($user) {
+            $auditLogsWithUsername[] = [
+                'id' => $auditlog->id,
+                'activity_name' => $auditlog->activity_name,
+                'activity_by' => $user->first_name . " " . $user->last_name,
+                'activity_date' => $auditlog->activity_date,
+                'activity_time' => $auditlog->activity_time    
+            ];
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'data' => $auditLogsWithUsername,
+    ]);
+}
+
+
+public function showTechnologies()
+{
+    return view('frontend_admin.technology');
+}
+public function showDocumentType()
+{
+    return view('frontend_admin.document_type');
+}
     
 }

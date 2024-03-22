@@ -7,7 +7,16 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <!-- Add the CSRF token meta tag here -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Nixcel - LeftMenu Template</title>
+  <title>Nixcel - Employee Management System</title>
+  <!-- Preload Critical CSS -->
+  <link rel="preload" href="/assets/css/app.min.css" as="style">
+  <link rel="preload" href="/assets/css/style.css" as="style">
+  <link rel="preload" href="/assets/css/components.css" as="style">
+  <link rel="preload" href="/assets/css/custom.css" as="style">
+   <!-- Preload Critical JS -->
+   <link rel="preload" href="/assets/js/app.min.js" as="script">
+   <link rel="preload" href="/assets/js/scripts.js" as="script">
+   <link rel="preload" href="/assets/js/custom.js" as="script">
   <!-- General CSS Files -->
   <link rel="stylesheet" href="/assets/css/app.min.css">
   <!-- Template CSS -->
@@ -16,6 +25,9 @@
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="/assets/css/custom.css">
   <link rel='shortcut icon' type='image/x-icon' href='/assets/img/favicon.ico' />
+<!-- datatable -->
+  <link rel="stylesheet" href="/assets/bundles/datatables/datatables.min.css">
+  <link rel="stylesheet" href="/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
 </head>
 
 <style>
@@ -43,6 +55,7 @@
 .menu li:first-child a {
   margin-left: 0; /* Remove left margin for the first item */
 }
+
 
 </style>
 
@@ -86,14 +99,14 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 200px; height: auto;" /> <span
-                class="logo-name"></span>
+            <a href="/dashboard"> <img alt="image" src="/assets/img/logo.png" class="header-logo" style="width: 43px; height: auto;" /> <span
+                class="logo-name" style="color: rgb(52, 52, 151); style="font-family: 'Georgia', sans-serif;">Nixcel</span>
             </a>
           </div>
           <ul class="sidebar-menu">
-            <li class="menu-header"></li>
-            <li class="dropdown active">
-              <a href="/dashboard" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+            <li class="menu-header" ></li>
+            <li class="dropdown active" style="margin-top: 5px;">
+              <a href="/dashboard" class="nav-link" style="color: black;"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
 
             {{-- left menu for admin --}}
@@ -106,45 +119,158 @@
               <ul class="sidebar-menu">
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/users" class="nav-link"><i data-feather="user-check"></i><span>Users</span></a>                  
+                  <a href="/admin/users" class="nav-link" style="color: black;"><i data-feather="user-check"></i><span>Users</span></a>                  
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/depts"class="nav-link"><i data-feather="grid"></i><span>Department</span></a>
+                  <a href="/admin/depts"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Department</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/designations"class="nav-link"><i data-feather="grid"></i><span>Designation</span></a>
+                  <a href="/admin/designations"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Designation</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/roles"class="nav-link"><i data-feather="grid"></i><span>Roles</span></a>
+                  <a href="/admin/roles"class="nav-link" style="color: black;"><i data-feather="grid"></i><span>Roles</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/auditlogdetails"class="nav-link"><i data-feather="command"></i><span>Audit_Log</span></a>
+                  <a href="/admin/technologies"class="nav-link"><i data-feather="command"></i><span>Technologies</span></a>
                 </li>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+                  <a href="/admin/documenttypes"class="nav-link"><i data-feather="command"></i><span>Document Type</span></a>
+                </li>
+
+                <li class="menu-header"></li>
+                <li class="dropdown active">
+
+                  <a href="/admin/auditlogdetails"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Activity Log</span></a>
+
+                </li>
+
+                
 
                 
               </ul>
               @else
-              <ul class="menu">
+              
+                
+                
                 @foreach($uniqueParentNames as $parentName)
-                <li>
-                  <a href="/{{ $parentName }}">{{ $parentName }}<span class=""></span></a>
+                <li class="menu-header"></li>
+                <ul class="sidebar-menu">
+                <li class="dropdown active">
+                  <a href="/{{ $parentName }}"class="nav-link" style="color: black;"><i data-feather="command"></i><span>{{ $parentName }}</span></a>
                 </li>
+                </ul>
                 @endforeach
-              </ul>
+              
+              
               @endif
+          </ul>
 
 
 
 
         </aside>
+        {{-- <div class="settingSidebar">
+          <a href="javascript:void(0)" class="settingPanelToggle"> <i class="fa fa-spin fa-cog"></i>
+          </a>
+          <div class="settingSidebar-body ps-container ps-theme-default">
+            <div class=" fade show active">
+              <div class="setting-panel-header">Setting Panel
+              </div>
+              <div class="p-15 border-bottom">
+                <h6 class="font-medium m-b-10">Select Layout</h6>
+                <div class="selectgroup layout-color w-50">
+                  <label class="selectgroup-item">
+                    <input type="radio" name="value" value="1" class="selectgroup-input-radio select-layout" checked>
+                    <span class="selectgroup-button">Light</span>
+                  </label>
+                  <label class="selectgroup-item">
+                    <input type="radio" name="value" value="2" class="selectgroup-input-radio select-layout">
+                    <span class="selectgroup-button">Dark</span>
+                  </label>
+                </div>
+              </div>
+              <div class="p-15 border-bottom">
+                <h6 class="font-medium m-b-10">Sidebar Color</h6>
+                <div class="selectgroup selectgroup-pills sidebar-color">
+                  <label class="selectgroup-item">
+                    <input type="radio" name="icon-input" value="1" class="selectgroup-input select-sidebar">
+                    <span class="selectgroup-button selectgroup-button-icon" data-toggle="tooltip"
+                      data-original-title="Light Sidebar"><i class="fas fa-sun"></i></span>
+                  </label>
+                  <label class="selectgroup-item">
+                    <input type="radio" name="icon-input" value="2" class="selectgroup-input select-sidebar" checked>
+                    <span class="selectgroup-button selectgroup-button-icon" data-toggle="tooltip"
+                      data-original-title="Dark Sidebar"><i class="fas fa-moon"></i></span>
+                  </label>
+                </div>
+              </div>
+              <div class="p-15 border-bottom">
+                <h6 class="font-medium m-b-10">Color Theme</h6>
+                <div class="theme-setting-options">
+                  <ul class="choose-theme list-unstyled mb-0">
+                    <li title="white" class="active">
+                      <div class="white"></div>
+                    </li>
+                    <li title="cyan">
+                      <div class="cyan"></div>
+                    </li>
+                    <li title="black">
+                      <div class="black"></div>
+                    </li>
+                    <li title="purple">
+                      <div class="purple"></div>
+                    </li>
+                    <li title="orange">
+                      <div class="orange"></div>
+                    </li>
+                    <li title="green">
+                      <div class="green"></div>
+                    </li>
+                    <li title="red">
+                      <div class="red"></div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="p-15 border-bottom">
+                <div class="theme-setting-options">
+                  <label class="m-b-0">
+                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input"
+                      id="mini_sidebar_setting">
+                    <span class="custom-switch-indicator"></span>
+                    <span class="control-label p-l-10">Mini Sidebar</span>
+                  </label>
+                </div>
+              </div>
+              <div class="p-15 border-bottom">
+                <div class="theme-setting-options">
+                  <label class="m-b-0">
+                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input"
+                      id="sticky_header_setting">
+                    <span class="custom-switch-indicator"></span>
+                    <span class="control-label p-l-10">Sticky Header</span>
+                  </label>
+                </div>
+              </div>
+              <div class="mt-4 mb-4 p-3 align-center rt-sidebar-last-ele">
+                <a href="#" class="btn btn-icon icon-left btn-primary btn-restore-theme">
+                  <i class="fas fa-undo"></i> Restore Default
+                </a>
+              </div>
+            </div>
+          </div>
+        </div> --}}
+        
       </div>    
           
  
@@ -169,7 +295,13 @@
   <!-- Page Specific JS File -->
   <script src="/assets/js/page/form-wizard.js"></script>
   
-  
+{{-- --- data table js files --- --}}
+<!-- JS Libraies -->
+<script src="/assets/bundles/datatables/datatables.min.js"></script>
+<script src="/assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="/assets/bundles/jquery-ui/jquery-ui.min.js"></script>
+<!-- Page Specific JS File -->
+<script src="/assets/js/page/datatables.js"></script>
 </body>
 
 

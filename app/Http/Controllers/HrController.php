@@ -19,9 +19,12 @@ use App\Models\Role;
 use App\Models\KycDetail;
 use App\Models\Module;
 use App\Models\RoleModule;
+use App\Models\DocumentType;
+use App\Models\Document;
 use Illuminate\Validation\Rule;
 //use App\Models\AuditLogHelper;
 use App\Helpers\AuditLogHelper;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -149,7 +152,9 @@ class HrController extends Controller
         }
         
         $ofc_details = OfficialDetail::where('tbl_user_id',$dec_id)->first();
+        //$additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
         $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
+
         $stat_details = EpfEssiDetail::where('tbl_user_id',$dec_id)->first();
         $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
         $bank_details = BankDetail::where('tbl_user_id',$dec_id)->first();
@@ -471,101 +476,152 @@ class HrController extends Controller
         return view('hr.official_details_form',['enc_id'=>$enc_id]);
     }
 
-    // public function storeOfficialDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
 
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
 
-    //     $officialDetails = OfficialDetail::where('tbl_user_id',$dec_id)->get();
-    //     $officialDetails->official_email_id = $request->email;
-    //     $officialDetails->work_location = $request->work_location;
-    //     $officialDetails->reporting_manager_id = $request->reporting_manager_id;
-    //     $officialDetails->add_by = $userdetails->tbl_user_id;
-    //     $officialDetails->add_date = Date::now()->toDateString();
-    //     $officialDetails->add_time = Date::now()->toTimeString();
-    //     $officialDetails->save();
+    //upload documents form
+    public function uploadDocumentsForm($enc_user_id)
+    {
 
-    //     return view('hr.statutory_comp_form',['enc_id'=>$enc_id]);
-    // }
+         //check if verify document module exist then only set $verifyButton to true
+         $moduleData = session('moduleData');
+         $verifyButton = false;
 
-    // public function statutoryDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
+         foreach($moduleData as $data)
+         {
+             if($data['module']->module_name === 'Verify Documents')
+             {
+                 $verifyButton = true;
+             }
 
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+             if($verifyButton)
+             {
+                 break;
+             }
+         }
 
-    //     $statDetails = EpfEssiDetail::where('tbl_user_id',$dec_id)->get();
-    //     $statDetails->uan = $request->uan;
-    //     $statDetails->old_epf_no = $request->old_epf_no;
-    //     $statDetails->nixcel_epf_no = $request->nixcel_epf_no;
-    //     $statDetails->nixcel_essi_no = $request->nixcel_essi_no;
-    //     $statDetails->nominee_name = $request->nominee_name;
-    //     $statDetails->relation_with_nominee = $request->relation_with_nominee;
-    //     $statDetails->add_by = $userdetails->tbl_user_id;
-    //     $statDetails->add_date = Date::now()->toDateString();
-    //     $statDetails->add_time = Date::now()->toTimeString();
-    //     $statDetails->flag = "show";
+        $docTypes = DocumentType::all();
+        
+        foreach($docTypes as $docType)
+        {
+            $docType->enc_doc_type_id = EncryptionDecryptionHelper::encdecId($docType->tbl_doc_type_id,'encrypt');
+        }
 
-    //     $statDetails->save();
+        $dec_user_id = EncryptionDecryptionHelper::encdecId($enc_user_id,'decrypt');
 
-    //     return view('hr.bank_details_form',['enc_id'=>$enc_id]);
+        $docs = Document::where('tbl_user_id',$dec_user_id)->where('flag','show')->get();
 
-    // }
+        foreach($docs as $doc)
+        {
+            $doc->enc_tbl_doc_id = EncryptionDecryptionHelper::encdecId($doc->tbl_doc_id,'encrypt');
+        }
 
-    // public function bankDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
 
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+        return view('frontend_hr.upload_document',['enc_user_id'=>$enc_user_id,'docTypes'=>$docTypes,'docs'=>$docs,'verifyButton'=>$verifyButton]);
+    }
+    
 
-    //     $bankDetails = BankDetail::where('tbl_user_id',$enc_id)->get();
-    //     $bankDetails->bank_name = $request->bank_name;
-    //     $bankDetails->city = $request->city;
-    //     $bankDetails->ifsc = $request->ifsc;
-    //     $bankDetails->account_no = $request->account_no;
-    //     $bankDetails->add_by = $userdetails->tbl_user_id;
-    //     $bankDetails->add_date = Date::now()->toDateString();
-    //     $bankDetails->add_time = Date::now()->toTimeString();
-    //     $bankDetails->save();
 
-    //     return view('hr.sal_details',['enc_id'=>$enc_id]);
-    // }
 
-    // public function salDetails(Request $request)
-    // {
-    //     $userdetails = session('user');
+    //upload documents
+    public function uploadDocuments(Request $request)
+    {   
+           
+            
+            //get user details from session
+            $userDetails = session('user');
+       
 
-    //     $enc_id = $request->input('enc_id');
-    //     $action = 'decrypt';
-    //     $dec_id = EncryptionDecryptionHelper::encdecId($enc_id,$action);
+            $dec_user_id = EncryptionDecryptionHelper::encdecId($request->enc_user_id, 'decrypt');
+            
+            // Retrieve the employee code based on the decrypted user ID
+            $empCode = EmployeeDetail::where('tbl_user_id', $dec_user_id)->value('emp_code');
+            
+            // Decrypt the selected document type ID
+            $dec_doc_type_id = EncryptionDecryptionHelper::encdecId($request->doc_type_id, 'decrypt');
+            
+            // Set the path for storing the document based on the employee code
+            $path = 'uploads/' . $empCode . '/documents/';
+            
+            // Get the original name of the document file
+            $originalName = $request->file('document')->getClientOriginalName();
 
-    //     $salDetails = SalaryStructureDetail::where('tbl_user_id',$dec_id)->get();
+            
+            
+            // Get the document file itself
+            $doc = $request->file('document');
+            
 
-    //     $salDetails->actual_gross =$request->actual_gross;
-    //     $salDetails->basic = $request->basic;
-    //     $salDetails->hra = $request->hra;
-    //     $salDetails->special_allowance = $request->special_allowance;
-    //     $salDetails->medical_allowance = $request->medical_allowance;
-    //     $salDetails->statutory_bonus = $request->statutory_bonus;
-    //     $salDetails->payable_gross_salary = $request->payable_gross_salary;
-    //     $salDetails->pf = $request->pf;
-    //     $salDetails->tds = $request->tds;
-    //     $salDetails->pt = $request->pt;
-    //     $salDetails->net_salary = $request->net_salary;
-    //     $salDetails->ctc = $request->ctc;
-    //     $salDetails->add_by = $userdetails->tbl_user_id;
-    //     $salDetails->add_date = Date::now()->toDateString();
-    //     $salDetails->add_time = Date::now()->toTimeString();
-    //     $salDetails->save();
+            $doc->move(public_path($path), $originalName);
 
-    //     return redirect('/hr/employees');
 
-    // }
+
+        //insert the data into documents table
+        $document = new Document;
+        $document->tbl_user_id = $dec_user_id;
+        $document->tbl_doc_type_id = $dec_doc_type_id;
+        $document->doc_name = $originalName;
+        $document->doc_path = $path;
+        $document->doc_status = 'Verification Pending';
+        $document->add_by = $userDetails->tbl_user_id;
+        $document->add_date = Date::now()->toDateString();
+        $document->add_time = Date::now()->toTimeString();
+        $document->flag = 'show';
+        
+        $document->save(); 
+        
+        
+        AuditLogHelper::logDetails('Document Uploaded',$userDetails->tbl_user_id);
+
+        return redirect()->back();
+    }
+
+    //verify documents change the status as verified
+    public function verifyDoc($enc_tbl_doc_id)
+    {
+        $userDetails = session('user');
+        
+        $dec_tbl_doc_id = EncryptionDecryptionHelper::encdecId($enc_tbl_doc_id,'decrypt');
+
+        $doc = Document::where('tbl_doc_id',$dec_tbl_doc_id)->first();
+
+        $doc->doc_status = 'Verified';
+        $doc->verified_by = $userDetails->tbl_user_id;
+        $doc->verified_date = Date::now()->toDateString();
+        $doc->verified_time = Date::now()->toTimeString();
+        
+        $doc->save();
+
+        AuditLogHelper::logDetails('Document Verified',$userDetails->tbl_user_id);
+
+
+        return redirect()->back();
+    }
+
+    public function deleteDoc($enc_tbl_doc_id)
+    {
+        //get the user details from the session
+        $userDetails = session('user');
+
+        //decrypt the user id
+        $dec_tbl_doc_id = EncryptionDecryptionHelper::encdecId($enc_tbl_doc_id,'decrypt');
+
+        $doc = Document::where('tbl_doc_id',$dec_tbl_doc_id)->first();
+
+        $doc->deleted_by = $userDetails->tbl_user_id;
+        $doc->deleted_date = Date::now()->toDateString();
+        $doc->deleted_time = Date::now()->toTimeString();
+        $doc->flag = 'deleted';
+        $doc->save();
+
+        AuditLogHelper::logDetails('Document Deleted',$userDetails->tbl_user_id);
+
+
+        return redirect()->back();
+
+    }
+
+
+
 }
+
+//testing

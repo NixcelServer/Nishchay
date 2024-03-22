@@ -49,12 +49,14 @@
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_delivery_date }}" readonly>
               </div>
               @if($completedDate)
+
               <div class="form-group">
                 <label for="completed_date">Task Completed On</label>
                 <input type="date" class="form-control" id="completed_date" name="completed_date" value="{{ $task->task_completion_date }}" readonly>
               </div>
               @endif
               <div class="form-group">
+
     <label for="status">Status</label>
     <select class="form-control" id="status" name="status"{{ !$changeStatus ? ($task->task_status == 'Completed' ? '' : ' disabled') : '' }}>
         <option value="">Select Status</option> <!-- Default option -->
@@ -87,6 +89,7 @@
                       @endif
               @endif
 
+
               @if($submitButton)
               <button type="submit" class="btn btn-primary">Submit</button>
               @else
@@ -98,7 +101,10 @@
       </div>
     </div>
   
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37fddeb27c1024b794e075c306659c2f8bfd3092
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 document.getElementById('delete_task_btn').addEventListener('click', function(event) {
