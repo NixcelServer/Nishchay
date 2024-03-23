@@ -95,6 +95,7 @@ class HrController extends Controller
         $emp = EmployeeDetail::where('tbl_user_id', $dec_id)->first();
 
         $depts = Department::where('flag','show')->get();
+        
         foreach ($depts as $dept) {
             // Encode the user's ID using the helper function
             $dept->enc_dept_id = EncryptionDecryptionHelper::encdecId($dept->tbl_dept_id, 'encrypt');
@@ -109,6 +110,11 @@ class HrController extends Controller
         $roles = Role::where('flag','show')->get();
         foreach($roles as $role){
             $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
+        }
+
+        $techs = Technology::where('flag','show')->get();
+        foreach($techs as $tech){
+            $tech->enc_tbl_tech_id = EncryptionDecryptionHelper::encdecId($tech->tbl_tech_id,'encrypt');
         }
 
 
@@ -161,7 +167,7 @@ class HrController extends Controller
         $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails,'techs'=>$techs]);
     
     
         
