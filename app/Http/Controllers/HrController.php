@@ -21,6 +21,7 @@ use App\Models\Module;
 use App\Models\RoleModule;
 use App\Models\DocumentType;
 use App\Models\Document;
+use App\Models\Technology;
 use Illuminate\Validation\Rule;
 //use App\Models\AuditLogHelper;
 use App\Helpers\AuditLogHelper;
@@ -117,7 +118,15 @@ class HrController extends Controller
             $tech->enc_tbl_tech_id = EncryptionDecryptionHelper::encdecId($tech->tbl_tech_id,'encrypt');
         }
 
+        $assignedTechIds = $emp->techs()->pluck('mst_tbl_technologies.tbl_tech_id')->toArray();
 
+        // Encrypt the IDs using foreach loop
+        $encTechIds = [];
+        foreach ($assignedTechIds as $id) {
+            $encTechIds[] = EncryptionDecryptionHelper::encdecId($id, 'encrypt');
+        }
+
+        
         //passing data of previous employment details
         $prev_details = PreviousEmploymentDetail::where('tbl_user_id',$dec_id)->get();
         foreach($prev_details as $prev_detail)
@@ -167,7 +176,7 @@ class HrController extends Controller
         $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails,'techs'=>$techs]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails,'techs'=>$techs,'encTechIds'=>$encTechIds]);
     
     
         
@@ -276,10 +285,32 @@ class HrController extends Controller
 
          $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
 
-       
+         $selectedTechnologies = $request->input('technologies');
+         
+         $decryptedTechnologies= [];
+         foreach($selectedTechnologies as $tech)
+         {
+            
+            $decryptedTechId = EncryptionDecryptionHelper::encdecId($tech,'decrypt');
+            
+            $decryptedTechnologies[] = $decryptedTechId;
+         }
+
+         $addDate = Date::now()->toDateString();
+         $addTime = Date::now()->toTimeString();
+         $emp->techs()->sync(collect($decryptedTechnologies)->mapWithKeys(function ($techId) use ($addDate, $addTime, $userdetails) {
+            return [$techId => [
+                'add_by' => $userdetails->tbl_user_id,
+                'add_date' => $addDate,
+                'add_time' => $addTime
+            ]]; 
+        }));
+        
+         //$emp->techs()->sync($decryptedTechnologies);
+
 
          $additionalDetails->employment_status = $request->employmentstatus;
-         $additionalDetails->technology = $request->technology;
+        // $additionalDetails->technology = $request->technology;
          $additionalDetails->module = $request->module;
          $additionalDetails->join_date = Date::now()->toDateString(); 
 
