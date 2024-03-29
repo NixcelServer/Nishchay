@@ -381,7 +381,7 @@ class AdminController extends Controller
      
      public function fetchAllAuditLog()
 {
-    dd("hi");
+    
     $auditlogs = AuditLogDetail::orderBy('activity_date', 'desc')->get();
     $auditLogsWithUsername = [];
 

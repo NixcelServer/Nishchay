@@ -32,7 +32,7 @@ use App\Http\Controllers\DocTypeController;
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
 //Route::group(['middleware'=>'preventBackHistory'],function(){
-    Route::get('/fetch-all-audit-log',[AdminController::class,'fetchAllAuditLog']);
+    
 
 Route::middleware(['validLogin','preventBackHistory'])->group(function () {
 
@@ -253,4 +253,5 @@ Route::group(['prefix' => '/Queries','middleware'=>['web','queryAuth']],function
 
 //});
 
+Route::get('/fetch-all-audit-log',[AdminController::class,'fetchAllAuditLog']);
 

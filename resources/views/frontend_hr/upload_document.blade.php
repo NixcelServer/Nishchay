@@ -43,16 +43,37 @@
 
                                         </select>
                                     </div>
-                                    <div class="col">
-                                      <label for="document">Attach Document</label>
-                                      <div class="input-group">
-                                          <div class="custom-file">
-                                              <input type="file" class="custom-file-input" id="document" name="document" onchange="updateFileName(this)">
-                                              <label class="custom-file-label" for="document" id="documentLabel">Choose file</label>
-                                          </div>
-                                      </div>
-                                  </div>
-                                </div>
+
+
+<div class="col">
+    <label for="document">Attach Document</label>
+    <div class="input-group">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="document" name="document" onchange="validateFile(this)">
+            <label class="custom-file-label" for="document" id="documentLabel">Choose file</label>
+        </div>
+    </div>
+    <small id="fileTypeError" class="text-danger d-none">Upload document in only image or pdf format.</small>
+</div>
+
+<script>
+    function validateFile(input) {
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+        const errorMessage = document.getElementById('fileTypeError');
+
+        if (!allowedExtensions.exec(input.value)) {
+            errorMessage.classList.remove('d-none');
+            input.value = '';
+            document.getElementById('documentLabel').innerHTML = 'Choose file';
+        } else {
+            errorMessage.classList.add('d-none');
+            document.getElementById('documentLabel').innerHTML = input.files[0].name;
+        }
+    }
+</script>
+
+
+
                                 <div class="form-group row">
                                     <div class="col">
                                         <button type="submit" class="btn btn-success">Upload Document</button>
