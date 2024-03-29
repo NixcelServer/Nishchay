@@ -52,7 +52,7 @@
                                                         <button href="/admin/deleterole/{{$role->encrypted_id}}" class="btn btn-danger btn-sm delete-role" data-encrypted-id="{{ $role->encrypted_id }}">Delete</button>
 
                                                         <!-- Assign Module action link -->
-                                                        <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-sm btn-primary assign-module" data-role-id="{{ $role->tbl_role_id }}">Assign Module</a>
+                                                        <a href="/admin/assignmodule/{{$role->encrypted_id}}" class="btn btn-sm btn-primary">Assign Module</a>
                                                     </td>
                                                 </tr>
                                             @endif

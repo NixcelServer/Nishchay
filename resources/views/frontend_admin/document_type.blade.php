@@ -40,6 +40,7 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $documentType->doc_type }}</td>
                                             <td>
+                                                <!-- Edit action link with encrypted ID -->
                                                 
                                                 <!-- Delete action form with encrypted ID -->
                                                 <button href="/admin/deletedocumenttype/{{ $documentType->enc_tbl_doc_type_id }}" class="btn btn-danger btn-sm delete-document-type" data-encrypted-id="{{ $documentType->enc_tbl_doc_type_id }}">Delete</button>

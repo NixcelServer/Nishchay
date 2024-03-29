@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tbl_docs', function (Blueprint $table) {
-            $table->id('tbl_id');
+            $table->id('tbl_doc_id');
             $table->integer('tbl_user_id');
             $table->integer('tbl_doc_type_id');
             $table->integer('doc_name');
             $table->string('doc_path');
             $table->integer('add_by');
-            $table->integer('add_date');
-            $table->integer('add_time');
+            $table->date('add_date');
+            $table->time('add_time');
             $table->integer('verified_by');
             $table->date('verified_date');
             $table->time('verified_time');
