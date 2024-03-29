@@ -138,8 +138,9 @@ class AdminController extends Controller
         File::makeDirectory($employeeFolderPath, 0777, true);
 
         // Create a folder named "documents" inside the employee's folder
-        $documentPath = $employeeFolderPath . '/documents'; 
-        File::makeDirectory($documentPath, 0777, true);
+        //$documentPath = $employeeFolderPath . '/documents';
+       // $documentPath = $employeeFolderPath; 
+        //File::makeDirectory($documentPath, 0777, true);
 
 
          

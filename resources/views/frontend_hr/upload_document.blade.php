@@ -49,9 +49,14 @@
                                           <div class="custom-file">
                                               <input type="file" class="custom-file-input" id="document" name="document" onchange="updateFileName(this)">
                                               <label class="custom-file-label" for="document" id="documentLabel">Choose file</label>
+                                              
                                           </div>
                                       </div>
+                                      @error('document')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
+                                  
                                 </div>
                                 <div class="form-group row">
                                     <div class="col">
@@ -91,7 +96,7 @@
                                         
                                         <td>
                                           <div class="d-flex justify-content-between">
-                                            <button href="#" onclick="openDocument('/{{ $doc->doc_path}}{{ $doc->doc_name}}', {{ json_encode($doc->enc_tbl_doc_id) }})" class="mr-2">
+                                            <button href="#" onclick="openDocument('/{{ $doc->doc_path}}/{{ $doc->doc_name}}', {{ json_encode($doc->enc_tbl_doc_id) }})" class="mr-2">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
                                             
@@ -121,7 +126,7 @@
 
     console.log("Document ID:", documentId);
       $('#documentFrame').attr('src', documentUrl);
-
+        
       // Update the content of the modal with the document ID
     $('#documentModal').find('.document-id').text(documentId);
 

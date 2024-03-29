@@ -567,7 +567,13 @@ class HrController extends Controller
     //upload documents
     public function uploadDocuments(Request $request)
     {   
-           
+            $validatedData = $request->validate([
+                'document' => 'required|file|mimes:pdf,jpg,jpeg,png', // Adjust max file size as needed
+            ], [
+                'document.required' => 'Please upload a document file.',
+                'document.mimes' => 'The document must be a PDF, JPG, JPEG, or PNG file.',
+                 // Adjust file size message as needed
+            ]);
             
             //get user details from session
             $userDetails = session('user');
@@ -582,7 +588,7 @@ class HrController extends Controller
             $dec_doc_type_id = EncryptionDecryptionHelper::encdecId($request->doc_type_id, 'decrypt');
             
             // Set the path for storing the document based on the employee code
-            $path = 'uploads/' . $empCode . '/documents/';
+            $path = 'uploads/' . $empCode ;
             
             // Get the original name of the document file
             $originalName = $request->file('document')->getClientOriginalName();
