@@ -150,7 +150,7 @@ class AuthController extends Controller
 
             $roleCount = Role::where('flag','show')->count();
 
-    
+            
 
             return view('frontend_home.dashboard',['usersCount'=>$usersCount,'deptsCount'=>$deptsCount,'desgCount'=>$desgCount,'roleCount'=>$roleCount]);
 

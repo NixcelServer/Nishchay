@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id('tbl_doc_id');
             $table->integer('tbl_user_id');
             $table->integer('tbl_doc_type_id');
-            $table->string('doc_name');
+            $table->integer('doc_name');
             $table->string('doc_path');
-            $table->string('doc_status');
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
@@ -28,6 +27,7 @@ return new class extends Migration
             $table->date('deleted_date');
             $table->time('deleted_time');
             $table->string('flag');
+            
             
             
         });

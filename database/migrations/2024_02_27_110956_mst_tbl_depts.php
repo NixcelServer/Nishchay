@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mst_tbl_depts', function (Blueprint $table) {
             $table->id('tbl_dept_id');
-            $table->string('dept_name')->unique();
+            $table->string('dept_name')->nullable();
             $table->integer('add_by')->nullable();
             $table->date('add_date')->nullable();
             $table->time('add_time')->nullable();

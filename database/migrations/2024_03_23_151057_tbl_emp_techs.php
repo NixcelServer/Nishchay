@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('deleted_by')->nullabe();
             $table->date('deleted_date')->nullable();
             $table->time('deleted_time')->nullable();
-            $table->string('flag');
+            $table->string('flag')->default('show');
 
             $table->foreign('tbl_tech_id')->references('tbl_tech_id')->on('mst_tbl_technologies')->onDelete('cascade');
             $table->foreign('tbl_employee_detail_id')->references('tbl_employee_detail_id')->on('tbl_emp_details')->onDelete('cascade');

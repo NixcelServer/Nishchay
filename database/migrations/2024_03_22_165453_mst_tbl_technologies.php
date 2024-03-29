@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
-            $table->integer('deleted_by')->nullabe();
+            $table->integer('deleted_by')->nullable();
             $table->date('deleted_date')->nullable();
             $table->time('deleted_time')->nullable();
             $table->string('flag');

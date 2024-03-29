@@ -102,6 +102,7 @@
     $(document).ready(function () {
         $('#exportExcel').click(function (e) {
             e.preventDefault();
+            
             exportData('xlsx');
         });
 
@@ -112,6 +113,7 @@
 
         function exportData(format) {
             // Send AJAX request to fetch all data
+            
             $.ajax({
                 url: '/fetch-all-audit-log', // Update with your backend route
                 method: 'GET',
@@ -119,6 +121,7 @@
                     if (response.success) {
                         if (format === 'xlsx') {
                             // Convert data to Excel
+                            
                             const sheet = XLSX.utils.json_to_sheet(response.data);
                             const wb = XLSX.utils.book_new();
                             XLSX.utils.book_append_sheet(wb, sheet, 'Audit Log Data');

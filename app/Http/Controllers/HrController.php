@@ -186,7 +186,7 @@ class HrController extends Controller
 
     public function storeDetails(Request $request)
     {   
-
+         
         $enc_id = $request->input('enc_id');
         
         $action = 'decrypt';
