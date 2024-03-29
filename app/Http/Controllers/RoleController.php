@@ -37,7 +37,10 @@ class RoleController extends Controller
     public function storeRole(Request $request)
     {   
         $request->validate([
-            'roleName' => 'required|unique:mst_tbl_roles,role_name',
+            'roleName' => [
+                'required',
+                'unique_role_based_on_flag'
+            ],
         ]);
            
         $user = session('user');

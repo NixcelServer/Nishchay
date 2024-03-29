@@ -42,9 +42,7 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $technology->tech_name }}</td>
 
-                                            <td>
-                                                <!-- Edit action link with encrypted ID -->
-                                               
+                                            <td> 
                                                 <!-- Delete action form with encrypted ID -->
                                                 <button href="/admin/deletetechnology/{{ $technology->enc_tbl_tech_id }}" class="btn btn-danger btn-sm delete-technology " data-encrypted-id="{{ $technology->enc_tbl_tech_id }}">Delete</button>
                                             </td>

@@ -38,7 +38,28 @@
                                         <input type="email" name="email" class="form-control" placeholder="Email"
                                         value="{{ $user->email}}" >
                                     </div>
+
+                                    <div class="col">
+                                    <label for="email">Employee Code</label>
+                                        <input type="text" name="emp_code" class="form-control" style="width: 100%;" placeholder="Employee Code" value="{{ $empCode }}" required pattern="[A-Z0-9]{6}" title="Enter a valid 6-character alphanumeric code" readonly>
+
+                                    </div>
+                                </div>
                                    
+                                    
+                                <div class="form-group row">
+                                    <div class="col">
+                                    <label for="email">Select Role</label>
+                                        <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 50%;" required>
+                                            <option value="">Select Role</option> <!-- Blank option -->
+                                            @foreach($roles as $role)
+                                                @if($role->role_name !== 'Admin')
+                                                    <option value="{{ $role->encrypted_id }}"{{ $roleName == $role->role_name ? 'selected' : '' }}>{{ $role->role_name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="col">
                                         <label for="password">Password</label>
                                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" value="{{ old('password') }}" required>
@@ -53,17 +74,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
-                                    <div class="col">
-                                        <select name="tbl_role_id" class="form-control" style="border: 1px solid #b1a7a7; width: 35%;" required>
-                                            <option value="">Select Role</option> <!-- Blank option -->
-                                            @foreach($roles as $role)
-                                                @if($role->role_name !== 'Admin')
-                                                    <option value="{{ $role->encrypted_id }}"{{ $roleName == $role->role_name ? 'selected' : '' }}>{{ $role->role_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                
                                     <div class="col-auto">
                                         <button class="btn btn-primary" type="submit">Submit</button>
                                     </div>

@@ -62,8 +62,8 @@ class AuthController extends Controller
 
             auth()->login($user);
             
-            Session::put('user', $user);
-            
+           Session::put('user', $user);
+        
 
             //get the user id and iterate over rolemodules to get the data of modules assigned to him
         $role_id = $user->tbl_role_id;
@@ -84,7 +84,7 @@ class AuthController extends Controller
             }
         }
         Session::put('moduleData',$moduleData);
-
+        
 
         $uniqueParentNames = [];
 
@@ -137,6 +137,7 @@ class AuthController extends Controller
         $moduleQueryExist = in_array('Queries',$uniqueParentNames);
         
         
+
         if($moduleUserExist)
         {
             $usersCount = User::where('flag', 'show')

@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\File;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Validation\Rule;
+
 
 
 
@@ -211,6 +213,8 @@ class AdminController extends Controller
         $dec_id = EncryptionDecryptionHelper::encdecId($enc_id, $action);
         
         $user = User::find($dec_id);
+
+        $empCode = EmployeeDetail::where('tbl_user_id',$dec_id)->value('emp_code');
     
 
         $roleName = Role::where('tbl_role_id',$user->tbl_role_id)->value('role_name');;
@@ -223,17 +227,19 @@ class AdminController extends Controller
             $role->encrypted_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
         
-        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles,'roleName' => $roleName]);
+        return view('frontend_admin.edituser',['user'=>$user,'enc_id' => $enc_id,'roles' => $roles,'roleName' => $roleName,'empCode'=>$empCode]);
     }
 
     //edit user details in db
     public function editUser(Request $request)
     {
-       
+    
+        //
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
+            'email' => ['required','email',Rule::unique('mst_tbl_users','email')->ignore($request->email,'email')],
             'password' => ['required', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'],
             'tbl_role_id' => 'required'],
             [
