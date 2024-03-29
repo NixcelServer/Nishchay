@@ -1,3 +1,4 @@
+@extends('frontend_home.leftmenu')
 <head>
     <!-- Preload Critical CSS -->
     <link rel="preload" href="/assets/css/app.min.css" as="style">
@@ -8,8 +9,11 @@
     <link rel="preload" href="/assets/js/app.min.js" as="script">
     <link rel="preload" href="/assets/js/scripts.js" as="script">
     <link rel="preload" href="/assets/js/custom.js" as="script">
+
+    <link rel="stylesheet" href="/assets/bundles/datatables/datatables.min.css">
+    <link rel="stylesheet" href="/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
+
 </head>
-@extends('frontend_home.leftmenu')
 
 <style>
     /* Custom CSS to adjust positioning */

@@ -96,6 +96,7 @@ class HrController extends Controller
         $emp = EmployeeDetail::where('tbl_user_id', $dec_id)->first();
 
         $depts = Department::where('flag','show')->get();
+        
         foreach ($depts as $dept) {
             // Encode the user's ID using the helper function
             $dept->enc_dept_id = EncryptionDecryptionHelper::encdecId($dept->tbl_dept_id, 'encrypt');
@@ -112,7 +113,20 @@ class HrController extends Controller
             $role->enc_role_id = EncryptionDecryptionHelper::encdecId($role->tbl_role_id, 'encrypt');
         }
 
+        $techs = Technology::where('flag','show')->get();
+        foreach($techs as $tech){
+            $tech->enc_tbl_tech_id = EncryptionDecryptionHelper::encdecId($tech->tbl_tech_id,'encrypt');
+        }
 
+        $assignedTechIds = $emp->techs()->pluck('mst_tbl_technologies.tbl_tech_id')->toArray();
+
+        // Encrypt the IDs using foreach loop
+        $encTechIds = [];
+        foreach ($assignedTechIds as $id) {
+            $encTechIds[] = EncryptionDecryptionHelper::encdecId($id, 'encrypt');
+        }
+
+        
         //passing data of previous employment details
         $prev_details = PreviousEmploymentDetail::where('tbl_user_id',$dec_id)->get();
         foreach($prev_details as $prev_detail)
@@ -160,15 +174,9 @@ class HrController extends Controller
         $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
         $bank_details = BankDetail::where('tbl_user_id',$dec_id)->first();
         $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
-
-        $techs = Technology::where('flag','show')->get();
-        foreach($techs as $tech){
-            $tech->enc_tbl_tech_id = EncryptionDecryptionHelper::encdecId($tech->tbl_tech_id,'encrypt');
-        }
-        
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails,'techs'=>$techs]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails,'techs'=>$techs,'encTechIds'=>$encTechIds]);
     
     
         
@@ -277,10 +285,32 @@ class HrController extends Controller
 
          $additionalDetails = AdditionalDetail::where('tbl_user_id',$dec_id)->first();
 
-       
+         $selectedTechnologies = $request->input('technologies');
+         
+         $decryptedTechnologies= [];
+         foreach($selectedTechnologies as $tech)
+         {
+            
+            $decryptedTechId = EncryptionDecryptionHelper::encdecId($tech,'decrypt');
+            
+            $decryptedTechnologies[] = $decryptedTechId;
+         }
+
+         $addDate = Date::now()->toDateString();
+         $addTime = Date::now()->toTimeString();
+         $emp->techs()->sync(collect($decryptedTechnologies)->mapWithKeys(function ($techId) use ($addDate, $addTime, $userdetails) {
+            return [$techId => [
+                'add_by' => $userdetails->tbl_user_id,
+                'add_date' => $addDate,
+                'add_time' => $addTime
+            ]]; 
+        }));
+        
+         //$emp->techs()->sync($decryptedTechnologies);
+
 
          $additionalDetails->employment_status = $request->employmentstatus;
-         $additionalDetails->technology = $request->technology;
+        // $additionalDetails->technology = $request->technology;
          $additionalDetails->module = $request->module;
          $additionalDetails->join_date = Date::now()->toDateString(); 
 

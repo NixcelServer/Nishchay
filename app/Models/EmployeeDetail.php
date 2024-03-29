@@ -42,4 +42,9 @@ class EmployeeDetail extends Model
         'update_time' => null,
         'flag' => 'show'
     ];  
+
+    public function techs()
+    {
+        return $this->belongsToMany(Technology::class, 'tbl_emps_techs' , 'tbl_employee_detail_id' , 'tbl_tech_id' );
+    }
 }
