@@ -97,7 +97,7 @@ class AuthController extends Controller
                 
             }
             Session::put('uniqueParentNames',$uniqueParentNames);
-            
+           
             return redirect('/dashboard');
  
         } else {

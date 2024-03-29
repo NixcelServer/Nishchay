@@ -14,16 +14,17 @@
   <link rel="stylesheet" href="/assets/css/custom.css">
   <link rel='shortcut icon' type='image/x-icon' href='/assets/img/favicon.ico' />
  
-    <!-- Include Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-   
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Include Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  
 <!-- jQuery UI library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
- 
-   
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
  
 @extends('frontend_home.leftmenu')
@@ -345,10 +346,30 @@
                                             <option value="parttime" {{ $emp->employment_status === 'parttime' ? 'selected' : '' }}>InActive</option>
                                         </select>
                                     </div>
+                                    
                                     <div class="col-md-4">
-                                        <label class="form-label">Technology</label>
-                                        <input type="text" class="form-control" name="technology" value="{{ $additionalDetails->technology }}">
+                                        <label class="form-label">Select Technology</label>
+                                        <div class="dropdown">
+                                            <button class="btn  dropdown-toggle" type="button" id="technologyDropdown" data-bs-toggle="dropdown" aria-expanded="false" >
+                                                Select Technology
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-bottom" aria-labelledby="technologyDropdown">
+                                                <!-- Add technology options for dropdown -->
+                                                @foreach($techs as $tech)
+                                                    <li>
+                                                        <label class="dropdown-item">
+                                                            <input class="form-check-input" type="checkbox" name="technologies[]" value="{{ $tech->enc_tbl_tech_id }}"{{ in_array($tech->enc_tbl_tech_id, explode(',', $additionalDetails->technology)) ? ' checked' : '' }}>
+                                                            {{ $tech->tech_name }}
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
+                                    
+                                    
+
+                                    
                                     <div class="col-md-4">
                                         <label class="form-label">Module</label>
                                         <input type="text" class="form-control" name="module" value="{{ $additionalDetails->module }}">

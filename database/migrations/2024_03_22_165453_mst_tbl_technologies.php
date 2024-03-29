@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mst_tbl_doc_type', function (Blueprint $table) {
-            $table->id('tbl_doc_type_id');
-            $table->string('doc_type');
+        Schema::create('mst_tbl_technologies', function (Blueprint $table) {
+            $table->id('tbl_tech_id');
+            $table->string('tech_name');
             $table->integer('add_by');
             $table->date('add_date');
             $table->time('add_time');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mst_tbl_doc_type');
+        Schema::dropIfExists('mst_tbl_technologies');
     }
 };

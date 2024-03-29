@@ -21,6 +21,7 @@ use App\Models\Module;
 use App\Models\RoleModule;
 use App\Models\DocumentType;
 use App\Models\Document;
+use App\Models\Technology;
 use Illuminate\Validation\Rule;
 //use App\Models\AuditLogHelper;
 use App\Helpers\AuditLogHelper;
@@ -159,9 +160,15 @@ class HrController extends Controller
         $kyc_details = KycDetail::where('tbl_user_id',$dec_id)->first();
         $bank_details = BankDetail::where('tbl_user_id',$dec_id)->first();
         $sal_details = SalaryStructureDetail::where('tbl_user_id',$dec_id)->first();
+
+        $techs = Technology::where('flag','show')->get();
+        foreach($techs as $tech){
+            $tech->enc_tbl_tech_id = EncryptionDecryptionHelper::encdecId($tech->tbl_tech_id,'encrypt');
+        }
+        
          
         
-        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails]);
+        return view('frontend_hr.editemp',['emp'=>$emp,'user'=>$user,'enc_id'=>$enc_id,'depts'=>$depts,'designations'=>$designations,'roles'=> $roles,'prev_details'=>$prev_details,'managers'=>$managers,'ofc_details'=>$ofc_details,'stat_details'=>$stat_details,'kyc_details'=>$kyc_details,'bank_details'=>$bank_details,'sal_details'=>$sal_details,'mng_name'=>$mng_name,'additionalDetails'=>$additionalDetails,'techs'=>$techs]);
     
     
         
@@ -171,7 +178,7 @@ class HrController extends Controller
 
     public function storeDetails(Request $request)
     {   
-
+         
         $enc_id = $request->input('enc_id');
         
         $action = 'decrypt';
