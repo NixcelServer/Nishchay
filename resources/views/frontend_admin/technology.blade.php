@@ -44,10 +44,7 @@
 
                                             <td>
                                                 <!-- Edit action link with encrypted ID -->
-                                                <button class="btn btn-warning btn-sm toggle-edit-form"
-                                                    data-technology-id="{{ $technology->tbl_technology_id }}"
-
-                                                    data-encrypted-id="{{ $technology->enc_tbl_tech_id }}">Edit</button>
+                                               
                                                 <!-- Delete action form with encrypted ID -->
                                                 <button href="/admin/deletetechnology/{{ $technology->enc_tbl_tech_id }}" class="btn btn-danger btn-sm delete-technology " data-encrypted-id="{{ $technology->enc_tbl_tech_id }}">Delete</button>
                                             </td>

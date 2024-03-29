@@ -32,7 +32,7 @@ use App\Http\Controllers\DocTypeController;
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'login']);
 //Route::group(['middleware'=>'preventBackHistory'],function(){
-
+    Route::get('/fetch-all-audit-log',[AdminController::class,'fetchAllAuditLog']);
 
 Route::middleware(['validLogin','preventBackHistory'])->group(function () {
 
@@ -110,6 +110,8 @@ Route::group(['prefix' => '/admin','middleware'=>['web','isAdmin']],function(){
      Route::post('/deletemodule',[RoleController::class,'deleteModule']);
 
      Route::get('/auditlogdetails',[AdminController::class,'auditlogDetails']);
+
+     
 
      //technologies
      Route::get('/technologies',[TechnologyController::class,'technologies']);

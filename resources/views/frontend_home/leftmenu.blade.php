@@ -139,12 +139,12 @@
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/technologies"class="nav-link"><i data-feather="command"></i><span>Technologies</span></a>
+                  <a href="/admin/technologies"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Technologies</span></a>
                 </li>
 
                 <li class="menu-header"></li>
                 <li class="dropdown active">
-                  <a href="/admin/documenttypes"class="nav-link"><i data-feather="command"></i><span>Document Type</span></a>
+                  <a href="/admin/documenttypes"class="nav-link" style="color: black;"><i data-feather="command"></i><span>Document Type</span></a>
                 </li>
 
                 <li class="menu-header"></li>

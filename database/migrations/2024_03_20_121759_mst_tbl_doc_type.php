@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('mst_tbl_doc_type', function (Blueprint $table) {
             $table->id('tbl_doc_type_id');
-            $table->string('doc_name');
+            $table->string('doc_type');
             $table->integer('add_by');
             $table->date('add_date');
-            $table->date('add_time');
-            $table->integer('deleted_by');
-            $table->date('deleted_date');
-            $table->date('deleted_time');
+            $table->time('add_time');
+            $table->integer('deleted_by')->nullable();
+            $table->date('deleted_date')->nullable();
+            $table->time('deleted_time')->nullable();
             $table->string('flag');
         });
     }

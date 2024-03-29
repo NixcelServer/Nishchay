@@ -20,12 +20,13 @@ return new class extends Migration
             $table->integer('add_by');
             $table->integer('add_date');
             $table->integer('add_time');
-            $table->integer('verified_by');
-            $table->date('verified_date');
-            $table->time('verified_time');
-            $table->integer('deleted_by');
-            $table->date('deleted_date');
-            $table->time('deleted_time');
+            $table->integer('verified_by')->nullable();
+            $table->date('verified_date')->nullable();
+            $table->time('verified_time')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->date('deleted_date')->nullable();
+            $table->time('deleted_time')->nullable();
+            $table->string('flag');
             
             
             
